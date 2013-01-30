@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Orwell</string>
+    <string name="title_map">Map</string>
+    <string name="title_infos">Infos</string>
+    <string name="title_hud">HUD</string>
+    <string name="menu_settings">Settings</string>
+
+</resources>
