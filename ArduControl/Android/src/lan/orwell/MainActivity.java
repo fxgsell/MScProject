@@ -11,6 +11,7 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import java.util.Locale;
 
+
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener {
 
     /**
