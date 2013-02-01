@@ -11,7 +11,20 @@ public class HudFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, 
         Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-//        return inflater.inflate(R.layout.hud_fragment, container, false);
+    	//return inflater.inflate(R.layout.hud_fragment, container, false);
         return new HudSurface(this.getActivity());
     }
+    
+    /*
+    @Override
+    	public void onResume() {
+    		getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
+    }
+    
+	@Override
+	public void onPause() {
+		getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
+		super.onPause();
+	}
+*/
 }

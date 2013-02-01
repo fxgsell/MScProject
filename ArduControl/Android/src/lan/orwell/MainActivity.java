@@ -2,6 +2,7 @@ package lan.orwell;
 
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -90,6 +91,15 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     @Override
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
     }
+
+/*
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		
+		setRequestedOrientation(Configuration.ORIENTATION_LANDSCAPE); // otherwise lock in portrait
+		super.onConfigurationChanged(newConfig);
+	}
+*/
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to

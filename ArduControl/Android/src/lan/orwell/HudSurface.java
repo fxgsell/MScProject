@@ -1,9 +1,6 @@
 package lan.orwell;
 
-import lan.orwell.R;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.os.Handler;
 import android.view.SurfaceHolder;
@@ -17,9 +14,6 @@ public class HudSurface extends SurfaceView implements SurfaceHolder.Callback {
 	private int _position_x = 20;
 	private int _position_y = 400;
 	private HudJoystick _joystick;
-
-
-	private Bitmap _pointer;
 
 	public HudSurface(Context context) {
 		super(context);
@@ -41,8 +35,6 @@ public class HudSurface extends SurfaceView implements SurfaceHolder.Callback {
 
 
 		_joystick = new HudJoystick(getContext().getResources());
-		_pointer = (Bitmap)BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
-		//contols
 		_controls = new HudControls();
 		setOnTouchListener(_controls);
 	}
@@ -53,14 +45,11 @@ public class HudSurface extends SurfaceView implements SurfaceHolder.Callback {
 		//update the pointer
 		_controls.update(null);
 		
-		//draw the pointer
-		canvas.drawBitmap(_pointer, _controls._pointerPosition.x, _controls._pointerPosition.y, null);
-
 		//draw the joystick background
 		canvas.drawBitmap(_joystick.get_joystickBg(), _position_x, _position_y, null);
 
 		//draw the dragable joystick
-		canvas.drawBitmap(_joystick.get_joystick(), _position_x + 38, _position_y + 38, null);
+		canvas.drawBitmap(_joystick.get_joystick(), _controls._touchingPoint.x, _controls._touchingPoint.y, null);
 
 	}
 
