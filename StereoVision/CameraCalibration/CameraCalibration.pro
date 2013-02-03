@@ -20,7 +20,7 @@ LIBS += unix:\
         "C:\opencv24\bin\*.dll" "C:\opencv24\bin\*.dll.a"
 
 INCLUDE_PATH += unix: \
-                else: "C:\opencv24\bin\*.dll" "C:\opencv24\bin\*.dll.a"
+                else: "C:\opencv24\includes"
 
 SOURCES += main.cpp\
         mainwindow.cpp
