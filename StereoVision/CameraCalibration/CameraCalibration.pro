@@ -16,7 +16,7 @@ LIBS += unix:\
         -lopencv_imgproc -lopencv_legacy -lopencv_ml        \
         -lopencv_objdetect -lopencv_photo -lopencv_stitching\
         -lopencv_ts -lopencv_video -lopencv_videostab       \
-        else:
+        else:\
         "C:\opencv24\bin\*.dll" "C:\opencv24\bin\*.dll.a"
 
 INCLUDE_PATH += unix: \
