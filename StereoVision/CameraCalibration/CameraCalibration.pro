@@ -1,7 +1,7 @@
 #-------------------------------------------------
 #
 # Project created by QtCreator 2013-02-03T09:39:02
-#
+#// PATH C:\MinGW\bin;C:\opencv243\build\bin;C:\Qt\4.8.4\bin; //
 #-------------------------------------------------
 
 QT       += core gui
@@ -18,6 +18,11 @@ LIBS += -lopencv_calib3d -lopencv_contrib -lopencv_core     \
         -lopencv_ts -lopencv_video -lopencv_videostab
 }
 
+win32 {
+    LIBS += "C:/opencv243/build/x86/mingw/bin/*.dll"
+    INCLUDEPATH += "C:/opencv243/build/include"
+}
+
 win64 {
     LIBS += "C:/opencv243/build/bin/*.dll"
     INCLUDEPATH += "C:/opencv243/build/include"
@@ -29,3 +34,5 @@ SOURCES += main.cpp\
 HEADERS  += mainwindow.h
 
 FORMS    += mainwindow.ui
+
+
