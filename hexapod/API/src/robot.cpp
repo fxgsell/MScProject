@@ -7,10 +7,10 @@
 ** Servo
 */
 
-Servo::Servo(const Servo & s): id(s.id), adjustment(s.adjustment), invert(s.invert), position(s.position), changed(true) {
+Servo::Servo(const Servo & s): id(s.id), changed(true), adjustment(s.adjustment), invert(s.invert), position(s.position) {
 }
 
-Servo::Servo(int id, int a, bool i, int p = 1500): id(id), adjustment(a), invert(i), position(p), changed(true) {
+Servo::Servo(int id, int a, bool i, int p = 1500): id(id), changed(true), adjustment(a), invert(i), position(p) {
 }
 
 void Servo::updatePosition(int offset) {
@@ -54,8 +54,8 @@ void Leg::down() {
 ** Body
 */
 Body::Body(Leg fr, Leg mr, Leg br, Leg fl, Leg ml, Leg bl) :
-				fr(fr), mr(mr), br(br), fl(fl), ml(ml), bl(bl),
-				serial("/dev/ttyAMA0") {
+				serial("/dev/ttyAMA0"),
+				fr(fr), mr(mr), br(br), fl(fl), ml(ml), bl(bl) {
   servos.push_back(&fr.shoulder);
   servos.push_back(&fr.elbow);
   servos.push_back(&fr.wrist);
@@ -90,11 +90,15 @@ void Body::commit() {
   serial.write(s);
 }
 
+void Body::centerLegs() {
+}
+
 void Body::turn(int degree) {
+  (void) degree;
 }
 
 void Body::step(int size, int number) {
   for (; number > 0; --number) {
-    ;
+          (void)size;
   }
 }

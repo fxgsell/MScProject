@@ -1,5 +1,8 @@
 #include "robot.hpp"
 
+/*
+** Initialisation des servos
+*/
 int main() {
   Servo s0(0, 0, false, 1500);
   Servo s1(1, 0, false, 1500);
@@ -11,15 +14,15 @@ int main() {
   Servo s9(9, 0, false, 1500);
   Servo s10(10, 0, false, 1500);
 
-  Servo s18(10, 0, false, 1500);
-  Servo s17(10, 0, false, 1500);
-  Servo s16(10, 0, false, 1500);
-  Servo s22(10, 0, false, 1500);
-  Servo s21(10, 0, false, 1500);
-  Servo s20(10, 0, false, 1500);
-  Servo s26(10, 0, false, 1500);
-  Servo s25(10, 0, false, 1500);
-  Servo s24(10, 0, false, 1500);
+  Servo s18(18, 0, false, 1500);
+  Servo s17(17, 0, false, 1500);
+  Servo s16(16, 0, false, 1500);
+  Servo s22(22, 0, false, 1500);
+  Servo s21(21, 0, false, 1500);
+  Servo s20(20, 0, false, 1500);
+  Servo s26(26, 0, false, 1500);
+  Servo s25(25, 0, false, 1500);
+  Servo s24(24, 0, false, 1500);
 
   Leg  fr(s18, s17, s16);
   Leg  mr(s22, s21, s20);

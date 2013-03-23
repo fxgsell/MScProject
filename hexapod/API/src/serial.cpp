@@ -17,7 +17,6 @@ Serial::Serial(const char *portname)
 {
   struct termios tty;
   int speed = B38400;
-  int parity = 0;
   
   fd = open(portname, O_RDWR | O_SYNC);
   if (fd < 0) {
@@ -150,14 +149,14 @@ int Serial::write(const std::string &s) {
   
   	if ((n < 0) && (errno == EAGAIN)) {
   		if (!tries) {
-        return n; //THROE -1
+        return gone; //THROE -1
   		}
   		microdelay (10000);
   		tries--;
   		continue;		/* while() */
   	} else if (n < 0) {
   		fprintf (stderr, "Error: write error to serial port: %s\n", strerror (errno));
-      return n; //THROW -1
+      return gone; //THROW -1
   	}
   	tries = 5;
   	gone += n;
@@ -167,6 +166,8 @@ int Serial::write(const std::string &s) {
   if (tcgetattr (fd, &lterm) == 0) 
      tcsetattr (fd, TCSAFLUSH, &lterm);
   free(msg);
+
+  return gone; 
 }
 
 

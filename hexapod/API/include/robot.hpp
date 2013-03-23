@@ -13,8 +13,8 @@ class Servo {
 
   private:
   public:
-    bool  changed;
     int	  id;
+    bool  changed;
     int   adjustment;
     bool  invert;
     int   position; 
