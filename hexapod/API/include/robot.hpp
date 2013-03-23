@@ -10,6 +10,7 @@ class Servo {
     Servo(const Servo &);
 
     void  updatePosition(int);
+    void  center();
 
   private:
   public:
@@ -21,17 +22,12 @@ class Servo {
 };
 
 class Leg {
-  public:
-    Servo shoulder;
-    Servo elbow;
-    Servo wrist;
+  public: 
+    enum LegGroup {A, B};
 
-  private:
-    bool  touch;
-    
   public:
     Leg(const Leg &);
-    Leg(Servo, Servo, Servo);
+    Leg(LegGroup, Servo, Servo, Servo);
 
     bool getTouch();
 
@@ -39,6 +35,16 @@ class Leg {
     void backward(int); 
     void up();
     void down(); 
+
+  private:
+    bool touch;
+
+  public: //TOPRIVATE
+    LegGroup group;
+    Servo shoulder;
+    Servo elbow;
+    Servo wrist;
+    
 };
 
 class Body {
@@ -53,11 +59,13 @@ class Body {
     Leg  bl;
 
     std::list<Servo *> servos;
+    std::list<Leg *> legs;
 
   public: 
     Body(Leg, Leg, Leg, Leg, Leg, Leg);
     Body();
 
+    void centerLegs();
     void commit();
     void turn(int);
     void step(int, int);

@@ -15,50 +15,50 @@
 
 Serial::Serial(const char *portname)
 {
-  struct termios tty;
-  int speed = B38400;
-  
-  fd = open(portname, O_RDWR | O_SYNC);
-  if (fd < 0) {
-    fprintf(stderr, "error %d opening %s: %s", errno, portname, strerror (errno));
-    return; // THROW
-  }
+	struct termios tty;
+	int speed = B38400;
 
-  memset(&saved_state, 0, sizeof tty);
-  if (tcgetattr (fd, &saved_state) != 0)
-  {
-    fprintf(stderr, "error %d from tcgetattr", errno);
-    return;
-    // THROW return -1;
-  }
-  memcpy ((char *)&tty, (char *)&saved_state, sizeof (struct termios));
+	fd = open(portname, O_RDWR | O_SYNC);
+	if (fd < 0) {
+		fprintf(stderr, "error %d opening %s: %s", errno, portname, strerror (errno));
+		return; // THROW
+	}
 
-  cfsetospeed(&tty, speed);
-  cfsetispeed(&tty, speed);
+	memset(&saved_state, 0, sizeof tty);
+	if (tcgetattr (fd, &saved_state) != 0)
+	{
+		fprintf(stderr, "error %d from tcgetattr", errno);
+		return;
+		// THROW return -1;
+	}
+	memcpy ((char *)&tty, (char *)&saved_state, sizeof (struct termios));
 
-  tty.c_iflag &= ~(IGNBRK|BRKINT|PARMRK|ISTRIP|INLCR|IGNCR|ICRNL|IXON);
-  tty.c_oflag &= ~OPOST;
-  tty.c_lflag &= ~(ECHO|ECHONL|ICANON|ISIG|IEXTEN);
-  tty.c_cflag &= ~(CSIZE|PARENB|CSTOPB);
+	cfsetospeed(&tty, speed);
+	cfsetispeed(&tty, speed);
+
+	tty.c_iflag &= ~(IGNBRK|BRKINT|PARMRK|ISTRIP|INLCR|IGNCR|ICRNL|IXON);
+	tty.c_oflag &= ~OPOST;
+	tty.c_lflag &= ~(ECHO|ECHONL|ICANON|ISIG|IEXTEN);
+	tty.c_cflag &= ~(CSIZE|PARENB|CSTOPB);
 	tty.c_cflag |= CS8;
 
-  if (tcsetattr (fd, TCSAFLUSH, &tty) != 0)
-  {
-    fprintf(stderr, "error %d from tcsetattr", errno);
-    return;
-    // THROWreturn -1;
-  }
+	if (tcsetattr (fd, TCSAFLUSH, &tty) != 0)
+	{
+		fprintf(stderr, "error %d from tcsetattr", errno);
+		return;
+		// THROWreturn -1;
+	}
 
-  write("M0\x0d"); // trunoff this stupid radar
-  write("M0\x0d"); // trunoff this stupid radar
-  std::cout << "Serial initialized" << std::endl;
+	write("M0\x0d"); // trunoff this stupid radar
+	write("M0\x0d"); // trunoff this stupid radar
+	std::cout << "Serial initialized" << std::endl;
 }
 
 Serial::~Serial() {
-  if (tcsetattr (fd, TCSAFLUSH, &saved_state) < 0) {
-    fprintf (stderr, "Error: failed to restore serial-port terminal state: %s\n", strerror (errno));
-  }
-  close(fd);
+	if (tcsetattr (fd, TCSAFLUSH, &saved_state) < 0) {
+		fprintf (stderr, "Error: failed to restore serial-port terminal state: %s\n", strerror (errno));
+	}
+	close(fd);
 }
 
 /*{{{  int decode_hex_byte (char b1, char b2, unsigned char *tptr)*/
@@ -102,27 +102,27 @@ static unsigned char *string_deescape (const unsigned char *str, int *len)
 			/* escape sequence */
 			ch++;
 			switch (*ch) {
-			case '\\': *dh = '\\'; break;
-			case 'n': *dh = '\n'; break;
-			case 'r': *dh = '\r'; break;
-			case 't': *dh = '\t'; break;
-			case 'a': *dh = '\a'; break;
-			case 'b': *dh = '\b'; break;
-			case 'f': *dh = '\f'; break;
-			case 'v': *dh = '\v'; break;
-			case 'x':
-				/* hex byte */
-				if (decode_hex_byte (ch[1], ch[2], (unsigned char *)dh)) {
-					fprintf (stderr, "Error: bad hex escape at char %d\n", (int)(ch - str));
-					free (newstr);
-					return NULL;
-				}
-				ch += 2;
-				break;
-			default:
-				fprintf (stderr, "Error: unsupported escape character \'%c\' at char %d\n", *ch, (int)(ch - str));
-				free (newstr);
-				return NULL;
+				case '\\': *dh = '\\'; break;
+				case 'n': *dh = '\n'; break;
+				case 'r': *dh = '\r'; break;
+				case 't': *dh = '\t'; break;
+				case 'a': *dh = '\a'; break;
+				case 'b': *dh = '\b'; break;
+				case 'f': *dh = '\f'; break;
+				case 'v': *dh = '\v'; break;
+				case 'x':
+					  /* hex byte */
+					  if (decode_hex_byte (ch[1], ch[2], (unsigned char *)dh)) {
+						  fprintf (stderr, "Error: bad hex escape at char %d\n", (int)(ch - str));
+						  free (newstr);
+						  return NULL;
+					  }
+					  ch += 2;
+					  break;
+				default:
+					  fprintf (stderr, "Error: unsupported escape character \'%c\' at char %d\n", *ch, (int)(ch - str));
+					  free (newstr);
+					  return NULL;
 			}
 		} else {
 			*dh = *ch;
@@ -137,37 +137,37 @@ static unsigned char *string_deescape (const unsigned char *str, int *len)
 }
 
 int Serial::write(const std::string &s) {
-  int gone = 0;
-  int tries = 5;
-  struct termios lterm;
-  int len = 0;
-  unsigned char * msg = string_deescape((const unsigned char *)s.c_str(), &len);
+	int gone = 0;
+	int tries = 5;
+	struct termios lterm;
+	int len = 0;
+	unsigned char * msg = string_deescape((const unsigned char *)s.c_str(), &len);
 
-  /* do the actual write */
-  while (gone < len) {
-  	int n = ::write (fd, msg + gone, len - gone);
-  
-  	if ((n < 0) && (errno == EAGAIN)) {
-  		if (!tries) {
-        return gone; //THROE -1
-  		}
-  		microdelay (10000);
-  		tries--;
-  		continue;		/* while() */
-  	} else if (n < 0) {
-  		fprintf (stderr, "Error: write error to serial port: %s\n", strerror (errno));
-      return gone; //THROW -1
-  	}
-  	tries = 5;
-  	gone += n;
-  }
+	/* do the actual write */
+	while (gone < len) {
+		int n = ::write (fd, msg + gone, len - gone);
 
-  /* need to wait for the data to actually go out -- setting attributes should cause this.. */
-  if (tcgetattr (fd, &lterm) == 0) 
-     tcsetattr (fd, TCSAFLUSH, &lterm);
-  free(msg);
+		if ((n < 0) && (errno == EAGAIN)) {
+			if (!tries) {
+				return gone; //THROE -1
+			}
+			microdelay (10000);
+			tries--;
+			continue;		/* while() */
+		} else if (n < 0) {
+			fprintf (stderr, "Error: write error to serial port: %s\n", strerror (errno));
+			return gone; //THROW -1
+		}
+		tries = 5;
+		gone += n;
+	}
 
-  return gone; 
+	/* need to wait for the data to actually go out -- setting attributes should cause this.. */
+	if (tcgetattr (fd, &lterm) == 0) 
+		tcsetattr (fd, TCSAFLUSH, &lterm);
+	free(msg);
+
+	return gone; 
 }
 
 
