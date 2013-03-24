@@ -1,66 +1,9 @@
 #include <iostream>
 #include <sstream>
 
+#include "servo.hpp"
+#include "leg.hpp"
 #include "robot.hpp"
-
-/*
-** Servo
-*/
-
-Servo::Servo(const Servo &s): id(s.id), changed(true), adjustment(s.adjustment), invert(s.invert), position(s.position) {
-}
-
-Servo::Servo(int id, int a, bool i, int p = 1500): id(id), changed(true), adjustment(a), invert(i) {
-  if (i == true)
-    position = p - a;
-  else
-    position = p + a;
-}
-
-void Servo::updatePosition(int offset) {
-  if (invert == true)
-    position -= offset;
-  else
-    position += offset;
-
-  if (position < 100)
-    position = 100;
-  else if (position > 2500)
-    position = 2500;
-}
-
-void	Servo::center() {
-  position = 1500 + adjustment;
-}
-
-/*
-** Legs
-*/
-Leg::Leg(LegGroup g, Servo s, Servo e, Servo w): group(g), shoulder(s), elbow(e), wrist(w) {
-}
-
-Leg::Leg(const Leg & l): group(l.group), shoulder(l.shoulder), elbow(l.elbow), wrist(l.wrist) {
-}
-
-bool Leg::getTouch() {
-  return touch;
-}
-
-void Leg::forward(int size = 200) {
-  shoulder.updatePosition(size);
-}
-
-void Leg::backward(int size = 200) {
-  shoulder.updatePosition(-size);
-}
-
-void Leg::up() {
-  elbow.updatePosition(+500);
-}
-
-void Leg::down() {
-  elbow.updatePosition(-500);
-}
 
 /*
 ** Body
@@ -108,14 +51,17 @@ void Body::commit() {
   wrist << "S";
   for (std::list<Servo *>::iterator it=servos.begin(); it != servos.end(); ++it) {
     int id = (*it)->id;
-    if (id == 0 || id == 4 || id == 8 || id == 18 || id == 22 || id == 26)
-      shoulder << " #" << (*it)->id << " P" << (*it)->position;
-    else if (id == 1 || id == 5 || id == 9 || id == 17 || id == 21 || id == 25)
-      elbow << " #" << (*it)->id << " P" << (*it)->position;
-    else if (id == 2 || id == 6 || id == 10 || id == 16 || id == 20 || id == 24)
-      wrist << " #" << (*it)->id << " P" << (*it)->position;
-  }
 
+    if ((*it)->changed) {
+      if (id == 0 || id == 4 || id == 8 || id == 18 || id == 22 || id == 26)
+        shoulder << " #" << (*it)->id << " P" << (*it)->getRealPosition();
+      else if (id == 1 || id == 5 || id == 9 || id == 17 || id == 21 || id == 25)
+        elbow << " #" << (*it)->id << " P" << (*it)->getRealPosition();
+      else if (id == 2 || id == 6 || id == 10 || id == 16 || id == 20 || id == 24)
+        wrist << " #" << (*it)->id << " P" << (*it)->getRealPosition();
+      (*it)->changed = false;
+    }
+  }
   shoulder << "\x0d";
   elbow << "\x0d";
   wrist << "\x0d";
@@ -132,6 +78,30 @@ void Body::commit() {
 }
 
 void Body::centerLegs() {
+}
+
+void Body::sit() {
+}
+
+void Body::setAllLeg(int s, int e, int w) {
+  for (std::list<Leg *>::iterator it=legs.begin(); it != legs.end(); ++it) {
+    (*it)->setPosition(s, e, w);
+  }
+  commit();
+}
+
+void Body::standDown() {
+  for (std::list<Leg *>::iterator it=legs.begin(); it != legs.end(); ++it) {
+    (*it)->setPosition(0, 500, 500);
+  }
+  commit();
+}
+
+void Body::standUp() {
+  for (std::list<Leg *>::iterator it=legs.begin(); it != legs.end(); ++it) {
+    (*it)->setPosition(0, -500, -500);
+  }
+  commit();
 }
 
 void Body::turn(int degree) {
