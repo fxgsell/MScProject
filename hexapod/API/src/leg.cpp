@@ -28,11 +28,24 @@ void Leg::backward(int size) {
   shoulder.updatePosition(-size);
 }
 
-void Leg::up() {
-  elbow.updatePosition(-200);
+void Leg::up(int size) {
+  elbow.updatePosition(size);
 }
 
-void Leg::down() {
-  elbow.updatePosition(200);
+void Leg::down(int size) {
+  elbow.updatePosition(-size);
+}
+
+
+void Leg::save() {
+  elbow.save();
+  shoulder.save();
+  wrist.save();
+}
+
+void Leg::restore() {
+  elbow.restore();
+  shoulder.restore();
+  wrist.restore();
 }
 

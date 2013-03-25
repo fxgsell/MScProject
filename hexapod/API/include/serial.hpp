@@ -12,8 +12,8 @@ class Serial {
     //int read(const char *);
 
   private:
-    int  fd;
-    struct termios saved_state;
+    int		    fd;
+    struct termios  saved_state;
 };
   
 

@@ -41,6 +41,9 @@ Body::Body(Leg fr, Leg mr, Leg br, Leg fl, Leg ml, Leg bl) :
   legs.push_back(&this->br);
 }
 
+/*
+** Push moves to serial
+*/
 void Body::commit() {
   std::string s;
   std::stringstream shoulder;
@@ -78,10 +81,29 @@ void Body::commit() {
   serial.write(s);
 }
 
+/*
+** Varrious --not so useful-- moves
+*/
 void Body::centerLegs() {
 }
 
 void Body::sit() {
+}
+
+void Body::setALeg(int s, int e, int w) {
+  for (std::list<Leg *>::iterator it=legs.begin(); it != legs.end(); ++it) {
+    if ((*it)->group == Leg::A)
+    (*it)->setPosition(s, e, w);
+  }
+  commit();
+}
+
+void Body::setBLeg(int s, int e, int w) {
+  for (std::list<Leg *>::iterator it=legs.begin(); it != legs.end(); ++it) {
+    if ((*it)->group == Leg::B)
+      (*it)->setPosition(s, e, w);
+  }
+  commit();
 }
 
 void Body::setAllLeg(int s, int e, int w) {
@@ -92,17 +114,53 @@ void Body::setAllLeg(int s, int e, int w) {
 }
 
 void Body::standDown() {
-  for (std::list<Leg *>::iterator it=legs.begin(); it != legs.end(); ++it) {
-    (*it)->setPosition(0, 500, 500);
-  }
+  setAllLeg(0, 300, 300);
   commit();
 }
 
 void Body::standUp() {
-  for (std::list<Leg *>::iterator it=legs.begin(); it != legs.end(); ++it) {
-    (*it)->setPosition(0, -500, -500);
-  }
+  setALeg(0, 0, 0); //o, +up, +in 
+  setBLeg(0, 500, 500);
   commit();
+  usleep(100000);
+
+  setALeg(0, 500, 500); //o, +up, +in 
+  commit();
+  setBLeg(0, 0, 0);
+  commit();
+  usleep(100000);
+
+  setALeg(0, -300, -300); //o, +up, +in 
+  commit();
+  setBLeg(0, 0, 0);
+  commit();
+  usleep(100000);
+
+  setAllLeg(0, -300, -300);
+  commit();
+  usleep(100000);
+}
+
+void Body::hello() {
+   bl.save();
+   bl.setPosition(0, 0, 0);
+   commit();
+   int i;
+   for (i = 0; i < 4; i++) {
+     bl.setPosition(-200, 1000, -600);
+     commit();
+     usleep(100000);
+     bl.setPosition(200, 1000, -400);
+     commit();
+     usleep(100000);
+     bl.setPosition(-200, 1000, -600);
+     commit();
+     usleep(100000);
+   }
+   usleep(300000);
+   bl.restore();
+   commit();
+   usleep(100000);
 }
 
 void Body::turn(int degree) {

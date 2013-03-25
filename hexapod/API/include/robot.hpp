@@ -31,6 +31,10 @@ class Body {
     void step(int, int);
 
     void setAllLeg(int, int, int);
+    void setALeg(int, int, int);
+    void setBLeg(int, int, int);
+
+    void hello();
     void sit();
     void standUp();
     void standDown();

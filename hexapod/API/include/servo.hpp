@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stack>
+
 class Servo {
   public:
     Servo(int, int, bool, int);
@@ -10,7 +12,12 @@ class Servo {
     void  setPosition(int);
     void  center();
 
+    void save();
+    void restore();
+
   private:
+    std::stack<int> states;
+
   public:
     int	  id;
     bool  changed;

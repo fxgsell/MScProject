@@ -4,10 +4,10 @@
 ** Servo
 */
 
-Servo::Servo(const Servo &s): id(s.id), changed(false), adjustment(s.adjustment), invert(s.invert), position(s.position) {
+Servo::Servo(const Servo &s): id(s.id), changed(true), adjustment(s.adjustment), invert(s.invert), position(s.position) {
 }
 
-Servo::Servo(int id, int a, bool i, int p = 0): id(id), changed(false), adjustment(a), invert(i) {
+Servo::Servo(int id, int a, bool i, int p = 0): id(id), changed(true), adjustment(a), invert(i) {
   if (i == true)
     position = - p - a;
   else
@@ -38,13 +38,24 @@ void Servo::updatePosition(int offset) {
   else
     position += offset;
 
-  if (position < 100)
-    position = 100;
-  else if (position > 2500)
-    position = 2500;
+  if (position < -1000)
+    position = -1000;
+  else if (position > 1000)
+    position = 1000;
 
   if (offset)
     changed = true;
+}
+
+void Servo::save() {
+  states.push(position);
+}
+
+void Servo::restore() {
+  if (position != states.top())
+    changed = true;
+  position = states.top();
+  states.pop();
 }
 
 void	Servo::center() {
