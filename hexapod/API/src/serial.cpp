@@ -1,6 +1,3 @@
-#include <string>
-#include <iostream>
-
 #include <stdlib.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -51,7 +48,7 @@ Serial::Serial(const char *portname)
 
 	write("M0\x0d"); // trunoff this stupid radar
 	write("M0\x0d"); // trunoff this stupid radar
-	std::cout << "Serial initialized" << std::endl;
+	printf("Serial initialized\n");
 }
 
 Serial::~Serial() {
@@ -136,12 +133,12 @@ static unsigned char *string_deescape (const unsigned char *str, int *len)
 	return newstr;
 }
 
-int Serial::write(const std::string &s) {
+int Serial::write(const char *s) {
 	int gone = 0;
 	int tries = 5;
 	struct termios lterm;
 	int len = 0;
-	unsigned char * msg = string_deescape((const unsigned char *)s.c_str(), &len);
+	unsigned char * msg = string_deescape((unsigned char *)s, &len);
 
 	/* do the actual write */
 	while (gone < len) {
@@ -167,6 +164,7 @@ int Serial::write(const std::string &s) {
 		tcsetattr (fd, TCSAFLUSH, &lterm);
 	free(msg);
 
+  printf("%s\n", s);
 	return gone; 
 }
 

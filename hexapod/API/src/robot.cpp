@@ -1,5 +1,4 @@
 #include <unistd.h>
-#include <iostream>
 #include <sstream>
 
 #include "servo.hpp"
@@ -13,26 +12,26 @@
 Body::Body(Leg fr, Leg mr, Leg br, Leg fl, Leg ml, Leg bl) :
 				serial("/dev/ttyAMA0"),
 				fr(fr), mr(mr), br(br), fl(fl), ml(ml), bl(bl) {
-  servos.push_back(&this->fr.shoulder);
-  servos.push_back(&this->mr.shoulder);
-  servos.push_back(&this->br.shoulder);
-  servos.push_back(&this->fl.shoulder);
-  servos.push_back(&this->ml.shoulder);
-  servos.push_back(&this->bl.shoulder);
+  servos[0] = &this->fr.shoulder;
+  servos[1] = &this->mr.shoulder;
+  servos[2] = &this->br.shoulder;
+  servos[3] = &this->fl.shoulder;
+  servos[4] = &this->ml.shoulder;
+  servos[5] = &this->bl.shoulder;
 
-  servos.push_back(&this->fr.elbow);
-  servos.push_back(&this->mr.elbow);
-  servos.push_back(&this->br.elbow);
-  servos.push_back(&this->ml.elbow);
-  servos.push_back(&this->fl.elbow);
-  servos.push_back(&this->bl.elbow);
+  servos[6] = &this->fr.elbow;
+  servos[7] = &this->mr.elbow;
+  servos[8] = &this->br.elbow;
+  servos[9] = &this->ml.elbow;
+  servos[10] = &this->fl.elbow;
+  servos[11] = &this->bl.elbow;
 
-  servos.push_back(&this->fr.wrist);
-  servos.push_back(&this->mr.wrist);
-  servos.push_back(&this->br.wrist);
-  servos.push_back(&this->fl.wrist);
-  servos.push_back(&this->ml.wrist);
-  servos.push_back(&this->bl.wrist);
+  servos[12] = &this->fr.wrist;
+  servos[13] = &this->mr.wrist;
+  servos[14] = &this->br.wrist;
+  servos[15] = &this->fl.wrist;
+  servos[16] = &this->ml.wrist;
+  servos[17] = &this->bl.wrist;
   
   legs[0] = (&this->fl);
   legs[1] = (&this->ml);
@@ -54,17 +53,17 @@ void Body::commit() {
   shoulder << "S";
   elbow << "S";
   wrist << "S";
-  for (std::list<Servo *>::iterator it=servos.begin(); it != servos.end(); ++it) {
-    int id = (*it)->id;
+  for (int i = 0; i < Body::SERVOS; i++) { 
+    int id = servos[i]->id;
 
-    if ((*it)->changed) {
+    if (servos[i]->changed) {
       if (id == 0 || id == 4 || id == 8 || id == 18 || id == 22 || id == 26)
-        shoulder << " #" << (*it)->id << " P" << (*it)->getRealPosition();
+        shoulder << " #" << servos[i]->id << " P" << servos[i]->getRealPosition();
       else if (id == 1 || id == 5 || id == 9 || id == 17 || id == 21 || id == 25)
-        elbow << " #" << (*it)->id << " P" << (*it)->getRealPosition();
+        elbow << " #" << servos[i]->id << " P" << servos[i]->getRealPosition();
       else if (id == 2 || id == 6 || id == 10 || id == 16 || id == 20 || id == 24)
-        wrist << " #" << (*it)->id << " P" << (*it)->getRealPosition();
-      (*it)->changed = false;
+        wrist << " #" << servos[i]->id << " P" << servos[i]->getRealPosition();
+      servos[i]->changed = false;
     }
   }
   shoulder << "\x0d";
@@ -72,14 +71,11 @@ void Body::commit() {
   wrist << "\x0d";
 
   s = shoulder.str();
-  std::cout << s << std::endl;
-  serial.write(s);
+  serial.write(s.c_str());
   s = elbow.str();
-  std::cout << s << std::endl;
-  serial.write(s);
+  serial.write(s.c_str());
   s = wrist.str();
-  std::cout << s << std::endl;
-  serial.write(s);
+  serial.write(s.c_str());
 }
 
 /*
@@ -116,24 +112,6 @@ void Body::centerLegs() {
 
 void Body::sit() {
 }
-
-/*
-void Body::setALeg(int s, int e, int w) {
-  for (std::list<Leg *>::iterator it=legs.begin(); it != legs.end(); ++it) {
-    if ((*it)->group == Leg::A)
-    (*it)->setPosition(s, e, w);
-  }
-  commit();
-}
-
-void Body::setBLeg(int s, int e, int w) {
-  for (std::list<Leg *>::iterator it=legs.begin(); it != legs.end(); ++it) {
-    if ((*it)->group == Leg::B)
-      (*it)->setPosition(s, e, w);
-  }
-  commit();
-}
-*/
 
 void Body::setAllLeg(int s, int e, int w) {
   for (int i = 0; i < Body::LEGS; i++)

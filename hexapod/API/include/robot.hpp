@@ -21,7 +21,8 @@ class Body {
     Leg  bl;
 
     std::list<Event *>   events;
-    std::list<Servo *>   servos;
+
+    Servo                *servos[18];
     Leg                  *legs[6];
 
     static const int     LEGS = 6;
