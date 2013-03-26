@@ -80,10 +80,6 @@ void Body::commit() {
 
 /*
 ** Event Manager
-
-void Body::executeNextEvent() {
-  events.pop_front()->execute();
-}
 */
 
 void Body::start() {
