@@ -6,6 +6,7 @@
 class Event {
   public:
     virtual int execute() = 0;
+    virtual ~Event() {};
 
   private:
 };

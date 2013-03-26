@@ -20,11 +20,13 @@ class Body {
     Leg  ml;
     Leg  bl;
 
-    std::list<Servo *>   servos;
-    std::list<Leg *>     legs;
     std::list<Event *>   events;
+    std::list<Servo *>   servos;
+    Leg                  *legs[6];
 
-    
+    static const int     LEGS = 6;
+    static const int     SERVOS = 18;
+
   public: 
     Body(Leg, Leg, Leg, Leg, Leg, Leg);
     Body();

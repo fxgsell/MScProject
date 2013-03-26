@@ -34,12 +34,12 @@ Body::Body(Leg fr, Leg mr, Leg br, Leg fl, Leg ml, Leg bl) :
   servos.push_back(&this->ml.wrist);
   servos.push_back(&this->bl.wrist);
   
-  legs.push_back(&this->fl);
-  legs.push_back(&this->ml);
-  legs.push_back(&this->bl);
-  legs.push_back(&this->fr);
-  legs.push_back(&this->mr);
-  legs.push_back(&this->br);
+  legs[0] = (&this->fl);
+  legs[1] = (&this->ml);
+  legs[2] = (&this->bl);
+  legs[3] = (&this->fr);
+  legs[4] = (&this->mr);
+  legs[5] = (&this->br);
 }
 
 /*
@@ -117,6 +117,7 @@ void Body::centerLegs() {
 void Body::sit() {
 }
 
+/*
 void Body::setALeg(int s, int e, int w) {
   for (std::list<Leg *>::iterator it=legs.begin(); it != legs.end(); ++it) {
     if ((*it)->group == Leg::A)
@@ -132,11 +133,11 @@ void Body::setBLeg(int s, int e, int w) {
   }
   commit();
 }
+*/
 
 void Body::setAllLeg(int s, int e, int w) {
-  for (std::list<Leg *>::iterator it=legs.begin(); it != legs.end(); ++it) {
-    (*it)->setPosition(s, e, w);
-  }
+  for (int i = 0; i < Body::LEGS; i++)
+    legs[i]->setPosition(s, e, w);
   commit();
 }
 
@@ -175,46 +176,46 @@ void Body::step(int size, int number) {
 
   usleep(100000);
   for (int i = 0; i < number; ++i) {
-    for (std::list<Leg *>::iterator it=legs.begin(); it != legs.end(); ++it) {
-      if ((*it)->group == Leg::A) {
-        (*it)->up();
-        (*it)->forward();
+    for (int i = 0; i < Body::LEGS; i++) {
+      if (legs[i]->group == Leg::A) {
+        legs[i]->up();
+        legs[i]->forward();
       }
     }
     commit();
     usleep(100000);
-    for (std::list<Leg *>::iterator it=legs.begin(); it != legs.end(); ++it) {
-      if ((*it)->group == Leg::B) {
-        (*it)->backward();
+    for (int i = 0; i < Body::LEGS; i++) {
+      if (legs[i]->group == Leg::B) {
+        legs[i]->backward();
       }
     }
     commit();
     usleep(100000);
-    for (std::list<Leg *>::iterator it=legs.begin(); it != legs.end(); ++it) {
-      if ((*it)->group == Leg::A) {
-        (*it)->down();
+    for (int i = 0; i < Body::LEGS; i++) {
+      if (legs[i]->group == Leg::A) {
+        legs[i]->down();
       }
     }
     commit();
     usleep(100000);
-    for (std::list<Leg *>::iterator it=legs.begin(); it != legs.end(); ++it) {
-      if ((*it)->group == Leg::B) {
-       (*it)->up();
-       (*it)->forward();
+    for (int i = 0; i < Body::LEGS; i++) {
+      if (legs[i]->group == Leg::B) {
+       legs[i]->up();
+       legs[i]->forward();
       }
     }
     commit();
     usleep(100000);
-    for (std::list<Leg *>::iterator it=legs.begin(); it != legs.end(); ++it) {
-      if ((*it)->group == Leg::A) {
-        (*it)->backward();
+    for (int i = 0; i < Body::LEGS; i++) {
+      if (legs[i]->group == Leg::A) {
+        legs[i]->backward();
       }
     }
     commit();
     usleep(100000);
-    for (std::list<Leg *>::iterator it=legs.begin(); it != legs.end(); ++it) {
-      if ((*it)->group == Leg::B) {
-        (*it)->down();
+    for (int i = 0; i < Body::LEGS; i++) {
+      if (legs[i]->group == Leg::B) {
+        legs[i]->down();
       }
     }
     commit();
