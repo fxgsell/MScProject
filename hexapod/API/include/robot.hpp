@@ -6,6 +6,8 @@
 #include "servo.hpp"
 #include "leg.hpp"
 
+class Event;
+
 class Body {
   private:
     Serial serial;
@@ -18,12 +20,17 @@ class Body {
     Leg  ml;
     Leg  bl;
 
-    std::list<Servo *> servos;
-    std::list<Leg *> legs;
+    std::list<Servo *>   servos;
+    std::list<Leg *>     legs;
+    std::list<Event *>   events;
 
+    
   public: 
     Body(Leg, Leg, Leg, Leg, Leg, Leg);
     Body();
+
+    void start();
+    void addAction(std::list<Event *> &action);
 
     void centerLegs();
     void commit();

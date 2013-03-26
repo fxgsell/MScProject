@@ -3,6 +3,7 @@
 #include <sstream>
 
 #include "servo.hpp"
+#include "event.hpp"
 #include "leg.hpp"
 #include "robot.hpp"
 
@@ -82,6 +83,31 @@ void Body::commit() {
 }
 
 /*
+** Event Manager
+
+void Body::executeNextEvent() {
+  events.pop_front()->execute();
+}
+*/
+
+void Body::start() {
+  for (;!events.empty();) {    //just for now will be ;;
+    // read input
+    // read sensors
+    if (!events.empty()) { 		//execute next event
+      events.front()->execute(); 
+      delete events.front();
+      events.pop_front();
+    }
+    // sleep on pool
+  }
+}
+
+void Body::addAction(std::list<Event *> &action) {
+  events.insert(events.begin(), action.begin(), action.end());
+}
+
+/*
 ** Varrious --not so useful-- moves
 */
 void Body::centerLegs() {
@@ -116,29 +142,6 @@ void Body::setAllLeg(int s, int e, int w) {
 void Body::standDown() {
   setAllLeg(0, 300, 300);
   commit();
-}
-
-void Body::standUp() {
-  setALeg(0, 0, 0); //o, +up, +in 
-  setBLeg(0, 500, 500);
-  commit();
-  usleep(100000);
-
-  setALeg(0, 500, 500); //o, +up, +in 
-  commit();
-  setBLeg(0, 0, 0);
-  commit();
-  usleep(100000);
-
-  setALeg(0, -300, -300); //o, +up, +in 
-  commit();
-  setBLeg(0, 0, 0);
-  commit();
-  usleep(100000);
-
-  setAllLeg(0, -300, -300);
-  commit();
-  usleep(100000);
 }
 
 void Body::hello() {

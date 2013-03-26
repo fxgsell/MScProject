@@ -1,5 +1,6 @@
 #include <unistd.h>
 
+#include "event.hpp"
 #include "robot.hpp"
 #include "leg.hpp"
 
@@ -35,12 +36,32 @@ int main() {
   Leg  bl(Leg::B, s8, s9, s10);
 
   Body *robot = new Body(fr, mr, br, fl, ml, bl);
+
+  std::list<Event *> standUp;
+  {
+    standUp.push_back(new ESetALeg(*robot, 0, 0, 0));
+    standUp.push_back(new ESetBLeg(*robot, 0, 500, 500));
+    standUp.push_back(new ESleep(100000));
+    standUp.push_back(new ESetALeg(*robot, 0, 500, 500));
+    standUp.push_back(new ESetBLeg(*robot, 0, 0, 0));
+    standUp.push_back(new ESleep(100000));
+    standUp.push_back(new ESetALeg(*robot, 0, -300, -300));
+    standUp.push_back(new ESetBLeg(*robot, 0, 0, 0));
+    standUp.push_back(new ESleep(100000));
+    standUp.push_back(new ESetALeg(*robot, 0, -300, -300));
+    standUp.push_back(new ESetBLeg(*robot, 0, -300, -300));
+    standUp.push_back(new ESleep(100000));
+  }
+
   robot->commit();
-  usleep(1000000);
 
-  //robot->setAllLeg(0, 700,300);
+  robot->events.push_back(new ESleep(1000000));
+  robot->events.push_back(new EStandDown(*robot));
+  robot->addAction(standUp);
 
+  robot->start();
 
+/*
   robot->standUp();
   usleep(1000000);
   robot->hello();
@@ -48,12 +69,11 @@ int main() {
   robot->standDown();
   usleep(1000000);
 
-/*
   robot->mr.up();
   robot->ml.up();
   robot->commit();
   usleep(1000000);
-*/
+
   robot->step(0, 6);
   usleep(1000000);
 
@@ -62,10 +82,7 @@ int main() {
 
   robot->setAllLeg(0, 700,300);
   usleep(1000000);
-
-
-/*
-
 */
+
   return 0;
 }

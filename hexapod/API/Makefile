@@ -11,13 +11,18 @@ OBJ_FILES = $(addprefix $(OBJ_DIR)/,$(notdir $(CPP_FILES:.cpp=.o)))
 OBJS =  $(patsubst %.cpp,$(OBJ_DIR)/%.o,$(notdir $(CPP_FILES)))
 
 CXXFLAGS = -W -Wall -O3 -I$(INC_DIR)
+CFLAGS = -W -Wall -O3 -I$(INC_DIR)
 LDFLAGS = 
 CXX=g++
+CC=gcc
 
 all : $(TARGET) 
 
 $(TARGET) : $(OBJS)
 	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJ_DIR)/*.o $(LDFLAGS)
+
+$(OBJ_DIR)/%.o : $(SRC_DIR)/%.c $(H_FILES)
+	$(CC) $(CFLAGS) -c -o $@ $<
 
 $(OBJ_DIR)/%.o : $(SRC_DIR)/%.cpp $(H_FILES)
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
