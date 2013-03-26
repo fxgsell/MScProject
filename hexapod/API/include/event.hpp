@@ -29,6 +29,19 @@ class EStandDown : public Event {
 };
 
 
+class ESetAllLeg : public Event {
+  public:
+    ESetAllLeg(Body &r, int s, int e, int w) : robot(r), s(s), e(e), w(w) {};
+    int execute();
+
+  private:
+    Body &robot;
+    int  s;
+    int  e;
+    int  w;
+};
+
+
 class ESetALeg : public Event {
   public:
     ESetALeg(Body &r, int s, int e, int w) : robot(r), s(s), e(e), w(w) {};

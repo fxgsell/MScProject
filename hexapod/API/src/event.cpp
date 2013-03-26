@@ -15,6 +15,14 @@ int	ESetALeg::execute() {
   return (0);
 }
 
+int	ESetAllLeg::execute() {
+  for (std::list<Leg *>::iterator it=robot.legs.begin(); it != robot.legs.end(); ++it) {
+    (*it)->setPosition(s, e, w);
+  }
+  robot.commit();
+  return (0);
+}
+
 int	ESetBLeg::execute() {
   for (std::list<Leg *>::iterator it=robot.legs.begin(); it != robot.legs.end(); ++it) {
     if ((*it)->group == Leg::B)
@@ -28,3 +36,4 @@ int	ESleep::execute() {
   usleep(time);
   return (0);
 }
+

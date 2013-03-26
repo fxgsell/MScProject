@@ -30,7 +30,7 @@ class Body {
     Body();
 
     void start();
-    void addAction(std::list<Event *> &action);
+    void addAction(std::list<Event *> *action);
 
     void centerLegs();
     void commit();
@@ -49,3 +49,5 @@ class Body {
     void heightUp(int);
     void heightDown(int);
 };
+
+extern Body *robot;

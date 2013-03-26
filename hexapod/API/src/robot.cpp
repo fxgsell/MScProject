@@ -103,8 +103,9 @@ void Body::start() {
   }
 }
 
-void Body::addAction(std::list<Event *> &action) {
-  events.insert(events.begin(), action.begin(), action.end());
+void Body::addAction(std::list<Event *> *action) {
+  events.insert(events.end(), action->begin(), action->end());
+  delete action;
 }
 
 /*

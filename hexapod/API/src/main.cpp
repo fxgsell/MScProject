@@ -1,8 +1,11 @@
 #include <unistd.h>
 
+#include "action.hpp"
 #include "event.hpp"
 #include "robot.hpp"
 #include "leg.hpp"
+
+Body *robot;
 
 /*
 ** Initialisation des servos
@@ -35,29 +38,11 @@ int main() {
   Leg  ml(Leg::A, s4, s5, s6);
   Leg  bl(Leg::B, s8, s9, s10);
 
-  Body *robot = new Body(fr, mr, br, fl, ml, bl);
-
-  std::list<Event *> standUp;
-  {
-    standUp.push_back(new ESetALeg(*robot, 0, 0, 0));
-    standUp.push_back(new ESetBLeg(*robot, 0, 500, 500));
-    standUp.push_back(new ESleep(100000));
-    standUp.push_back(new ESetALeg(*robot, 0, 500, 500));
-    standUp.push_back(new ESetBLeg(*robot, 0, 0, 0));
-    standUp.push_back(new ESleep(100000));
-    standUp.push_back(new ESetALeg(*robot, 0, -300, -300));
-    standUp.push_back(new ESetBLeg(*robot, 0, 0, 0));
-    standUp.push_back(new ESleep(100000));
-    standUp.push_back(new ESetALeg(*robot, 0, -300, -300));
-    standUp.push_back(new ESetBLeg(*robot, 0, -300, -300));
-    standUp.push_back(new ESleep(100000));
-  }
-
-  robot->commit();
+  robot = new Body(fr, mr, br, fl, ml, bl);
 
   robot->events.push_back(new ESleep(1000000));
-  robot->events.push_back(new EStandDown(*robot));
-  robot->addAction(standUp);
+  robot->addAction(standUp());
+  robot->addAction(standDown());
 
   robot->start();
 
