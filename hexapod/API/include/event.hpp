@@ -5,10 +5,10 @@
 
 class Event {
   public:
+
     virtual int execute() = 0;
     virtual ~Event() {};
 
-  private:
 };
 
 //should be waiting in poll
@@ -32,39 +32,17 @@ class EStandDown : public Event {
 };
 
 
-class ESetAllLeg : public Event {
+/*
+** Set
+*/
+class ELegSet : public Event {
   public:
-    ESetAllLeg(Body &b, int s, int e, int w) : robot(b), s(s), e(e), w(w) {};
+    ELegSet(Body &b, Leg::LegId g, int s, int e, int w) : robot(b), group(g),  s(s), e(e), w(w) {};
     int execute();
 
   private:
     Body &robot;
-    int  s;
-    int  e;
-    int  w;
-};
-
-
-class ESetALeg : public Event {
-  public:
-    ESetALeg(Body &b, int s, int e, int w) : robot(b), s(s), e(e), w(w) {};
-    int execute();
-
-  private:
-    Body &robot;
-    int  s;
-    int  e;
-    int  w;
-};
-
-
-class ESetBLeg : public Event {
-  public:
-    ESetBLeg(Body &b, int s, int e, int w) : robot(b), s(s), e(e), w(w) {};
-    int execute();
-
-  private:
-    Body &robot;
+    Leg::LegId	group;
     int  s;
     int  e;
     int  w;
@@ -74,48 +52,29 @@ class ESetBLeg : public Event {
 ** Down A, B
 */
 
-class EDownALeg : public Event {
+class ELegDown : public Event {
   public:
-    EDownALeg(Body &b, int r) : robot(b), range(r) {};
+    ELegDown(Body &b, Leg::LegId g, int r) : robot(b), group(g), range(r) {};
     int execute();
 
   private:
     Body &robot;
+    Leg::LegId	group;
     int  range;
 };
-
-class EDownBLeg : public Event {
-  public:
-    EDownBLeg(Body &b, int r) : robot(b), range(r) {};
-    int execute();
-
-  private:
-    Body &robot;
-    int  range;
-};
-
 
 /*
 ** Up A, B
 */
 
-class EUpALeg : public Event {
+class ELegUp : public Event {
   public:
-    EUpALeg(Body &b, int r) : robot(b), range(r) {};
+    ELegUp(Body &b, Leg::LegId g, int r) : robot(b), group(g), range(r) {};
     int execute();
 
   private:
     Body &robot;
-    int  range;
-};
-
-class EUpBLeg : public Event {
-  public:
-    EUpBLeg(Body &b, int r) : robot(b), range(r) {};
-    int execute();
-
-  private:
-    Body &robot;
+    Leg::LegId	group;
     int  range;
 };
 
@@ -123,23 +82,14 @@ class EUpBLeg : public Event {
 ** Forward A, B
 */
 
-class EForwardALeg : public Event {
+class ELegForward : public Event {
   public:
-    EForwardALeg(Body &b, int r) : robot(b), range(r) {};
+    ELegForward(Body &b, Leg::LegId g, int r) : robot(b), group(g), range(r) {};
     int execute();
 
   private:
     Body &robot;
-    int  range;
-};
-
-class EForwardBLeg : public Event {
-  public:
-    EForwardBLeg(Body &b, int r) : robot(b), range(r) {};
-    int execute();
-
-  private:
-    Body &robot;
+    Leg::LegId	group;
     int  range;
 };
 
@@ -147,24 +97,14 @@ class EForwardBLeg : public Event {
 ** Backward A, B
 */
 
-class EBackwardALeg : public Event {
+class ELegBackward : public Event {
   public:
-    EBackwardALeg(Body &b, int r) : robot(b), range(r) {};
+    ELegBackward(Body &b, Leg::LegId g, int r) : robot(b), group(g), range(r) {};
     int execute();
 
   private:
     Body &robot;
+    Leg::LegId	group;
     int  range;
 };
-
-class EBackwardBLeg : public Event {
-  public:
-    EBackwardBLeg(Body &b, int r) : robot(b), range(r) {};
-    int execute();
-
-  private:
-    Body &robot;
-    int  range;
-};
-
 

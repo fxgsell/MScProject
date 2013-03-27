@@ -31,12 +31,12 @@ int main() {
   Servo s25(25,   50, true,  700);
   Servo s24(24,  -75, true,  300);
 
-  Leg  fr(Leg::A, s18, s17, s16);
-  Leg  mr(Leg::B, s22, s21, s20);
-  Leg  br(Leg::A, s26, s25, s24);
-  Leg  fl(Leg::B, s0, s1, s2);
-  Leg  ml(Leg::A, s4, s5, s6);
-  Leg  bl(Leg::B, s8, s9, s10);
+  Leg  fr(Leg::FR, s18, s17, s16);
+  Leg  mr(Leg::MR, s22, s21, s20);
+  Leg  br(Leg::BR, s26, s25, s24);
+  Leg  fl(Leg::FL, s0, s1, s2);
+  Leg  ml(Leg::ML, s4, s5, s6);
+  Leg  bl(Leg::BL, s8, s9, s10);
 
   robot = new Body(fr, mr, br, fl, ml, bl);
 

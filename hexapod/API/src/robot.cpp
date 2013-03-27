@@ -101,25 +101,6 @@ void Body::addAction(std::list<Event *> *action) {
 }
 
 /*
-** Varrious --not so useful-- moves
-*/
-void Body::centerLegs() {
-}
-
-void Body::sit() {
-}
-
-void Body::setAllLeg(int s, int e, int w) {
-  for (int i = 0; i < Body::LEGS; i++)
-    legs[i]->setPosition(s, e, w);
-  commit();
-}
-
-void Body::standDown() {
-  setAllLeg(0, 300, 300);
-  commit();
-}
-
 void Body::hello() {
    bl.save();
    bl.setPosition(0, 0, 0);
@@ -142,60 +123,5 @@ void Body::hello() {
    usleep(100000);
 }
 
-void Body::turn(int degree) {
-  (void) degree;
-}
 
-void Body::step(int size, int number) {
-
-  usleep(100000);
-  for (int i = 0; i < number; ++i) {
-    for (int i = 0; i < Body::LEGS; i++) {
-      if (legs[i]->group == Leg::A) {
-        legs[i]->up();
-        legs[i]->forward();
-      }
-    }
-    commit();
-    usleep(100000);
-    for (int i = 0; i < Body::LEGS; i++) {
-      if (legs[i]->group == Leg::B) {
-        legs[i]->backward();
-      }
-    }
-    commit();
-    usleep(100000);
-    for (int i = 0; i < Body::LEGS; i++) {
-      if (legs[i]->group == Leg::A) {
-        legs[i]->down();
-      }
-    }
-    commit();
-    usleep(100000);
-    for (int i = 0; i < Body::LEGS; i++) {
-      if (legs[i]->group == Leg::B) {
-       legs[i]->up();
-       legs[i]->forward();
-      }
-    }
-    commit();
-    usleep(100000);
-    for (int i = 0; i < Body::LEGS; i++) {
-      if (legs[i]->group == Leg::A) {
-        legs[i]->backward();
-      }
-    }
-    commit();
-    usleep(100000);
-    for (int i = 0; i < Body::LEGS; i++) {
-      if (legs[i]->group == Leg::B) {
-        legs[i]->down();
-      }
-    }
-    commit();
-    usleep(100000);
-
-  }
-  (void)size;
-}
-
+*/

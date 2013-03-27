@@ -35,22 +35,22 @@ class Body {
     void start();
     void addAction(std::list<Event *> *action);
 
-    void centerLegs();
     void commit();
-    void turn(int);
-    void step(int, int);
+    //void centerLegs();
+    //void turn(int);
+    //void step(int, int);
 
     void setAllLeg(int, int, int);
     void setALeg(int, int, int);
     void setBLeg(int, int, int);
 
-    void hello();
-    void sit();
-    void standUp();
-    void standDown();
+    //void hello();
+    //void sit();
+    //void standUp();
+    //void standDown();
 
-    void heightUp(int);
-    void heightDown(int);
+    //void heightUp(int);
+    //void heightDown(int);
 };
 
 extern Body *robot;

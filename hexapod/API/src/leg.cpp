@@ -4,10 +4,10 @@
 /*
 ** Legs
 */
-Leg::Leg(LegGroup g, Servo s, Servo e, Servo w): group(g), shoulder(s), elbow(e), wrist(w) {
+Leg::Leg(LegId i, Servo s, Servo e, Servo w): id(i), shoulder(s), elbow(e), wrist(w) {
 }
 
-Leg::Leg(const Leg & l): group(l.group), shoulder(l.shoulder), elbow(l.elbow), wrist(l.wrist) {
+Leg::Leg(const Leg & l): id(l.id), shoulder(l.shoulder), elbow(l.elbow), wrist(l.wrist) {
 }
 
 void Leg::setPosition(int s, int e, int w) {
