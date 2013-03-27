@@ -197,7 +197,5 @@ void Body::step(int size, int number) {
 
   }
   (void)size;
-
-
 }
 

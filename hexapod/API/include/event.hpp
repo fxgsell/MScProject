@@ -11,6 +11,7 @@ class Event {
   private:
 };
 
+//should be waiting in poll
 class ESleep : public Event {
   public:
     ESleep(int t) : time(t) {};
@@ -20,9 +21,10 @@ class ESleep : public Event {
     int time;
 };
 
+//Should not be an event
 class EStandDown : public Event {
   public:
-    EStandDown(Body &r) : robot(r) {};
+    EStandDown(Body &b) : robot(b) {};
     int execute();
 
   private:
@@ -32,7 +34,7 @@ class EStandDown : public Event {
 
 class ESetAllLeg : public Event {
   public:
-    ESetAllLeg(Body &r, int s, int e, int w) : robot(r), s(s), e(e), w(w) {};
+    ESetAllLeg(Body &b, int s, int e, int w) : robot(b), s(s), e(e), w(w) {};
     int execute();
 
   private:
@@ -45,7 +47,7 @@ class ESetAllLeg : public Event {
 
 class ESetALeg : public Event {
   public:
-    ESetALeg(Body &r, int s, int e, int w) : robot(r), s(s), e(e), w(w) {};
+    ESetALeg(Body &b, int s, int e, int w) : robot(b), s(s), e(e), w(w) {};
     int execute();
 
   private:
@@ -58,7 +60,7 @@ class ESetALeg : public Event {
 
 class ESetBLeg : public Event {
   public:
-    ESetBLeg(Body &r, int s, int e, int w) : robot(r), s(s), e(e), w(w) {};
+    ESetBLeg(Body &b, int s, int e, int w) : robot(b), s(s), e(e), w(w) {};
     int execute();
 
   private:
@@ -66,6 +68,103 @@ class ESetBLeg : public Event {
     int  s;
     int  e;
     int  w;
+};
+
+/*
+** Down A, B
+*/
+
+class EDownALeg : public Event {
+  public:
+    EDownALeg(Body &b, int r) : robot(b), range(r) {};
+    int execute();
+
+  private:
+    Body &robot;
+    int  range;
+};
+
+class EDownBLeg : public Event {
+  public:
+    EDownBLeg(Body &b, int r) : robot(b), range(r) {};
+    int execute();
+
+  private:
+    Body &robot;
+    int  range;
+};
+
+
+/*
+** Up A, B
+*/
+
+class EUpALeg : public Event {
+  public:
+    EUpALeg(Body &b, int r) : robot(b), range(r) {};
+    int execute();
+
+  private:
+    Body &robot;
+    int  range;
+};
+
+class EUpBLeg : public Event {
+  public:
+    EUpBLeg(Body &b, int r) : robot(b), range(r) {};
+    int execute();
+
+  private:
+    Body &robot;
+    int  range;
+};
+
+/*
+** Forward A, B
+*/
+
+class EForwardALeg : public Event {
+  public:
+    EForwardALeg(Body &b, int r) : robot(b), range(r) {};
+    int execute();
+
+  private:
+    Body &robot;
+    int  range;
+};
+
+class EForwardBLeg : public Event {
+  public:
+    EForwardBLeg(Body &b, int r) : robot(b), range(r) {};
+    int execute();
+
+  private:
+    Body &robot;
+    int  range;
+};
+
+/*
+** Backward A, B
+*/
+
+class EBackwardALeg : public Event {
+  public:
+    EBackwardALeg(Body &b, int r) : robot(b), range(r) {};
+    int execute();
+
+  private:
+    Body &robot;
+    int  range;
+};
+
+class EBackwardBLeg : public Event {
+  public:
+    EBackwardBLeg(Body &b, int r) : robot(b), range(r) {};
+    int execute();
+
+  private:
+    Body &robot;
+    int  range;
 };
 
 

@@ -12,6 +12,28 @@ std::list<Event *> *standDown() {
   return standDown;
 }
 
+std::list<Event *> *walk(int steps) {
+  std::list<Event *> *walk = new std::list<Event *>;
+
+  for (; steps; steps--) {
+    walk->push_back(new EUpALeg(*robot, 400));
+    walk->push_back(new EForwardALeg(*robot, 400));
+    walk->push_back(new ESleep(100000));
+    walk->push_back(new EBackwardBLeg(*robot, 400));
+    walk->push_back(new ESleep(100000));
+    walk->push_back(new EDownALeg(*robot, 400));
+    walk->push_back(new ESleep(100000));
+    walk->push_back(new EUpBLeg(*robot, 400));
+    walk->push_back(new EForwardBLeg(*robot, 400));
+    walk->push_back(new ESleep(100000));
+    walk->push_back(new EBackwardALeg(*robot, 400));
+    walk->push_back(new ESleep(100000));
+    walk->push_back(new EDownBLeg(*robot, 400));
+  }
+  return walk;
+}
+
+
 std::list<Event *> *standUp() {
   std::list<Event *> *standUp = new std::list<Event *>;
 
