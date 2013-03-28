@@ -54,16 +54,16 @@ void Body::commit() {
   elbow << "S";
   wrist << "S";
   for (int i = 0; i < Body::SERVOS; i++) { 
-    int id = servos[i]->id;
+    int id = servos[i]->getId();
 
-    if (servos[i]->changed) {
+    if (servos[i]->hasChanged()) {
       if (id == 0 || id == 4 || id == 8 || id == 18 || id == 22 || id == 26)
-        shoulder << " #" << servos[i]->id << " P" << servos[i]->getRealPosition();
+        shoulder << " #" << id << " P" << servos[i]->getRealPosition();
       else if (id == 1 || id == 5 || id == 9 || id == 17 || id == 21 || id == 25)
-        elbow << " #" << servos[i]->id << " P" << servos[i]->getRealPosition();
+        elbow << " #" << id << " P" << servos[i]->getRealPosition();
       else if (id == 2 || id == 6 || id == 10 || id == 16 || id == 20 || id == 24)
-        wrist << " #" << servos[i]->id << " P" << servos[i]->getRealPosition();
-      servos[i]->changed = false;
+        wrist << " #" << id << " P" << servos[i]->getRealPosition();
+      servos[i]->changeDone();
     }
   }
   shoulder << "\x0d";

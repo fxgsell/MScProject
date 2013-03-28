@@ -14,6 +14,19 @@ Servo::Servo(int id, int a, bool i, int p = 0): id(id), changed(true), adjustmen
     position = p + a;
 }
 
+void Servo::changeDone() {
+  changed = false;
+}
+
+
+bool Servo::hasChanged() {
+  return changed;
+}
+
+int Servo::getId() {
+  return id;
+}
+
 int Servo::getRealPosition() {
   return position + 1500;
 }

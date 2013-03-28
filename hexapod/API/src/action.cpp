@@ -10,7 +10,7 @@ std::list<Event *> *reverseStandUp() {
 
   reverseStandUp->push_back(new ESleep(100000));
 
-  int a = 0, b = 0;
+  int a = 0;
   for (int i = 0; i < 20; i++) {
     reverseStandUp->push_back(new ELegSet(*robot, Leg::A, 0,  1000, i * 50)); 
     reverseStandUp->push_back(new ESleep(100000));
@@ -21,49 +21,6 @@ std::list<Event *> *reverseStandUp() {
     if (a > 1000)
       a = 1000;
   }
-
-//reverseStandUp->push_back(new ELegSet(*robot, Leg::ALL, 0, 1000, -1000));   // REVERSE GROUND
-
-/*
-  reverseStandUp->push_back(new ELegSet(*robot, Leg::A  , 0, 1000, 0)); 
-  reverseStandUp->push_back(new ESleep(100000));
-  reverseStandUp->push_back(new ELegSet(*robot, Leg::B  , 0, 1000, 0)); 
-  reverseStandUp->push_back(new ESleep(100000));
-  reverseStandUp->push_back(new ELegSet(*robot, Leg::A  , 0, 1000, 0)); 
-  reverseStandUp->push_back(new ESleep(100000));
-  reverseStandUp->push_back(new ELegSet(*robot, Leg::B  , 0, 1000, 0)); 
-  reverseStandUp->push_back(new ESleep(100000));
-*/
-
-/*
-  reverseStandUp->push_back(new ELegSet(*robot, Leg::B, 0, 1000, -0)); // ELBOW AT MAX
-  reverseStandUp->push_back(new ESleep(100000));
-  reverseStandUp->push_back(new ELegSet(*robot, Leg::A, 0, 200, -1000)); // WRIST AT MAX
-  reverseStandUp->push_back(new ESleep(100000));
-*/
-
-/*
-  reverseStandUp->push_back(new ELegSet(*robot, Leg::B, 0, 1000, -700)); // ELBOW AT MAX
-  reverseStandUp->push_back(new ESleep(100000));
-  reverseStandUp->push_back(new ELegSet(*robot, Leg::A, 0, 700, -1000)); // WRIST AT MAX
-  reverseStandUp->push_back(new ESleep(100000));
-
-  reverseStandUp->push_back(new ELegSet(*robot, Leg::B, 0, 1000, -800)); // ELBOW AT MAX
-  reverseStandUp->push_back(new ESleep(100000));
-  reverseStandUp->push_back(new ELegSet(*robot, Leg::A, 0, 800, -1000)); // WRIST AT MAX
-  reverseStandUp->push_back(new ESleep(100000));
-
-  reverseStandUp->push_back(new ELegSet(*robot, Leg::B, 0, 1000, -900)); // ELBOW AT MAX
-  reverseStandUp->push_back(new ESleep(100000));
-  reverseStandUp->push_back(new ELegSet(*robot, Leg::A, 0, 900, -1000)); // WRIST AT MAX
-  reverseStandUp->push_back(new ESleep(100000));
-
-  reverseStandUp->push_back(new ELegSet(*robot, Leg::B, 0, 1000, -1000)); // ELBOW AT MAX
-  reverseStandUp->push_back(new ESleep(100000));
-  reverseStandUp->push_back(new ELegSet(*robot, Leg::A, 0, 1000, -1000)); // WRIST AT MAX
-  reverseStandUp->push_back(new ESleep(100000));
-*/
-
  return reverseStandUp;
 
 }
@@ -161,53 +118,44 @@ std::list<Event *> *hello(Leg::LegId) {
   return hello;
 }
 
+/*
+** Align the legs
+*/
+std::list<Event *> *centerLegs() {
+  std::list<Event *> *centerLegs = new std::list<Event *>;
+  centerLegs->push_back(new ELegUp(*robot, Leg::A, 100));
+  centerLegs->push_back(new ELegCenter(*robot, Leg::A));
+  centerLegs->push_back(new ELegDown(*robot, Leg::A, 100));
+  centerLegs->push_back(new ESleep(100000));
+  centerLegs->push_back(new ELegUp(*robot, Leg::B, 100));
+  centerLegs->push_back(new ELegCenter(*robot, Leg::B));
+  centerLegs->push_back(new ELegDown(*robot, Leg::B, 100));
+  return centerLegs;
+}
+
 std::list<Event *> *standUp() {
   std::list<Event *> *standUp = new std::list<Event *>;
+  std::list<Event *> *a;
 
-  standUp->push_back(new ELegSet(*robot, Leg::ALL, 0, 1000, 1000));
-  standUp->push_back(new ESleep(100000));
-  standUp->push_back(new ELegSet(*robot, Leg::ALL, 0, 0, 500));
-  standUp->push_back(new ESleep(100000));
-
-  standUp->push_back(new ELegSet(*robot, Leg::A, 0, 200, 200));
-  standUp->push_back(new ESleep(100000));
-  standUp->push_back(new ELegSet(*robot, Leg::A, 0, 0, 200));
-  standUp->push_back(new ESleep(500000));
-
-  standUp->push_back(new ELegSet(*robot, Leg::B, 0, 200, 200));
-  standUp->push_back(new ESleep(100000));
-  standUp->push_back(new ELegSet(*robot, Leg::B, 0, -200, 200));
-  standUp->push_back(new ESleep(500000));
-
- return standUp;
-  standUp->push_back(new ELegSet(*robot, Leg::A, 0, 600, 1000));
-  standUp->push_back(new ESleep(100000));
-  standUp->push_back(new ELegSet(*robot, Leg::B, 0, 800, 1200));
-  standUp->push_back(new ELegSet(*robot, Leg::B, 0, 600, 1000));
-  standUp->push_back(new ESleep(100000));
-  standUp->push_back(new ELegSet(*robot, Leg::A, 0, 600, 1200));
-  standUp->push_back(new ELegSet(*robot, Leg::A, 0, 400, 1000));
-  standUp->push_back(new ESleep(100000));
-  standUp->push_back(new ELegSet(*robot, Leg::B, 0, 600, 1000));
-  standUp->push_back(new ELegSet(*robot, Leg::B, 0, 400, 800));
-
-  standUp->push_back(new ELegSet(*robot, Leg::ALL, 0, -600, 200));
-
- return standUp;
-  standUp->push_back(new ELegSet(*robot, Leg::A, 0, 800, 1000));
-  standUp->push_back(new ELegSet(*robot, Leg::B, 0, 800, 1000));
-  standUp->push_back(new ESleep(100000));
-  standUp->push_back(new ELegSet(*robot, Leg::A, 0, 800, 1000));
-  standUp->push_back(new ELegSet(*robot, Leg::B, 0, 800, 1000));
-  standUp->push_back(new ESleep(100000));
-  standUp->push_back(new ELegSet(*robot, Leg::A, 0, 800, 1000));
-  standUp->push_back(new ELegSet(*robot, Leg::B, 0, 800, 1000));
-  standUp->push_back(new ESleep(100000));
-  standUp->push_back(new ELegSet(*robot, Leg::A, 0, 800, 1000));
-  standUp->push_back(new ELegSet(*robot, Leg::B, 0, 800, 1000));
+  // Center the legs
+  a = centerLegs();
+  standUp->insert(standUp->end(), a->begin(), a->end());
   standUp->push_back(new ESleep(100000));
 
-  standUp->push_back(new ELegSet(*robot, Leg::ALL, 0, -600, 200));
+  // Alternate push A/B
+  standUp->push_back(new ELegUp(*robot, Leg::A, 100));
+  standUp->push_back(new ELegDown(*robot, Leg::A, 200));
+  standUp->push_back(new ESleep(100000));
+  standUp->push_back(new ELegUp(*robot, Leg::B, 100));
+  standUp->push_back(new ELegDown(*robot, Leg::B, 200));
+  standUp->push_back(new ESleep(100000));
+  standUp->push_back(new ELegUp(*robot, Leg::A, 100));
+  standUp->push_back(new ELegDown(*robot, Leg::A, 200));
+  standUp->push_back(new ESleep(100000));
+  standUp->push_back(new ELegUp(*robot, Leg::B, 100));
+  standUp->push_back(new ELegDown(*robot, Leg::B, 200));
+  standUp->push_back(new ESleep(100000));
+
 
   return standUp;
 }

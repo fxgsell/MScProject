@@ -48,6 +48,18 @@ int	ELegForward::execute() {
 }
 
 /*
+** Center
+*/
+int	ELegCenter::execute() {
+  for (int i = 0; i < Body::LEGS; i++) {
+    if (robot.legs[i]->id & group)
+      robot.legs[i]->center();
+  }
+  robot.commit();
+  return (0);
+}
+
+/*
 ** Down A, B
 */
 int	ELegDown::execute() {

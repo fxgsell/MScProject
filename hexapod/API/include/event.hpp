@@ -49,6 +49,21 @@ class ELegSet : public Event {
 };
 
 /*
+** Center
+*/
+
+class ELegCenter : public Event {
+  public:
+    ELegCenter(Body &b, Leg::LegId g) : robot(b), group(g) {};
+    int execute();
+
+  private:
+    Body &robot;
+    Leg::LegId	group;
+};
+
+
+/*
 ** Down A, B
 */
 

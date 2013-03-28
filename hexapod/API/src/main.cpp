@@ -45,6 +45,7 @@ int main() {
 */
   robot->events.push_back(new ESleep(1000000));
   robot->addAction(standUp());
+
 //  robot->addAction(standDown());
 //  robot->addAction(walk(2));
 
@@ -60,19 +61,9 @@ int main() {
   usleep(1000000);
   robot->standDown();
   usleep(1000000);
-
-  robot->mr.up();
-  robot->ml.up();
-  robot->commit();
-  usleep(1000000);
-
   robot->step(0, 6);
   usleep(1000000);
-
   robot->standDown();
-  usleep(1000000);
-
-  robot->setAllLeg(0, 700,300);
   usleep(1000000);
 */
 

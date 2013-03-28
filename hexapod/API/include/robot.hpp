@@ -11,6 +11,8 @@ class Event;
 class Body {
   private:
     Serial serial;
+    int    direction;
+    int    speed;
 
   public:
     Leg  fr;
@@ -34,23 +36,11 @@ class Body {
 
     void start();
     void addAction(std::list<Event *> *action);
-
     void commit();
-    //void centerLegs();
-    //void turn(int);
-    //void step(int, int);
 
     void setAllLeg(int, int, int);
     void setALeg(int, int, int);
     void setBLeg(int, int, int);
-
-    //void hello();
-    //void sit();
-    //void standUp();
-    //void standDown();
-
-    //void heightUp(int);
-    //void heightDown(int);
 };
 
 extern Body *robot;

@@ -10,14 +10,14 @@ Leg::Leg(LegId i, Servo s, Servo e, Servo w): id(i), shoulder(s), elbow(e), wris
 Leg::Leg(const Leg & l): id(l.id), shoulder(l.shoulder), elbow(l.elbow), wrist(l.wrist) {
 }
 
+void Leg::center() {
+  shoulder.center();
+}
+
 void Leg::setPosition(int s, int e, int w) {
   shoulder.setPosition(s);
   elbow.setPosition(e);
   wrist.setPosition(w);
-}
-
-bool Leg::getTouch() {
-  return touch;
 }
 
 void Leg::forward(int size) {
@@ -30,12 +30,13 @@ void Leg::backward(int size) {
 
 void Leg::up(int size) {
   elbow.updatePosition(size);
+  wrist.updatePosition(size);
 }
 
 void Leg::down(int size) {
   elbow.updatePosition(-size);
+  wrist.updatePosition(-size);
 }
-
 
 void Leg::save() {
   elbow.save();
