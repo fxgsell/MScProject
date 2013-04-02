@@ -4,6 +4,8 @@
 
 #include "event.hpp"
 
+std::list<Event *> *setLegVLevel(Leg::LegId id, int level);
+std::list<Event *> *positionWalk();
 std::list<Event *> *hello(Leg::LegId);
 std::list<Event *> *standUp();
 std::list<Event *> *standDown();

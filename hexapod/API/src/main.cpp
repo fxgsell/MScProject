@@ -12,23 +12,23 @@ Body *robot;
 */
 int main() {
   Servo s0( 0,    75, false, 0);
-  Servo s1( 1,  -700, false, 700); // + up
+  Servo s1( 1,  -300, false, 700); // + up
   Servo s2( 2,     0, false, 300); // ERROR
   Servo s4( 4,   -50, false, 0);
-  Servo s5( 5,  -450, false, 700); //
-  Servo s6( 6,     0, false, 300); // + in
+  Servo s5( 5,  -150, false, 700); //
+  Servo s6( 6,  -300, false, 300); // + in
   Servo s8( 8,   -25, false, 0);
-  Servo s9( 9,  -700, false, 700);
+  Servo s9( 9,  -300, false, 700);
   Servo s10(10, -300, false, 300); // + in
 
   Servo s18(18,   55, true,    0);
   Servo s17(17, -500, true,  700);
-  Servo s16(16, -100, true,  300);
+  Servo s16(16, -50, true,  300);
   Servo s22(22,  -60, true,    0);
-  Servo s21(21, -600, true,  700);
+  Servo s21(21, -200, true,  700);
   Servo s20(20,  -50, true,  300);
   Servo s26(26,  -25, true,    0);
-  Servo s25(25, -500, true,  700);
+  Servo s25(25, -100, true,  700);
   Servo s24(24,  -50, true,  300);
 
   Leg  fr(Leg::FR, s18, s17, s16);
@@ -43,12 +43,19 @@ int main() {
 
 /*
 */
-  robot->events.push_back(new ESleep(1000000));
-//  robot->addAction(standUp());
-  robot->addAction(hello(Leg::FR));
+//  robot->events.push_back(new ESleep(1000000));
 
 //  robot->addAction(standDown());
-//  robot->addAction(walk(2));
+
+//  robot->events.push_back(new ESleep(1000000));
+  robot->events.push_back(new ESleep(1000000));
+  robot->addAction(setLegVLevel(Leg::ALL, 0));
+  robot->events.push_back(new ESleep(1000000));
+  robot->addAction(setLegVLevel(Leg::ALL, 5));
+  robot->events.push_back(new ESleep(1000000));
+
+  robot->addAction(positionWalk());
+  robot->addAction(walk(10));
 
 /*
   robot->addAction(flipOver());

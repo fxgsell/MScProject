@@ -62,6 +62,18 @@ int	ELegCenter::execute() {
 /*
 ** Down A, B
 */
+int	ELegVLevel::execute() {
+  for (int i = 0; i < Body::LEGS; i++) {
+    if (robot.legs[i]->id & group)
+      robot.legs[i]->down(range);
+  }
+  robot.commit();
+  return (0);
+}
+
+/*
+** Down A, B
+*/
 int	ELegDown::execute() {
   for (int i = 0; i < Body::LEGS; i++) {
     if (robot.legs[i]->id & group)
@@ -99,7 +111,7 @@ int	ELegSave::execute() {
 int	ELegRestore::execute() {
   for (int i = 0; i < Body::LEGS; i++) {
     if (robot.legs[i]->id & group)
-      robot.legs[i]->save();
+      robot.legs[i]->restore();
   }
   robot.commit();
   return (0);
