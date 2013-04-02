@@ -44,7 +44,8 @@ int main() {
 /*
 */
   robot->events.push_back(new ESleep(1000000));
-  robot->addAction(standUp());
+//  robot->addAction(standUp());
+  robot->addAction(hello(Leg::FR));
 
 //  robot->addAction(standDown());
 //  robot->addAction(walk(2));

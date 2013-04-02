@@ -107,14 +107,22 @@ std::list<Event *> *walk(int steps) {
   return walk;
 }
 
-std::list<Event *> *hello(Leg::LegId) {
+std::list<Event *> *hello(Leg::LegId l) {
   std::list<Event *> *hello = new std::list<Event *>;
 
-  /*
-  **  Need backup event
-  */
+  hello->push_back(new ELegSave(*robot, l));
 
-
+  for (int i = 0; i < 4; i++) {
+    hello->push_back(new ELegSet(*robot, l, -200, 1000, -600));
+    hello->push_back(new ESleep(100000));
+    hello->push_back(new ELegSet(*robot, l, 200, 1000, -400));
+    hello->push_back(new ESleep(100000));
+    hello->push_back(new ELegSet(*robot, l, -200, 1000, -600));
+    hello->push_back(new ESleep(100000));
+  }
+  hello->push_back(new ESleep(100000));
+  hello->push_back(new ELegRestore(*robot, l));
+  hello->push_back(new ESleep(100000));
   return hello;
 }
 

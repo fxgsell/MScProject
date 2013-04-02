@@ -123,3 +123,27 @@ class ELegBackward : public Event {
     int  range;
 };
 
+/*
+** Backup
+*/
+
+class ELegSave : public Event {
+  public:
+    ELegSave(Body &b, Leg::LegId g) : robot(b), group(g) {};
+    int execute();
+
+  private:
+    Body &robot;
+    Leg::LegId	group;
+};
+
+class ELegRestore : public Event {
+  public:
+    ELegRestore(Body &b, Leg::LegId g) : robot(b), group(g) {};
+    int execute();
+
+  private:
+    Body &robot;
+    Leg::LegId	group;
+};
+

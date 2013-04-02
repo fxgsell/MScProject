@@ -83,6 +83,28 @@ int	ELegUp::execute() {
   return (0);
 }
 
+
+/*
+** Backup
+*/
+int	ELegSave::execute() {
+  for (int i = 0; i < Body::LEGS; i++) {
+    if (robot.legs[i]->id & group)
+      robot.legs[i]->save();
+  }
+  robot.commit();
+  return (0);
+}
+
+int	ELegRestore::execute() {
+  for (int i = 0; i < Body::LEGS; i++) {
+    if (robot.legs[i]->id & group)
+      robot.legs[i]->save();
+  }
+  robot.commit();
+  return (0);
+}
+
 /*
 ** Sleep
 */
