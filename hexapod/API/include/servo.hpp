@@ -12,6 +12,7 @@ class Servo {
     bool  hasChanged();
     void  changeDone();
     void  updatePosition(int);
+    void  setAngle(int);
     void  setPosition(int);
     void  center();
 

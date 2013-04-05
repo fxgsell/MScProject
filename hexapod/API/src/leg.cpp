@@ -1,6 +1,14 @@
 #include <stdio.h>
+#include <cmath>
+
 #include "servo.hpp"
 #include "leg.hpp"
+
+/*
+** Leg Size
+*/
+#define SIZETIBIA 60
+#define SIZEFEMUR 100
 
 /*
 ** Legs
@@ -15,6 +23,24 @@ Leg::Leg(const Leg & l): id(l.id), shoulder(l.shoulder), elbow(l.elbow), wrist(l
 
 void Leg::center() {
   shoulder.center();
+}
+
+void Leg::setCoord(int x, int y, int z) {
+  int G = sqrt(x * x + z * z);
+  int H = sqrt(y * y + G * G);
+  int A = SIZEFEMUR;
+  int B = SIZETIBIA;
+
+  int b = acos((A * A + H * H - B * B) / (2 * A * H));
+  int h = asin(H * (sin(b)) / B);
+
+  int s = atan(x / z);
+  int e = atan(atan(G / y) + b - 90);
+  int w = atan(h - 180);
+
+  shoulder.setAngle(s);
+  elbow.setAngle(e);
+  wrist.setAngle(w);
 }
 
 void Leg::setPosition(int s, int e, int w) {
