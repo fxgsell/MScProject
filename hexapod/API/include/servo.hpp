@@ -1,6 +1,6 @@
 #pragma once
 
-#include <stack>
+#include "list.hpp"
 
 class Servo {
   public:
@@ -19,7 +19,7 @@ class Servo {
     void  restore();
 
   private:
-    std::stack<int> states;
+    list            states;
     int	            id;
     bool            changed;
     int             adjustment;

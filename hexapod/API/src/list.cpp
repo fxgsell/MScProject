@@ -1,4 +1,18 @@
 #include "list.hpp"
+ 
+list::list(): start(0), end(0) {
+}
+
+list::list(void *data): start(0), end(0) {
+  push_back(data);
+}
+
+bool list::empty() {
+  if (start != 0)
+    return true;
+  return false;
+}
+
 
 void  *list::pop() {
   if (start) {
@@ -20,6 +34,20 @@ void list::insert(list *l){
   start = l->start;
 };
 
+void *list::push_front(void *data) {
+  list_elem *e;
+
+  e = new list_elem;
+  if (e) {
+    e->data = data;
+    if (start)
+      e->next = start;
+    else
+      e->next = 0;
+    start = e;
+  }
+  return e;
+};
 
 void *list::push_back(void *data) {
   list_elem *e;

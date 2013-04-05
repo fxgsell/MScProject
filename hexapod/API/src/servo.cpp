@@ -61,14 +61,22 @@ void Servo::updatePosition(int offset) {
 }
 
 void Servo::save() {
-  states.push(position);
+  int *p = new int;
+
+  *p = position;
+  states.push_front(p);
 }
 
 void Servo::restore() {
-  if (position != states.top())
-    changed = true;
-  position = states.top();
-  states.pop();
+  int *p;
+
+  p = (int *)states.pop();
+  if (p) {
+    if (*p != position)
+      changed = true;
+    position = *p;
+    delete p;
+  }
 }
 
 void	Servo::center() {

@@ -41,39 +41,18 @@ int main() {
   robot = new Body(fr, mr, br, fl, ml, bl);
   robot->commit();
 
-/*
-*/
-//  robot->events.push_back(new ESleep(1000000));
+  //robot->events.push_back(new ESleep(1000000));
+  //robot->addAction(setLegVLevel(Leg::ALL, 0));
+  //robot->events.push_back(new ESleep(1000000));
+  //robot->addAction(setLegVLevel(Leg::ALL, 5));
+  //robot->events.push_back(new ESleep(1000000));
+  //robot->addAction(setLegVLevel(Leg::ALL, 10));
+  //robot->events.push_back(new ESleep(1000000));
 
-//  robot->addAction(standDown());
+  //robot->addAction(positionWalk());
+  //robot->addAction(walk(10));
 
-//  robot->events.push_back(new ESleep(1000000));
-  robot->events.push_back(new ESleep(1000000));
-  robot->addAction(setLegVLevel(Leg::ALL, 0));
-  robot->events.push_back(new ESleep(1000000));
-  robot->addAction(setLegVLevel(Leg::ALL, 5));
-  robot->events.push_back(new ESleep(1000000));
-
-  robot->addAction(positionWalk());
-  robot->addAction(walk(10));
-
-/*
-  robot->addAction(flipOver());
-*/
   robot->start();
-
-/*
-  robot->standUp();
-  usleep(1000000);
-  robot->hello();
-  usleep(1000000);
-  robot->standDown();
-  usleep(1000000);
-  robot->step(0, 6);
-  usleep(1000000);
-  robot->standDown();
-  usleep(1000000);
-*/
 
   return 0;
 }
