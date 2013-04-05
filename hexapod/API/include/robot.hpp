@@ -1,6 +1,6 @@
 #pragma once
 
-#include <list>
+#include "list.hpp"
 
 #include "serial.hpp"
 #include "servo.hpp"
@@ -22,7 +22,7 @@ class Body {
     Leg  ml;
     Leg  bl;
 
-    std::list<Event *>   events;
+    list   events;
 
     Servo                *servos[18];
     Leg                  *legs[6];
@@ -35,7 +35,7 @@ class Body {
     Body();
 
     void start();
-    void addAction(std::list<Event *> *action);
+    void addAction(list *action);
     void commit();
 
     void setAllLeg(int, int, int);

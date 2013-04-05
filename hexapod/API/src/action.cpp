@@ -1,20 +1,20 @@
-#include <list>
+#include "list.hpp"
 
 #include "action.hpp"
 #include "event.hpp"
 #include "robot.hpp"
 
-std::list<Event *> *reverseStandUp() {
-  std::list<Event *> *reverseStandUp = new std::list<Event *>;
+list *reverseStandUp() {
+  list *reverseStandUp = new list;
   reverseStandUp->push_back(new ELegSet(*robot, Leg::ALL, 0, 1000, 0));   // REVERSE GROUND
 
  return reverseStandUp;
 
 }
 
-std::list<Event *> *flipOver() {
-  std::list<Event *> *flipOver = new std::list<Event *>;
-  std::list<Event *> *a;
+list *flipOver() {
+  list *flipOver = new list;
+  list *a;
 
 // STANDUP ON BACK
 //  a = reverseStandUp();
@@ -59,22 +59,22 @@ flipOver->push_back(new ESleep(5000000));
 
 //  STANDUP
   a = standUp();
-  flipOver->insert(flipOver->end(), a->begin(), a->end());
+  flipOver->insert(a);
   flipOver->push_back(new ESleep(100000));
 
   return flipOver;
 }
 
-std::list<Event *> *standDown() {
-  std::list<Event *> *standDown = new std::list<Event *>;
+list *standDown() {
+  list *standDown = new list;
 
   standDown->push_back(new ELegSet(*robot, Leg::ALL, 0, 300, 300));
   standDown->push_back(new ESleep(100000));
   return standDown;
 }
 
-std::list<Event *> *positionWalk() {
-  std::list<Event *> *positionWalk = new std::list<Event *>;
+list *positionWalk() {
+  list *positionWalk = new list;
 
   positionWalk->push_back(new ELegUp(*robot, Leg::FRONT, 5));
   positionWalk->push_back(new ESleep(100000));
@@ -103,8 +103,8 @@ std::list<Event *> *positionWalk() {
 }
 
 
-std::list<Event *> *walk(int steps) {
-  std::list<Event *> *walk = new std::list<Event *>;
+list *walk(int steps) {
+  list *walk = new list;
 
   for (; steps; steps--) {
     walk->push_back(new ELegUp(*robot, Leg::A, 5));
@@ -124,8 +124,8 @@ std::list<Event *> *walk(int steps) {
   return walk;
 }
 
-std::list<Event *> *hello(Leg::LegId l) {
-  std::list<Event *> *hello = new std::list<Event *>;
+list *hello(Leg::LegId l) {
+  list *hello = new list;
 
   hello->push_back(new ELegSave(*robot, l));
   for (int i = 0; i < 4; i++) {
@@ -146,8 +146,8 @@ std::list<Event *> *hello(Leg::LegId l) {
 /*
 ** Align the legs
 */
-std::list<Event *> *centerLegs() {
-  std::list<Event *> *centerLegs = new std::list<Event *>;
+list *centerLegs() {
+  list *centerLegs = new list;
   centerLegs->push_back(new ELegUp(*robot, Leg::A, 100));
   centerLegs->push_back(new ELegCenter(*robot, Leg::A));
   centerLegs->push_back(new ELegDown(*robot, Leg::A, 100));
@@ -158,9 +158,8 @@ std::list<Event *> *centerLegs() {
   return centerLegs;
 }
 
-std::list<Event *> *setLegVLevel(Leg::LegId id, int level) {
-  std::list<Event *> *setLegVLevel = new std::list<Event *>;
-  std::list<Event *> *a;
+list *setLegVLevel(Leg::LegId id, int level) {
+  list *setLegVLevel = new list;
 
   //// Center the legs
   //a = centerLegs();
@@ -173,9 +172,8 @@ std::list<Event *> *setLegVLevel(Leg::LegId id, int level) {
 }
 
 
-std::list<Event *> *standUp() {
-  std::list<Event *> *standUp = new std::list<Event *>;
-  std::list<Event *> *a;
+list *standUp() {
+  list *standUp = new list;
 
   //// Center the legs
   //a = centerLegs();

@@ -1,6 +1,7 @@
 #include <unistd.h>
 #include <sstream>
 
+#include "list.hpp"
 #include "servo.hpp"
 #include "event.hpp"
 #include "leg.hpp"
@@ -87,41 +88,15 @@ void Body::start() {
     // read input
     // read sensors
     if (!events.empty()) { 		//execute next event
-      events.front()->execute(); 
-      delete events.front();
-      events.pop_front();
+      ((Event*)events.start)->execute(); 
+      events.pop();
     }
     // sleep on pool
   }
 }
 
-void Body::addAction(std::list<Event *> *action) {
-  events.insert(events.end(), action->begin(), action->end());
+void Body::addAction(list *action) {
+  events.insert(action);
   delete action;
 }
 
-/*
-void Body::hello() {
-   bl.save();
-   bl.setPosition(0, 0, 0);
-   commit();
-   int i;
-   for (i = 0; i < 4; i++) {
-     bl.setPosition(-200, 1000, -600);
-     commit();
-     usleep(100000);
-     bl.setPosition(200, 1000, -400);
-     commit();
-     usleep(100000);
-     bl.setPosition(-200, 1000, -600);
-     commit();
-     usleep(100000);
-   }
-   usleep(300000);
-   bl.restore();
-   commit();
-   usleep(100000);
-}
-
-
-*/
