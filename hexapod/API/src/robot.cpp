@@ -6,6 +6,7 @@
 #include "event.hpp"
 #include "leg.hpp"
 #include "robot.hpp"
+#include "socket.hpp"
 
 /*
 ** Body
@@ -13,6 +14,10 @@
 Body::Body(Leg fr, Leg mr, Leg br, Leg fl, Leg ml, Leg bl) :
 				serial("/dev/ttyAMA0"),
 				fr(fr), mr(mr), br(br), fl(fl), ml(ml), bl(bl) {
+
+  if (srv_create(9930) == -1)
+    throw ;
+
   servos[0] = &this->fr.shoulder;
   servos[1] = &this->mr.shoulder;
   servos[2] = &this->br.shoulder;
@@ -84,14 +89,21 @@ void Body::commit() {
 */
 
 void Body::start() {
-  for (;!events.empty();) {    //just for now will be ;;
-    // read input
-    // read sensors
+  struct timeval  *tv_ptr;
+  int r;
+  run = true;
+
+  for (;run;) {    //just for now will be ;;
+    init_fd();
+
+    tv_ptr = NULL;
+    r = select(lastfd + 1, &fd_read, &fd_write, NULL, tv_ptr);
+    check_fd(r);
+
     if (!events.empty()) { 		//execute next event
       ((Event*)events.start)->execute(); 
       events.pop();
     }
-    // sleep on pool
   }
 }
 

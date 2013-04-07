@@ -13,6 +13,7 @@ class Body {
     Serial serial;
     int    direction;
     int    speed;
+    bool   run;
 
   public:
     Leg  fr;

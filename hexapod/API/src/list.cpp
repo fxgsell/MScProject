@@ -8,7 +8,7 @@ list::list(void *data): start(0), end(0) {
 }
 
 bool list::empty() {
-  if (start != 0)
+  if (start == 0)
     return true;
   return false;
 }

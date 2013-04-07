@@ -1,11 +1,16 @@
+#include <stdio.h>
+#include <sys/socket.h>
+#include <sys/types.h>
 #include <unistd.h>
 
 #include "action.hpp"
 #include "event.hpp"
 #include "robot.hpp"
 #include "leg.hpp"
+#include "socket.hpp"
 
 Body *robot;
+
 
 /*
 ** Initialisation des servos
@@ -41,6 +46,8 @@ int main() {
   robot = new Body(fr, mr, br, fl, ml, bl);
   robot->commit();
 
+
+
   //robot->events.push_back(new ESleep(1000000));
   //robot->addAction(setLegVLevel(Leg::ALL, 0));
   //robot->events.push_back(new ESleep(1000000));
@@ -52,7 +59,7 @@ int main() {
   //robot->addAction(positionWalk());
   //robot->addAction(walk(10));
 
-  robot->start();
 
+  robot->start();
   return 0;
 }
