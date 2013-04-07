@@ -48,27 +48,31 @@ int main(int ac, char* av[])
     }
     if (init() == false)
       return 1;
-    if (!(s = initNet(av[1])))
+    s = initNet(av[1]);
+    if (!s)
       return -1;
 
     if (load_files() == false)
       return 1;
 
     int i = 0;
-    char buf[BUFLEN];
+    char *buf = "TEST\n";
     while (quit == false) {
         //Start the frame timer
         fps.start();
 
         //While there's events to handle
         while (SDL_PollEvent(&event)) {
-            printf("Sending packet %d\n", i);
-            if (send(s, buf, BUFLEN, 0) == -1)
-              fprintf(stderr, "Error: packet %d\n", i++);
             myDot.handle_input();
             if (event.type == SDL_QUIT)
               quit = true;
         }
+
+        printf("Sending packet %d\n", i);
+        if (send(s, buf, BUFLEN, 0) == -1)
+          fprintf(stderr, "Error: packet %d\n", i);
+        i++;
+        printf("Hello\n");
 
         //Move the dot
         myDot.move();

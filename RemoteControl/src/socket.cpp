@@ -11,18 +11,24 @@
 packet p;
 
 int initNet(char *av) {
-  struct sockaddr_in si_other;
-  int s;
+  int sock;
+  struct sockaddr_in echoserver;
 
-  if ((s = socket(AF_INET, SOCK_DGRAM, IPPROTO_TCP))==-1)
+  if ((sock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP)) < 0)
     return 0;
 
-  memset((char *) &si_other, 0, sizeof(si_other));
-  si_other.sin_family = AF_INET;
-  si_other.sin_port = htons(PORT);
-  if (inet_aton(av, &si_other.sin_addr) == 0) {
-    return 0;
+  memset(&echoserver, 0, sizeof(echoserver));       /* Clear struct */
+  echoserver.sin_family = AF_INET;                  /* Internet/IP */
+  echoserver.sin_addr.s_addr = inet_addr(av);  /* IP address */
+  echoserver.sin_port = htons(PORT);       /* server port */
+
+  /* Establish connection */
+  if (connect(sock, (struct sockaddr *) &echoserver, sizeof(echoserver)) < 0) {
+          perror("socket");
+          return 0;
   }
-  return s;
+
+
+  return sock;
 }
 
