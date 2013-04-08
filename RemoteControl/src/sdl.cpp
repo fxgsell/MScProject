@@ -115,6 +115,7 @@ void Dot::handle_input()
         yAxe = event.jaxis.value / 1000;
       }
       else if (event.jaxis.axis == 2) {  // pivot
+        turn = event.jaxis.value;
         if (event.jaxis.value < 0)
           xOri += event.jaxis.value / 1000;
         else if (event.jaxis.value > 0)

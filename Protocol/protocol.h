@@ -1,13 +1,12 @@
 #pragma once
 
 struct packet {
-        int      flags;
-        long int id;
-        int      orientation; // Axis 3
-        int      x;           // Axis 0
-        int      y;           // Axis 1
-        int      turn;        // Axis 2
-        int      speed;       // Axis 3
+  int      flags;
+  long int id;
+  int      x;           // Axis 0
+  int      y;           // Axis 1
+  int      turn;        // Axis 2
+  int      speed;       // Axis 3
 };
 
 

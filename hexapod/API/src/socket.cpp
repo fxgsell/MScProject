@@ -9,10 +9,6 @@
 
 #include "socket.hpp"
 
-#define PORT 9930
-
- 
- 
 fd_set  fd_read;
 fd_set  fd_write;
 
@@ -37,9 +33,9 @@ void      clean_fd(int fd)
 void    client_read(int cs)
 {
   int   r;
-  int   buf = 0;
+  packet   buf;
 
-  r = recv(cs, &buf, sizeof(int), 0);
+  r = recv(cs, &buf, sizeof(buf), 0);
   if (r <= 0) {
           // GUS IS DEAD
     close(cs);
@@ -47,7 +43,9 @@ void    client_read(int cs)
   }
   else
   {
-    printf("Recv!!!\n");
+    printf("Recv!\tid:%ld, speed:%d\n", buf.id, buf.speed);
+    printf("\tx:%d, y:%d\n", buf.x, buf.y);
+    printf("\tturn:%d\n", buf.turn);
 
           //DO SHIT
   }

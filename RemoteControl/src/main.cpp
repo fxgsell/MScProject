@@ -55,27 +55,32 @@ int main(int ac, char* av[])
     if (load_files() == false)
       return 1;
 
-    int i = 0;
-    char *buf = "TEST\n";
+    long int i = 0;
+    packet buf;
+    bzero(&buf, sizeof(buf));
     while (quit == false) {
         //Start the frame timer
         fps.start();
 
+        myDot.last = buf;
         //While there's events to handle
         while (SDL_PollEvent(&event)) {
             myDot.handle_input();
             if (event.type == SDL_QUIT)
               quit = true;
+            myDot.SetBuf(&buf);
         }
 
-        printf("Sending packet %d\n", i);
-        if (send(s, buf, BUFLEN, 0) == -1)
-          fprintf(stderr, "Error: packet %d\n", i);
-        i++;
-        printf("Hello\n");
+        if (memcmp(&myDot.last, &buf, sizeof(buf))) {
+          buf.id = i;
+          printf("Sending packet %ld\n", i);
+          if (send(s, &buf, sizeof(buf), 0) == -1)
+            fprintf(stderr, "Error: packet %ld\n", i);
+          i++;
 
-        //Move the dot
-        myDot.move();
+          //Move the dot
+          myDot.move();
+        }
 
         //Fill the screen white
         SDL_FillRect(screen, &screen->clip_rect, SDL_MapRGB(screen->format, 0xFF, 0xFF, 0xFF));

@@ -19,8 +19,8 @@ int initNet(char *av) {
 
   memset(&echoserver, 0, sizeof(echoserver));       /* Clear struct */
   echoserver.sin_family = AF_INET;                  /* Internet/IP */
-  echoserver.sin_addr.s_addr = inet_addr(av);  /* IP address */
-  echoserver.sin_port = htons(PORT);       /* server port */
+  echoserver.sin_addr.s_addr = inet_addr(av);       /* IP address */
+  echoserver.sin_port = htons(PORT);                /* server port */
 
   /* Establish connection */
   if (connect(sock, (struct sockaddr *) &echoserver, sizeof(echoserver)) < 0) {

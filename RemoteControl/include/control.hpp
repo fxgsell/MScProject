@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../../Protocol/protocol.h"
+
 int initNet(char *av);
 bool load_files();
 
@@ -40,9 +42,21 @@ class Dot
     int xOri, yOri;
     int xAxe, yAxe;
 
+    int turn;
+
+  public:
+    packet last;
+
   public:
     //Initializes
     Dot();
+
+    void SetBuf(packet *buf) {
+       buf->speed = speed;
+       buf->x = xAxe;
+       buf->y = yAxe;
+       buf->turn = turn;
+    };
 
     //Handles joystick
     void handle_input();
