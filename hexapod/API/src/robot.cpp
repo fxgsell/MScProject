@@ -93,17 +93,18 @@ void Body::start() {
   int r;
   run = true;
 
-  for (;run;) {    //just for now will be ;;
+  for (;run;) { 
     init_fd();
 
     tv_ptr = NULL;
     r = select(lastfd + 1, &fd_read, &fd_write, NULL, tv_ptr);
     check_fd(r);
 
-    if (!events.empty()) { 		//execute next event
-      ((Event*)events.start)->execute(); 
-      events.pop();
-    }
+    if (!events.empty()) // If nothing: walk
+      addAction(walk(1));
+
+    ((Event*)events.start)->execute(); 
+    events.pop();
   }
 }
 

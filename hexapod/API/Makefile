@@ -4,7 +4,6 @@ OBJ_DIR   = obj
 INC_DIR   = include
 
 CPP_FILES = $(wildcard $(SRC_DIR)/*.cpp)
-H_FILES   = $(wildcard $(INC_DIR)/*.hpp)
 
 OBJ_FILES = $(addprefix $(OBJ_DIR)/,$(notdir $(CPP_FILES:.cpp=.o)))
 
@@ -21,10 +20,10 @@ all : $(TARGET)
 $(TARGET) : $(OBJS)
 	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJ_DIR)/*.o $(LDFLAGS)
 
-$(OBJ_DIR)/%.o : $(SRC_DIR)/%.c $(H_FILES)
+$(OBJ_DIR)/%.o : $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
-$(OBJ_DIR)/%.o : $(SRC_DIR)/%.cpp $(H_FILES)
+$(OBJ_DIR)/%.o : $(SRC_DIR)/%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 clean:

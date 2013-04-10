@@ -8,6 +8,9 @@
 #include <string.h>
 
 #include "socket.hpp"
+#include "robot.hpp"
+
+extern Body *robot;
 
 fd_set  fd_read;
 fd_set  fd_write;
@@ -46,6 +49,9 @@ void    client_read(int cs)
     printf("Recv!\tid:%ld, speed:%d\n", buf.id, buf.speed);
     printf("\tx:%d, y:%d\n", buf.x, buf.y);
     printf("\tturn:%d\n", buf.turn);
+
+    robot->direction = buf.turn;
+    robot->speed = buf.speed;
 
           //DO SHIT
   }

@@ -9,7 +9,7 @@
 class Event;
 
 class Body {
-  private:
+  public:
     Serial serial;
     int    direction;
     int    speed;
