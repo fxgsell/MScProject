@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <unistd.h>
 #include <sstream>
 
@@ -5,6 +6,7 @@
 #include "servo.hpp"
 #include "event.hpp"
 #include "leg.hpp"
+#include "action.hpp"
 #include "robot.hpp"
 #include "socket.hpp"
 
@@ -76,12 +78,18 @@ void Body::commit() {
   elbow << "\x0d";
   wrist << "\x0d";
 
-  s = shoulder.str();
-  serial.write(s.c_str());
-  s = elbow.str();
-  serial.write(s.c_str());
-  s = wrist.str();
-  serial.write(s.c_str());
+  if ((s = shoulder.str()).compare("S\x0d")) {
+    serial.write(s.c_str());
+    puts(s.c_str());
+  }
+  if ((s = elbow.str()).compare("S\x0d")) {
+    serial.write(s.c_str());
+    puts(s.c_str());
+  }
+  if ((s = wrist.str()).compare("S\x0d")) {
+    serial.write(s.c_str());
+    puts(s.c_str());
+  }
 }
 
 /*
@@ -99,11 +107,12 @@ void Body::start() {
     tv_ptr = NULL;
     r = select(lastfd + 1, &fd_read, &fd_write, NULL, tv_ptr);
     check_fd(r);
-
-    if (!events.empty()) // If nothing: walk
+    
+    if (events.empty())
       addAction(walk(1));
 
-    ((Event*)events.start)->execute(); 
+    Event *e = (Event*)events.start->data;
+    e->execute(); 
     events.pop();
   }
 }

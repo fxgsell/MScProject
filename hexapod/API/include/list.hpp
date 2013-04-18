@@ -15,6 +15,7 @@ class list {
     void insert(list *l);
     void *pop();
     bool empty();
+    void print();
 
     list_elem *start;
 

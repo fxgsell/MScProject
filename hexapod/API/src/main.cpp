@@ -56,9 +56,7 @@ int main() {
   //robot->addAction(setLegVLevel(Leg::ALL, 10));
   //robot->events.push_back(new ESleep(1000000));
 
-  //robot->addAction(positionWalk());
-  //robot->addAction(walk(10));
-
+  robot->addAction(positionWalk());
 
   robot->start();
   return 0;

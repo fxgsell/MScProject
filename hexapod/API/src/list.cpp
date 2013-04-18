@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #include "list.hpp"
  
 list::list(): start(0), end(0) {
@@ -25,8 +27,17 @@ void  *list::pop() {
   return 0;
 };
 
+void list::print() {
+  list_elem *cur;
+   
+  for (cur = this->start; cur != 0;) {
+     printf("Elem: %p\n", cur);
+     cur = cur->next;
+  }
+  printf("Elem: %p\n", cur);
+}
 
-void list::insert(list *l){
+void list::insert(list *l) {
   if (l->end)
     l->end->next = start;
   else

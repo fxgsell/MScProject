@@ -102,6 +102,7 @@ list *positionWalk() {
   return positionWalk;
 }
 
+#include <stdio.h>
 
 list *walk(int steps) {
   list *walk = new list;
@@ -120,6 +121,7 @@ list *walk(int steps) {
     walk->push_back(new ELegBackward(*robot, Leg::A, 200));
     walk->push_back(new ESleep(100000));
     walk->push_back(new ELegDown(*robot, Leg::B, 5));
+    walk->push_back(new ESleep(100000));
   }
   return walk;
 }
