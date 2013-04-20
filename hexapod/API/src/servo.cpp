@@ -1,5 +1,7 @@
 #include "servo.hpp"
 
+#define ANGLETOPULSE 11
+
 /*
 ** Servo
 */
@@ -12,6 +14,10 @@ Servo::Servo(int id, int a, bool i, int p = 0): id(id), changed(true), adjustmen
     position = - p - a;
   else
     position = p + a;
+}
+
+void Servo::setAngle(int x) {
+  setPosition(x * ANGLETOPULSE);
 }
 
 void Servo::changeDone() {
@@ -61,14 +67,22 @@ void Servo::updatePosition(int offset) {
 }
 
 void Servo::save() {
-  states.push(position);
+  int *p = new int;
+
+  *p = position;
+  states.push_front(p);
 }
 
 void Servo::restore() {
-  if (position != states.top())
-    changed = true;
-  position = states.top();
-  states.pop();
+  int *p;
+
+  p = (int *)states.pop();
+  if (p) {
+    if (*p != position)
+      changed = true;
+    position = *p;
+    delete p;
+  }
 }
 
 void	Servo::center() {

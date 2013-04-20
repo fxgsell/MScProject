@@ -1,15 +1,15 @@
 #pragma once
 
-#include <list>
+#include "list.hpp"
 
 #include "event.hpp"
 
-std::list<Event *> *setLegVLevel(Leg::LegId id, int level);
-std::list<Event *> *positionWalk();
-std::list<Event *> *hello(Leg::LegId);
-std::list<Event *> *standUp();
-std::list<Event *> *standDown();
-std::list<Event *> *walk(int steps);
-std::list<Event *> *flipOver();
-std::list<Event *> *centerLegs();
+list *setLegVLevel(Leg::LegId id, int level);
+list *positionWalk();
+list *hello(Leg::LegId);
+list *standUp();
+list *standDown();
+list *walk(int steps);
+list *flipOver();
+list *centerLegs();
 

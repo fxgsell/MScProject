@@ -1,10 +1,14 @@
+#include <stdio.h>
 #include <unistd.h>
 #include <sstream>
 
+#include "list.hpp"
 #include "servo.hpp"
 #include "event.hpp"
 #include "leg.hpp"
+#include "action.hpp"
 #include "robot.hpp"
+#include "socket.hpp"
 
 /*
 ** Body
@@ -12,6 +16,10 @@
 Body::Body(Leg fr, Leg mr, Leg br, Leg fl, Leg ml, Leg bl) :
 				serial("/dev/ttyAMA0"),
 				fr(fr), mr(mr), br(br), fl(fl), ml(ml), bl(bl) {
+
+  if (srv_create(9930) == -1)
+    throw ;
+
   servos[0] = &this->fr.shoulder;
   servos[1] = &this->mr.shoulder;
   servos[2] = &this->br.shoulder;
@@ -70,12 +78,18 @@ void Body::commit() {
   elbow << "\x0d";
   wrist << "\x0d";
 
-  s = shoulder.str();
-  serial.write(s.c_str());
-  s = elbow.str();
-  serial.write(s.c_str());
-  s = wrist.str();
-  serial.write(s.c_str());
+  if ((s = shoulder.str()).compare("S\x0d")) {
+    serial.write(s.c_str());
+    puts(s.c_str());
+  }
+  if ((s = elbow.str()).compare("S\x0d")) {
+    serial.write(s.c_str());
+    puts(s.c_str());
+  }
+  if ((s = wrist.str()).compare("S\x0d")) {
+    serial.write(s.c_str());
+    puts(s.c_str());
+  }
 }
 
 /*
@@ -83,45 +97,28 @@ void Body::commit() {
 */
 
 void Body::start() {
-  for (;!events.empty();) {    //just for now will be ;;
-    // read input
-    // read sensors
-    if (!events.empty()) { 		//execute next event
-      events.front()->execute(); 
-      delete events.front();
-      events.pop_front();
-    }
-    // sleep on pool
+  struct timeval  *tv_ptr;
+  int r;
+  run = true;
+
+  for (;run;) { 
+    init_fd();
+
+    tv_ptr = NULL;
+    r = select(lastfd + 1, &fd_read, &fd_write, NULL, tv_ptr);
+    check_fd(r);
+    
+    if (events.empty())
+      addAction(walk(1));
+
+    Event *e = (Event*)events.start->data;
+    e->execute(); 
+    events.pop();
   }
 }
 
-void Body::addAction(std::list<Event *> *action) {
-  events.insert(events.end(), action->begin(), action->end());
+void Body::addAction(list *action) {
+  events.insert(action);
   delete action;
 }
 
-/*
-void Body::hello() {
-   bl.save();
-   bl.setPosition(0, 0, 0);
-   commit();
-   int i;
-   for (i = 0; i < 4; i++) {
-     bl.setPosition(-200, 1000, -600);
-     commit();
-     usleep(100000);
-     bl.setPosition(200, 1000, -400);
-     commit();
-     usleep(100000);
-     bl.setPosition(-200, 1000, -600);
-     commit();
-     usleep(100000);
-   }
-   usleep(300000);
-   bl.restore();
-   commit();
-   usleep(100000);
-}
-
-
-*/

@@ -15,7 +15,7 @@ class Leg {
 		BR    = 0b001000,
 		BL    = 0b000100,
 		ML    = 0b000010,
-  		FL    = 0b000001};
+		FL    = 0b000001};
 
   public:
     Leg(const Leg &);
@@ -33,10 +33,15 @@ class Leg {
     void down(int = 1); 
 
     void vLevel(int);
+    void setCoord(int x, int y, int z);
 
   private:
     bool touch;
     int	 height;
+
+    int   x;
+    int   y;
+    int   z;
 
   public: //TOPRIVATE
     LegId id;

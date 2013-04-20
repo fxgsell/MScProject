@@ -1,9 +1,13 @@
+#include <stdio.h>
+#include <sys/socket.h>
+#include <sys/types.h>
 #include <unistd.h>
 
 #include "action.hpp"
 #include "event.hpp"
 #include "robot.hpp"
 #include "leg.hpp"
+#include "socket.hpp"
 
 Body *robot;
 
@@ -41,33 +45,43 @@ int main() {
   robot = new Body(fr, mr, br, fl, ml, bl);
   robot->commit();
 
-  robot->events.push_back(new ESleep(1000000));
+  //robot->events.push_back(new ESleep(1000000));
 
-  robot->addAction(setLegVLevel(Leg::ALL, 5));
-  for (int i =0; i < 5; i++) {
-    robot->addAction(setLegVLevel(Leg::A, 0));
-    robot->events.push_back(new ESleep(5000));
-    robot->addAction(setLegVLevel(Leg::A, 5));
-    robot->events.push_back(new ESleep(10000));
-    robot->addAction(setLegVLevel(Leg::B, 0));
-    robot->events.push_back(new ESleep(5000));
-    robot->addAction(setLegVLevel(Leg::B, 5));
-    robot->events.push_back(new ESleep(10000));
-    robot->addAction(setLegVLevel(Leg::ALL, 5));
-    robot->events.push_back(new ESleep(10000));
-  }
+  //robot->addAction(setLegVLevel(Leg::ALL, 5));
+  //for (int i =0; i < 5; i++) {
+  //  robot->addAction(setLegVLevel(Leg::A, 0));
+  //  robot->events.push_back(new ESleep(5000));
+  //  robot->addAction(setLegVLevel(Leg::A, 5));
+  //  robot->events.push_back(new ESleep(10000));
+  //  robot->addAction(setLegVLevel(Leg::B, 0));
+  //  robot->events.push_back(new ESleep(5000));
+  //  robot->addAction(setLegVLevel(Leg::B, 5));
+  //  robot->events.push_back(new ESleep(10000));
+  //  robot->addAction(setLegVLevel(Leg::ALL, 5));
+  //  robot->events.push_back(new ESleep(10000));
+  //}
 
-  robot->events.push_back(new ESleep(1000000));
-  robot->addAction(hello(Leg::BL));
-  robot->events.push_back(new ESleep(1000000));
+  //robot->events.push_back(new ESleep(1000000));
+  //robot->addAction(hello(Leg::BL));
+  //robot->events.push_back(new ESleep(1000000));
 
-  robot->addAction(setLegVLevel(Leg::ALL, 5));
-  robot->events.push_back(new ESleep(50000));
-  robot->addAction(setLegVLevel(Leg::ALL, 2));
-  robot->events.push_back(new ESleep(50000));
-  robot->addAction(setLegVLevel(Leg::ALL, 1));
-  robot->events.push_back(new ESleep(50000));
-  robot->addAction(setLegVLevel(Leg::ALL, 0));
+  //robot->addAction(setLegVLevel(Leg::ALL, 5));
+  //robot->events.push_back(new ESleep(50000));
+  //robot->addAction(setLegVLevel(Leg::ALL, 2));
+  //robot->events.push_back(new ESleep(50000));
+  //robot->addAction(setLegVLevel(Leg::ALL, 1));
+  //robot->events.push_back(new ESleep(50000));
+  //robot->addAction(setLegVLevel(Leg::ALL, 0));
+
+  //robot->events.push_back(new ESleep(1000000));
+  //robot->addAction(setLegVLevel(Leg::ALL, 0));
+  //robot->events.push_back(new ESleep(1000000));
+  //robot->addAction(setLegVLevel(Leg::ALL, 5));
+  //robot->events.push_back(new ESleep(1000000));
+  //robot->addAction(setLegVLevel(Leg::ALL, 10));
+  //robot->events.push_back(new ESleep(1000000));
+
+  robot->addAction(positionWalk());
 
   robot->start();
 

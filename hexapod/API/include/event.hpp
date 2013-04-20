@@ -1,7 +1,6 @@
 #pragma once
 
 #include "robot.hpp"
-//typedef std::list<Event *>;
 
 class Event {
   public:
