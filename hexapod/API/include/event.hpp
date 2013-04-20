@@ -78,10 +78,6 @@ class ELegDown : public Event {
     int  range;
 };
 
-/*
-** Up A, B
-*/
-
 class ELegVLevel : public Event {
   public:
     ELegVLevel(Body &b, Leg::LegId g, int r) : robot(b), group(g), range(r) {};
@@ -93,6 +89,9 @@ class ELegVLevel : public Event {
     int  range;
 };
 
+/*
+** Up A, B
+*/
 
 class ELegUp : public Event {
   public:

@@ -65,7 +65,7 @@ int	ELegCenter::execute() {
 int	ELegVLevel::execute() {
   for (int i = 0; i < Body::LEGS; i++) {
     if (robot.legs[i]->id & group)
-      robot.legs[i]->down(range);
+      robot.legs[i]->vLevel(range);
   }
   robot.commit();
   return (0);
