@@ -25,6 +25,7 @@ class Leg {
     void restore();
 
     void setPosition(int = 0, int = 0, int = 0);
+    void setAngles(int = 0, int = 0, int = 0);
     void center();
 
     void forward(int = 300);

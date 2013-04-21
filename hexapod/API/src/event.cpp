@@ -26,6 +26,18 @@ int	ELegSetCoord::execute() {
 /*
 ** Set
 */
+int	ELegSetAngles::execute() {
+  for (int i = 0; i < Body::LEGS; i++) {
+    if (robot.legs[i]->id & group)
+      robot.legs[i]->setAngles(s, e, w);
+  }
+  robot.commit();
+  return (0);
+}
+
+/*
+** Set
+*/
 int	ELegSet::execute() {
   for (int i = 0; i < Body::LEGS; i++) {
     if (robot.legs[i]->id & group)

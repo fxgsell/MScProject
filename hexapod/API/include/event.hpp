@@ -51,6 +51,23 @@ class ELegSetCoord : public Event {
 /*
 ** Set
 */
+class ELegSetAngles : public Event {
+  public:
+    ELegSetAngles(Body &b, Leg::LegId g, int s, int e, int w) : robot(b), group(g),  s(s), e(e), w(w) {};
+    int execute();
+
+  private:
+    Body &robot;
+    Leg::LegId	group;
+    int  s;
+    int  e;
+    int  w;
+};
+
+
+/*
+** Set
+*/
 class ELegSet : public Event {
   public:
     ELegSet(Body &b, Leg::LegId g, int s, int e, int w) : robot(b), group(g),  s(s), e(e), w(w) {};
