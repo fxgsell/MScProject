@@ -152,7 +152,7 @@ int Serial::write(const char *s) {
 			tries--;
 			continue;		/* while() */
 		} else if (n < 0) {
-			fprintf (stderr, "Error: write error to serial port: %s\n", strerror (errno));
+			//fprintf (stderr, "Error: write error to serial port: %s\n", strerror (errno));
 			return gone; //THROW -1
 		}
 		tries = 5;
