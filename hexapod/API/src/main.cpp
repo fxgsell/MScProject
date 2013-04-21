@@ -17,7 +17,7 @@ Body *robot;
 int main() {
   Servo s0( 0,    75, false, 0);
   Servo s1( 1,  -300, false, 1000); // + up
-  Servo s2( 2,     0, false, 600); // ERROR
+  Servo s2( 2,  -300, false, 600); // ERROR
   Servo s4( 4,   -50, false, 0);
   Servo s5( 5,   -50, false,1000); //
   Servo s6( 6,  -100, false, 600); // + in
@@ -43,45 +43,52 @@ int main() {
   Leg  bl(Leg::BL, s8, s9, s10);
 
   robot = new Body(fr, mr, br, fl, ml, bl);
-  robot->commit();
 
-  //robot->events.push_back(new ESleep(1000000));
+  robot->events.push_back(new ELegSetCoord(*robot, Leg::FL, 10, 10, 10));
+  robot->events.push_back(new ESleep(300000));
+  robot->events.push_back(new ELegSetCoord(*robot, Leg::FL, 10, 10, 15));
+  robot->events.push_back(new ESleep(300000));
+  robot->events.push_back(new ELegSetCoord(*robot, Leg::FL, 10, 10, 20));
+  robot->events.push_back(new ESleep(300000));
+  robot->events.push_back(new ELegSetCoord(*robot, Leg::FL, 10, 10, 25));
+  robot->events.push_back(new ESleep(300000));
+  robot->events.push_back(new ELegSetCoord(*robot, Leg::FL, 10, 10, 30));
+  robot->events.push_back(new ESleep(300000));
+  robot->events.push_back(new ELegSetCoord(*robot, Leg::FL, 10, 10, 35));
+  robot->events.push_back(new ESleep(1000000));
+  robot->events.push_back(new ELegSetCoord(*robot, Leg::FL, 10, 10, 40));
 
-  //robot->addAction(setLegVLevel(Leg::ALL, 5));
-  //for (int i =0; i < 5; i++) {
-  //  robot->addAction(setLegVLevel(Leg::A, 0));
-  //  robot->events.push_back(new ESleep(5000));
-  //  robot->addAction(setLegVLevel(Leg::A, 5));
-  //  robot->events.push_back(new ESleep(10000));
-  //  robot->addAction(setLegVLevel(Leg::B, 0));
-  //  robot->events.push_back(new ESleep(5000));
-  //  robot->addAction(setLegVLevel(Leg::B, 5));
-  //  robot->events.push_back(new ESleep(10000));
-  //  robot->addAction(setLegVLevel(Leg::ALL, 5));
-  //  robot->events.push_back(new ESleep(10000));
-  //}
 
-  //robot->events.push_back(new ESleep(1000000));
-  //robot->addAction(hello(Leg::BL));
-  //robot->events.push_back(new ESleep(1000000));
+  robot->events.push_back(new ELegSetCoord(*robot, Leg::FL, 10, 10, 10));
+  robot->events.push_back(new ESleep(300000));
+  robot->events.push_back(new ELegSetCoord(*robot, Leg::FL, 20, 10, 10));
+  robot->events.push_back(new ESleep(300000));
+  robot->events.push_back(new ELegSetCoord(*robot, Leg::FL, 30, 10, 10));
+  robot->events.push_back(new ESleep(300000));
+  robot->events.push_back(new ELegSetCoord(*robot, Leg::FL, 40, 10, 10));
+  robot->events.push_back(new ESleep(300000));
+  robot->events.push_back(new ELegSetCoord(*robot, Leg::FL, 50, 10, 10));
+  robot->events.push_back(new ESleep(300000));
+  robot->events.push_back(new ELegSetCoord(*robot, Leg::FL, 60, 10, 10));
+  robot->events.push_back(new ESleep(1000000));
+  robot->events.push_back(new ELegSetCoord(*robot, Leg::FL, 70, 10, 10));
 
-  //robot->addAction(setLegVLevel(Leg::ALL, 5));
-  //robot->events.push_back(new ESleep(50000));
-  //robot->addAction(setLegVLevel(Leg::ALL, 2));
-  //robot->events.push_back(new ESleep(50000));
-  //robot->addAction(setLegVLevel(Leg::ALL, 1));
-  //robot->events.push_back(new ESleep(50000));
-  //robot->addAction(setLegVLevel(Leg::ALL, 0));
 
-  //robot->events.push_back(new ESleep(1000000));
-  //robot->addAction(setLegVLevel(Leg::ALL, 0));
-  //robot->events.push_back(new ESleep(1000000));
-  //robot->addAction(setLegVLevel(Leg::ALL, 5));
-  //robot->events.push_back(new ESleep(1000000));
-  //robot->addAction(setLegVLevel(Leg::ALL, 10));
-  //robot->events.push_back(new ESleep(1000000));
+  robot->events.push_back(new ELegSetCoord(*robot, Leg::FL, 10, 10, 10));
+  robot->events.push_back(new ESleep(100000));
+  robot->events.push_back(new ELegSetCoord(*robot, Leg::FL, 10, 10, 12));
+  robot->events.push_back(new ESleep(100000));
+  robot->events.push_back(new ELegSetCoord(*robot, Leg::FL, 10, 10, 14));
+  robot->events.push_back(new ESleep(100000));
+  robot->events.push_back(new ELegSetCoord(*robot, Leg::FL, 10, 10, 16));
+  robot->events.push_back(new ESleep(100000));
+  robot->events.push_back(new ELegSetCoord(*robot, Leg::FL, 10, 10, 18));
+  robot->events.push_back(new ESleep(100000));
+  robot->events.push_back(new ELegSetCoord(*robot, Leg::FL, 10, 10, 20));
+  robot->events.push_back(new ESleep(1000000));
+  robot->events.push_back(new ELegSetCoord(*robot, Leg::FL, 10, 10, 10));
 
-  robot->addAction(positionWalk());
+
 
   robot->start();
 

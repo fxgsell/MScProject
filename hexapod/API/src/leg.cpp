@@ -7,8 +7,8 @@
 /*
 ** Leg Size
 */
-#define SIZETIBIA 60
-#define SIZEFEMUR 100
+const double SIZETIBIA  = 140.0;
+const double SIZEFEMUR  = 56.0;
 
 /*
 ** Legs
@@ -25,19 +25,35 @@ void Leg::center() {
   shoulder.center();
 }
 
-void Leg::setCoord(int x, int y, int z) {
-  int G = sqrt(x * x + z * z);
-  int H = sqrt(y * y + G * G);
-  int A = SIZEFEMUR;
-  int B = SIZETIBIA;
+void Leg::setCoord(double x, double y, double z) {
+  double dist = sqrt(x * x + z * z);
+  double b = sqrt(z*z+dist*dist);
+  double T1 = atan2(dist, z);
+  double Ti = acos((SIZEFEMUR*SIZEFEMUR + SIZETIBIA*SIZETIBIA - b*b)/(2*SIZEFEMUR*SIZETIBIA));
 
-  int b = acos((A * A + H * H - B * B) / (2 * A * H));
-  int h = asin(H * (sin(b)) / B);
+  printf("DEBUG: %lF / %lF = %lF\n", (SIZEFEMUR*SIZEFEMUR + SIZETIBIA*SIZETIBIA - b*b), (2*SIZEFEMUR*SIZETIBIA),  (SIZEFEMUR*SIZEFEMUR + SIZETIBIA*SIZETIBIA - b*b) / (2*SIZEFEMUR*SIZETIBIA)); 
+  printf("DEBUG: acos(%lF) = %lF\n", 1.43, acos(1.43));
+  double s = atan2(x, z);
+  double e = T1;
+  double w = Ti;
+/*
+  double G = sqrt(x * x + z * z);
+  double H = sqrt(y * y + G * G);
+  double A = SIZEFEMUR;
+  double B = SIZETIBIA;
 
-  int s = atan(x / z);
-  int e = atan(atan(G / y) + b - 90);
-  int w = atan(h - 180);
+  double b = acos((A * A + H * H - B * B) / (2.0 * A * H));
+  double h = asin(H * (sin(b)) / B);
+  printf("DEBUG: a=%lf\n", acos((A * A + H * H - B * B) / (2.0 * A * H)));
 
+  double s = atan2(x, z);
+  double e = atan(atan2(G, y) + b - 90.0);
+  double w = atan(h - 180.0);
+
+  printf("Set: b=%lf, h=%lf\n", b, h);
+  printf("Set: G=%lf, H=%lf, A=%lf, B=%lf\n", G, H, A, B);
+  printf("Set: s=%lf, e=%lf, w=%lf\n", s, e, w);
+*/
   shoulder.setAngle(s);
   elbow.setAngle(e);
   wrist.setAngle(w);

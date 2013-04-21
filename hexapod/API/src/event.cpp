@@ -12,6 +12,18 @@ int	EStandDown::execute() {
 }
 
 /*
+** SetCoor
+*/
+int	ELegSetCoord::execute() {
+  for (int i = 0; i < Body::LEGS; i++) {
+    if (robot.legs[i]->id & group)
+      robot.legs[i]->setCoord(x, y, z);
+  }
+  robot.commit();
+  return (0);
+}
+
+/*
 ** Set
 */
 int	ELegSet::execute() {

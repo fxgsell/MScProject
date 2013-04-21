@@ -47,6 +47,17 @@ Body::Body(Leg fr, Leg mr, Leg br, Leg fl, Leg ml, Leg bl) :
   legs[3] = (&this->fr);
   legs[4] = (&this->mr);
   legs[5] = (&this->br);
+
+  //for (int i = 0; i < 6; i++)
+  //legs[1]->setCoord(10.0, 1.0, 1.0);
+  //legs[2]->setCoord(1.0, 10.0, 1.0);
+
+  //legs[3]->setCoord(10.0, 1.0, 10.0);
+
+  //servos[0]->setAngle(0);
+  //servos[6]->setAngle(-90);
+  //servos[12]->setAngle(0);
+  commit();
 }
 
 /*
@@ -97,23 +108,24 @@ void Body::commit() {
 */
 
 void Body::start() {
-  struct timeval  *tv_ptr;
+  struct timeval  tv_ptr;
   int r;
   run = true;
 
   for (;run;) { 
     init_fd();
 
-    tv_ptr = NULL;
-    r = select(lastfd + 1, &fd_read, &fd_write, NULL, tv_ptr);
+    tv_ptr.tv_usec = 0;
+    tv_ptr.tv_sec = 0;
+    r = select(lastfd + 1, &fd_read, &fd_write, NULL, &tv_ptr);
     check_fd(r);
     
-    if (events.empty())
-      addAction(walk(1));
-
-    Event *e = (Event*)events.start->data;
-    e->execute(); 
-    events.pop();
+    if (!events.empty())
+    {
+      Event *e = (Event*)events.start->data;
+      e->execute(); 
+      events.pop();
+    }
   }
 }
 

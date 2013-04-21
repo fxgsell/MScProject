@@ -1,6 +1,10 @@
+#include <cmath>
+#include <stdio.h>
+
 #include "servo.hpp"
 
-#define ANGLETOPULSE 11
+#define ANGLETOPULSE 10
+const double Pi = 3.14159265358979323846;
 
 /*
 ** Servo
@@ -16,8 +20,10 @@ Servo::Servo(int id, int a, bool i, int p = 0): id(id), changed(true), adjustmen
     position = p + a;
 }
 
-void Servo::setAngle(int x) {
-  setPosition(x * ANGLETOPULSE);
+void Servo::setAngle(double x) {
+  double degree = (x * 181) / Pi;
+  setPosition(degree * ANGLETOPULSE);
+  printf("Set: Angle=%lf\n", degree);
 }
 
 void Servo::changeDone() {

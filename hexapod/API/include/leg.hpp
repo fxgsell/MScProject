@@ -33,7 +33,7 @@ class Leg {
     void down(int = 1); 
 
     void vLevel(int);
-    void setCoord(int x, int y, int z);
+    void setCoord(double x, double y, double z);
 
   private:
     bool touch;

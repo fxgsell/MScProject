@@ -32,6 +32,23 @@ class EStandDown : public Event {
 
 
 /*
+** Set Coord
+*/
+class ELegSetCoord : public Event {
+  public:
+    ELegSetCoord(Body &b, Leg::LegId g, int x, int y, int z) : robot(b), group(g),  x(x), y(y), z(z) {};
+    int execute();
+
+  private:
+    Body &robot;
+    Leg::LegId	group;
+    int  x;
+    int  y;
+    int  z;
+};
+
+
+/*
 ** Set
 */
 class ELegSet : public Event {
