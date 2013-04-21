@@ -44,17 +44,8 @@ int main() {
 
   robot = new Body(fr, mr, br, fl, ml, bl);
 
-
-
 //  robot->events.push_back(new ELegSetAngles(*robot, Leg::ALL, 0, 0, -90));
 
-  for (int i = 0; i < 20; i++) {
-    robot->events.push_back(new ELegSetCoord(*robot, Leg::ALL, 150, 40 + i*5, 0));
-  }
-  robot->events.push_back(new ESleep(1000000));
-  for (int i = 20; i > 0; i--) {
-    robot->events.push_back(new ELegSetCoord(*robot, Leg::ALL, 150, 40 + i*5, 0));
-  }
   robot->start();
 
   return 0;

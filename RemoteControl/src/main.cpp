@@ -71,6 +71,7 @@ int main(int ac, char* av[])
             myDot.SetBuf(&buf);
         }
 
+        myDot.last.flags = 0;
         if (memcmp(&myDot.last, &buf, sizeof(buf))) {
           buf.id = i;
           printf("Sending packet %ld\n", i);

@@ -115,7 +115,7 @@ void Body::start() {
   for (;run;) { 
     init_fd();
 
-    tv_ptr.tv_usec = 0;
+    tv_ptr.tv_usec = 100;
     tv_ptr.tv_sec = 0;
     r = select(lastfd + 1, &fd_read, &fd_write, NULL, &tv_ptr);
     check_fd(r);

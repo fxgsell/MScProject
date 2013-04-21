@@ -104,6 +104,7 @@ Dot::Dot()
 void Dot::handle_input()
 {
   if (event.type == SDL_JOYAXISMOTION) {
+    printf("Joy\n");
     if (event.jaxis.which == 0) { // joystick 0
       if (event.jaxis.axis == 3) {
         speed = ((event.jaxis.value * -1 + 32767)) / 1000;
@@ -122,6 +123,12 @@ void Dot::handle_input()
           yOri += event.jaxis.value / 1000;
       }
     }
+  } else if (event.type == SDL_JOYBUTTONDOWN) {
+    printf("Jbutton %d\n", event.jbutton.button);
+    if (event.jbutton.button == 10)
+      flags |= B10;
+    else if (event.jbutton.button == 11)
+      flags |= B11;
   }
 }
 

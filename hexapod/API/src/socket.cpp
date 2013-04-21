@@ -7,6 +7,7 @@
 #include <unistd.h>
 #include <string.h>
 
+#include "action.hpp"
 #include "socket.hpp"
 #include "robot.hpp"
 
@@ -38,22 +39,27 @@ void    client_read(int cs)
   int   r;
   packet   buf;
 
+  bzero(&buf, sizeof(buf));
   r = recv(cs, &buf, sizeof(buf), 0);
   if (r <= 0) {
-          // GUS IS DEAD
     close(cs);
     clean_fd(cs);
   }
   else
   {
-    printf("Recv!\tid:%ld, speed:%d\n", buf.id, buf.speed);
-    printf("\tx:%d, y:%d\n", buf.x, buf.y);
-    printf("\tturn:%d\n", buf.turn);
-
-    robot->direction = buf.turn;
-    robot->speed = buf.speed;
-
-          //DO SHIT
+    if (buf.flags & B10) {
+      robot->events.insert(standUp());
+      printf("Recv Up!\n");
+    }
+    else if (buf.flags & B11) {
+      robot->events.insert(standDown());
+      printf("Recv Down!\n");
+    }
+    if (!buf.flags)  {
+      printf("Recv!\tid:%ld, speed:%d\n", buf.id, buf.speed);
+      robot->direction = buf.turn;
+      robot->speed = buf.speed;
+    }
   }
 }
 

@@ -44,6 +44,9 @@ class Dot
 
     int turn;
 
+    //buttons
+    int flags;
+
   public:
     packet last;
 
@@ -52,6 +55,8 @@ class Dot
     Dot();
 
     void SetBuf(packet *buf) {
+       buf->flags = flags;
+       flags = 0;
        buf->speed = speed;
        buf->x = xAxe;
        buf->y = yAxe;
