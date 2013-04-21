@@ -15,24 +15,24 @@ Body *robot;
 ** Initialisation des servos
 */
 int main() {
-  Servo s0( 0,    75, false, 0);
+  Servo s0( 0,    50, false, 0);
   Servo s1( 1,  -125, false, 1000); // + up
-  Servo s2( 2,  -100, false, 600); // ERROR
+  Servo s2( 2,    50, false, 600); // ERROR
   Servo s4( 4,   -50, false, 0);
-  Servo s5( 5,   125, false,1000); //
-  Servo s6( 6,     0, false, 600); // + in
+  Servo s5( 5,    75, false,1000); //
+  Servo s6( 6,    50, false, 600); // + in
   Servo s8( 8,   -25, false, 0);
-  Servo s9( 9,    25, false,1000);
-  Servo s10(10, -100, false, 600); // + in
+  Servo s9( 9,     0, false,1000);
+  Servo s10(10,  100, false, 600); // + in
 
   Servo s18(18,   55, true,    0);
-  Servo s17(17, -550, true, 1000);
-  Servo s16(16,   50, true,  600);
+  Servo s17(17, -600, true, 1000);
+  Servo s16(16,  140, true,  600);
   Servo s22(22,  -60, true,    0);
-  Servo s21(21,   25, true, 1000);
-  Servo s20(20,   50, true,  600);
+  Servo s21(21,  -25, true, 1000);
+  Servo s20(20,  150, true,  600);
   Servo s26(26,  -25, true,    0);
-  Servo s25(25,   75, true, 1000);
+  Servo s25(25,  25, true, 1000);
   Servo s24(24,   50, true,  600);
 
   Leg  fr(Leg::FR, s18, s17, s16);
@@ -46,11 +46,15 @@ int main() {
 
 
 
-//  robot->events.push_back(new ELegSetAngles(*robot, Leg::ALL, 0, 90, -90));
+//  robot->events.push_back(new ELegSetAngles(*robot, Leg::ALL, 0, 0, -90));
 
-  robot->events.push_back(new ELegSetCoord(*robot, Leg::FR, 150, 50, 0));
-  robot->events.push_back(new ESleep(500000));
-
+  for (int i = 0; i < 20; i++) {
+    robot->events.push_back(new ELegSetCoord(*robot, Leg::ALL, 150, 40 + i*5, 0));
+  }
+  robot->events.push_back(new ESleep(1000000));
+  for (int i = 20; i > 0; i--) {
+    robot->events.push_back(new ELegSetCoord(*robot, Leg::ALL, 150, 40 + i*5, 0));
+  }
   robot->start();
 
   return 0;

@@ -51,10 +51,11 @@ void Leg::setCoord(double x, double y, double z) {
     shoulder.setAngle(s);
     elbow.setAngle(e);
     wrist.setAngle(w);
-  } 
-  printf("DEBUG: length=%lf, dist=%lf\n", length, dist);
-  printf("DEBUG: a1=%lf, a2=%lf, b1=%lf\n", a1, a2, b1);
-  printf("Set: s=%lf, e=%lf, w=%lf\n", s, e, w);
+  }  else {
+    printf("DEBUG: length=%lf, dist=%lf\n", length, dist);
+    printf("DEBUG: a1=%lf, a2=%lf, b1=%lf\n", a1, a2, b1);
+    printf("Set: s=%lf, e=%lf, w=%lf\n", s, e, w);
+  }
 }
 
 void Leg::setPosition(int s, int e, int w) {

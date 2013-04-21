@@ -21,7 +21,6 @@ Servo::Servo(int id, int a, bool i, int p = 0): id(id), changed(true), adjustmen
 
 void Servo::setAngle(double x) {
   setPosition(x * ANGLETOPULSE);
-  printf("Set: Angle=%lf\n", x);
 }
 
 void Servo::changeDone() {
