@@ -64,13 +64,13 @@ class Dot
     };
 
     //Handles joystick
-    void handle_input();
+    bool handle_input();
 
     //Moves the dot
-    void move();
+//    void move();
 
     //Shows the dot
-    void show();
+ //   void show();
 };
 
 //The timer
