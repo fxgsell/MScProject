@@ -48,15 +48,6 @@ Body::Body(Leg fr, Leg mr, Leg br, Leg fl, Leg ml, Leg bl) :
   legs[4] = (&this->mr);
   legs[5] = (&this->br);
 
-  //for (int i = 0; i < 6; i++)
-  //legs[1]->setCoord(10.0, 1.0, 1.0);
-  //legs[2]->setCoord(1.0, 10.0, 1.0);
-
-  //legs[3]->setCoord(10.0, 1.0, 10.0);
-
-  //servos[0]->setAngle(0);
-  //servos[6]->setAngle(-90);
-  //servos[12]->setAngle(0);
   commit();
 }
 
@@ -91,15 +82,12 @@ void Body::commit() {
 
   if ((s = shoulder.str()).compare("S\x0d")) {
     serial.write(s.c_str());
-    puts(s.c_str());
   }
   if ((s = elbow.str()).compare("S\x0d")) {
     serial.write(s.c_str());
-    puts(s.c_str());
   }
   if ((s = wrist.str()).compare("S\x0d")) {
     serial.write(s.c_str());
-    puts(s.c_str());
   }
 }
 
@@ -115,16 +103,15 @@ void Body::start() {
   for (;run;) { 
     init_fd();
 
-    tv_ptr.tv_usec = 100;
+    tv_ptr.tv_usec = 0;
     tv_ptr.tv_sec = 0;
     r = select(lastfd + 1, &fd_read, &fd_write, NULL, &tv_ptr);
     check_fd(r);
     
     if (!events.empty())
     {
-      Event *e = (Event*)events.start->data;
+      Event *e = (Event*)events.pop();
       e->execute(); 
-      events.pop();
     }
   }
 }

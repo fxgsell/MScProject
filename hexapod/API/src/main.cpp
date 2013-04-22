@@ -46,6 +46,9 @@ int main() {
 
 //  robot->events.push_back(new ELegSetAngles(*robot, Leg::ALL, 0, 0, -90));
 
+//  robot->addAction(standUp());
+//  robot->addAction(standDown());
+
   robot->start();
 
   return 0;

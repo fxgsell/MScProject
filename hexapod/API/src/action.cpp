@@ -40,21 +40,22 @@ list *walk(int steps) {
   list *walk = new list;
 
   for (; steps; steps--) {
-    walk->push_back(new ELegUp(*robot, Leg::A, 5));
-    walk->push_back(new ELegForward(*robot, Leg::A, 200));
+    walk->push_back(new ELegDown(*robot, Leg::A, 50));
+    walk->push_back(new ELegForward(*robot, Leg::A, 40));
     walk->push_back(new ESleep(100000));
-    walk->push_back(new ELegBackward(*robot, Leg::B, 200));
+    walk->push_back(new ELegBackward(*robot, Leg::B, 40));
     walk->push_back(new ESleep(100000));
-    walk->push_back(new ELegDown(*robot, Leg::A, 5));
+    walk->push_back(new ELegUp(*robot, Leg::A, 50));
     walk->push_back(new ESleep(100000));
-    walk->push_back(new ELegUp(*robot, Leg::B, 5));
-    walk->push_back(new ELegForward(*robot, Leg::B, 200));
+    walk->push_back(new ELegDown(*robot, Leg::B, 50));
+    walk->push_back(new ELegForward(*robot, Leg::B, 40));
     walk->push_back(new ESleep(100000));
-    walk->push_back(new ELegBackward(*robot, Leg::A, 200));
+    walk->push_back(new ELegBackward(*robot, Leg::A, 40));
     walk->push_back(new ESleep(100000));
-    walk->push_back(new ELegDown(*robot, Leg::B, 5));
+    walk->push_back(new ELegUp(*robot, Leg::B, 50));
     walk->push_back(new ESleep(100000));
   }
+
   return walk;
 }
 
