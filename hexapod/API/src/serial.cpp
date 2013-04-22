@@ -163,8 +163,6 @@ int Serial::write(const char *s) {
 	if (tcgetattr (fd, &lterm) == 0) 
 		tcsetattr (fd, TCSAFLUSH, &lterm);
 	free(msg);
-
-  printf("%s\n", s);
 	return gone; 
 }
 

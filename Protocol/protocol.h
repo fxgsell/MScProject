@@ -6,7 +6,7 @@ struct packet {
   int x;           // Axis 0
   int y;           // Axis 1
   int turn;        // Axis 2
-  int speed;       // Axis 3
+  int height;      // Axis 3
 };
 
 #define B10 1

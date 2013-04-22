@@ -4,6 +4,7 @@
 
 #include "event.hpp"
 
+list *updateHeight();
 list *setLegVLevel(Leg::LegId id, int level);
 list *positionWalk();
 list *hello(Leg::LegId);

@@ -4,6 +4,7 @@
 #include "event.hpp"
 #include "robot.hpp"
 
+extern Body* robot;
 
 list *positionWalk() {
   list *positionWalk = new list;
@@ -110,8 +111,10 @@ list *setLegVLevel(Leg::LegId id, int level) {
 list *standUp() {
   list *standUp = new list;
 
-  for (int i = 0; i < 20; i++) {
-    standUp->push_back(new ELegSetCoord(*robot, Leg::ALL, 150, 40 + i*5, 0));
+  printf("Goesup\n");
+  for (int i = robot->y; i < 27; i++) {   //27
+    standUp->push_back(new ELegSetCoord(*robot, Leg::ALL, 120, 40 + i*5, 0));
+    robot->y = i;
   }
  
   return standUp;
@@ -120,9 +123,26 @@ list *standUp() {
 list *standDown() {
   list *standDown = new list;
 
-  for (int i = 20; i > 0; i--) {
-    standDown->push_back(new ELegSetCoord(*robot, Leg::ALL, 150, 40 + i*5, 0));
+  for (int i = robot->y; i > 0; i--) { //26
+    standDown->push_back(new ELegSetCoord(*robot, Leg::ALL, 120, 40 + i*5, 0));
+    robot->y = i;
   }
   return standDown;
+}
+
+list *updateHeight() {
+  list *updateHeight = new list;
+
+  if (robot->y < robot->height)
+    for (int i = robot->y; i < robot->height; i++) { //26
+            updateHeight->push_back(new ELegSetCoord(*robot, Leg::ALL, 120, 40 + i*5, 0));
+            robot->y = i;
+    }
+  else
+    for (int i = robot->y; i > robot->height - 1; i--) { //26
+            updateHeight->push_back(new ELegSetCoord(*robot, Leg::ALL, 120, 40 + i*5, 0));
+            robot->y = i;
+    }
+  return updateHeight;
 }
 
