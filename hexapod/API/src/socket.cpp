@@ -45,20 +45,22 @@ void    client_read(int cs)
     close(cs);
     clean_fd(cs);
   }
-  else
-  {
-    if (buf.flags & B10) {
-      robot->addAction(standUp());
-      printf("Recv Up!\n");
+  else {
+    if (buf.flags)
+    {
+      if (buf.flags & B10) {
+        robot->addAction(standUp());
+        printf("Recv Up!\n");
+      }
+      else if (buf.flags & B11) {
+        robot->addAction(standDown());
+        printf("Recv Down!\n");
+      }
     }
-    else if (buf.flags & B11) {
-      robot->addAction(standDown());
-      robot->events.print();
-      printf("Recv Down!\n");
-    }
-    if (!buf.flags)  {
-      robot->direction = buf.turn;
-      robot->speed = buf.speed;
+    else if (robot->height != buf.height)  {
+      robot->height = buf.height;
+      robot->addAction(updateHeight());
+      printf("Recv Height:%d, !\n", buf.height);
     }
   }
 }

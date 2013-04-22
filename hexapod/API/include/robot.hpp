@@ -12,10 +12,12 @@ class Body {
   public:
     Serial serial;
     int    direction;
-    int    speed;
     bool   run;
 
   public:
+    int  height;
+    int  y;
+
     Leg  fr;
     Leg  mr;
     Leg  br;
