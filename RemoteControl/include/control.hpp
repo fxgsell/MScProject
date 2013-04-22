@@ -36,7 +36,7 @@ class Dot
     int x, y;
 
     //The velocity of the dot
-    int speed;
+    int height;
     int xVel, yVel;
 
     int xOri, yOri;
@@ -57,7 +57,7 @@ class Dot
     void SetBuf(packet *buf) {
        buf->flags = flags;
        flags = 0;
-       buf->speed = speed;
+       buf->height = height;
        buf->x = xAxe;
        buf->y = yAxe;
        buf->turn = turn;

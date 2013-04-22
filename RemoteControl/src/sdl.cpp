@@ -6,6 +6,8 @@
 #include "control.hpp"
 #include "protocol.h"
 
+extern packet buf;
+
 //Screen attributes
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
@@ -36,7 +38,7 @@ Dot::Dot()
   xVel = 0;
   yVel = 0;
 
-  speed = 0;
+  height = 0;
   xOri = 0;
   yOri = 0;
   xAxe = 0;
@@ -46,34 +48,31 @@ Dot::Dot()
 bool Dot::handle_input()
 {
   if (event.type == SDL_JOYAXISMOTION) {
-    printf("Joy\n");
     if (event.jaxis.which == 0) { // joystick 0
+      printf("Joy\n");
       if (event.jaxis.axis == 3) {
-        speed = ((event.jaxis.value * -1 + 32767)) / 1000;
+        buf.height = ((event.jaxis.value * -1 + 32767)) / 2500;
       }
       else if (event.jaxis.axis == 0) { // X
-        xAxe = event.jaxis.value / 1000;
+        buf.x = event.jaxis.value / 1000;
       }
       else if (event.jaxis.axis == 1) { // Y
-        yAxe = event.jaxis.value / 1000;
+        buf.y = event.jaxis.value / 1000;
       }
       else if (event.jaxis.axis == 2) {  // pivot
-        turn = event.jaxis.value;
-        if (event.jaxis.value < 0)
-          xOri += event.jaxis.value / 1000;
-        else if (event.jaxis.value > 0)
-          yOri += event.jaxis.value / 1000;
+        buf.turn = event.jaxis.value;
       }
     }
-  } else if (event.type == SDL_JOYBUTTONDOWN) {
+  }
+  if (event.type == SDL_JOYBUTTONDOWN) {
     printf("Jbutton %d\n", event.jbutton.button);
     if (event.jbutton.button == 10)
-      flags |= B10;
+      buf.flags |= B10;
     else if (event.jbutton.button == 11)
-      flags |= B11;
+      buf.flags |= B11;
   }
   else
-    return false;
+    buf.flags = 0;
   return true;
 }
 

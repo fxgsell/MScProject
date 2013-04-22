@@ -10,6 +10,7 @@
 #include "protocol.h"
 
 int s;
+packet buf;
 
 bool init()
 {
@@ -49,14 +50,13 @@ int main(int ac, char* av[])
       return -1;
 
     long int i = 0;
-    packet buf;
+    packet last;
     bzero(&buf, sizeof(buf));
     while (quit == false) {
         //Start the frame timer
         fps.start();
 
-        memcpy(&myDot.last, &buf, sizeof(buf));
-        bzero(&buf, sizeof(buf));
+        memcpy(&last, &buf, sizeof(buf));
 
         //While there's events to handle
         while (SDL_PollEvent(&event)) {
@@ -64,26 +64,18 @@ int main(int ac, char* av[])
               quit = true;
               break;
             }
-            if (!myDot.handle_input())
-              continue;
-            bzero(&buf, sizeof(buf));
-            myDot.SetBuf(&buf);
+            myDot.handle_input();
         }
 
         buf.id = i;
-        myDot.last.flags = myDot.last.flags & buf.flags ;
-        myDot.last.id = buf.id;
-        if (bcmp(&myDot.last, &buf, sizeof(buf))) {
+        last.flags = last.flags & buf.flags ;
+        last.id = buf.id;
+        if (memcmp(&last, &buf, sizeof(buf))) {
           printf("Sending packet %ld\n", i);
           if (send(s, &buf, sizeof(buf), 0) == -1)
             fprintf(stderr, "Error: packet %ld\n", i);
           i++;
-          //Dot.move();
         }
-
-        //Cap the frame rate
-        if (fps.get_ticks() < 1000 / FRAMES_PER_SECOND)
-          SDL_Delay((1000 / FRAMES_PER_SECOND) - fps.get_ticks());
     }
 
     clean_up();
