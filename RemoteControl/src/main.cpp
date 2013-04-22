@@ -15,15 +15,11 @@ bool init()
 {
   if( SDL_Init( SDL_INIT_EVERYTHING ) == -1 )
     return false;
-  screen = SDL_SetVideoMode( SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_SWSURFACE );
-  if( screen == NULL )
-    return false;
   if( SDL_NumJoysticks() < 1 )
     return false;
   stick = SDL_JoystickOpen( 0 );
   if( stick == NULL )
     return false;
-  SDL_WM_SetCaption( "Move the Dot", NULL );
   return true;
 }
 
@@ -52,9 +48,6 @@ int main(int ac, char* av[])
     if (!s)
       return -1;
 
-    if (load_files() == false)
-      return 1;
-
     long int i = 0;
     packet buf;
     bzero(&buf, sizeof(buf));
@@ -62,36 +55,31 @@ int main(int ac, char* av[])
         //Start the frame timer
         fps.start();
 
-        myDot.last = buf;
+        memcpy(&myDot.last, &buf, sizeof(buf));
+        bzero(&buf, sizeof(buf));
+
         //While there's events to handle
         while (SDL_PollEvent(&event)) {
-            myDot.handle_input();
-            if (event.type == SDL_QUIT)
+            if (event.type == SDL_QUIT) {
               quit = true;
+              break;
+            }
+            if (!myDot.handle_input())
+              continue;
+            bzero(&buf, sizeof(buf));
             myDot.SetBuf(&buf);
         }
 
-        myDot.last.flags = 0;
-        if (memcmp(&myDot.last, &buf, sizeof(buf))) {
-          buf.id = i;
+        buf.id = i;
+        myDot.last.flags = myDot.last.flags & buf.flags ;
+        myDot.last.id = buf.id;
+        if (bcmp(&myDot.last, &buf, sizeof(buf))) {
           printf("Sending packet %ld\n", i);
           if (send(s, &buf, sizeof(buf), 0) == -1)
             fprintf(stderr, "Error: packet %ld\n", i);
           i++;
-
-          //Move the dot
-          myDot.move();
+          //Dot.move();
         }
-
-        //Fill the screen white
-        SDL_FillRect(screen, &screen->clip_rect, SDL_MapRGB(screen->format, 0xFF, 0xFF, 0xFF));
-
-        //Show the dot on the screen
-        myDot.show();
-
-        //Update the screen
-        if (SDL_Flip(screen) == -1)
-          return 1;
 
         //Cap the frame rate
         if (fps.get_ticks() < 1000 / FRAMES_PER_SECOND)
