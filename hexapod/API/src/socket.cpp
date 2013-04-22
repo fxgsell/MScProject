@@ -48,15 +48,15 @@ void    client_read(int cs)
   else
   {
     if (buf.flags & B10) {
-      robot->events.insert(standUp());
+      robot->addAction(standUp());
       printf("Recv Up!\n");
     }
     else if (buf.flags & B11) {
-      robot->events.insert(standDown());
+      robot->addAction(standDown());
+      robot->events.print();
       printf("Recv Down!\n");
     }
     if (!buf.flags)  {
-      printf("Recv!\tid:%ld, speed:%d\n", buf.id, buf.speed);
       robot->direction = buf.turn;
       robot->speed = buf.speed;
     }

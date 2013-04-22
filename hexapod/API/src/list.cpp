@@ -22,6 +22,8 @@ void  *list::pop() {
     list_elem *t = start->next;
     delete start;
     start = t;
+    if (!t)
+      end = 0; 
     return ret;
   }
   return 0;
@@ -30,19 +32,21 @@ void  *list::pop() {
 void list::print() {
   list_elem *cur;
    
+  printf("List:\n");
   for (cur = this->start; cur != 0;) {
-     printf("Elem: %p\n", cur);
+     printf("  Elem: %p\n", cur);
      cur = cur->next;
   }
-  printf("Elem: %p\n", cur);
+  printf("  Elem: %p\n", cur);
 }
 
 void list::insert(list *l) {
-  if (l->end)
-    l->end->next = start;
-  else
-    l->end = start;
-  start = l->start;
+  if (end)
+    end->next = l->start;
+  else {
+    start = l->start;
+  }
+  end = l->end;
 };
 
 void *list::push_front(void *data) {

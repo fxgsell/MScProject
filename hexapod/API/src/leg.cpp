@@ -46,11 +46,15 @@ void Leg::setCoord(double x, double y, double z) {
   double s = 90 - (atan2(x, z) * 180 / Pi);
   double e = -90 + ((a1 + a2) * 180 / Pi);
   double w = 90 - (b1 * 180 / Pi);
+  
 
   if (s == s && e == e && w == w) {
     shoulder.setAngle(s);
     elbow.setAngle(e);
     wrist.setAngle(w);
+    this->x = x;
+    this->y = y;
+    this->z = z;
   }  else {
     printf("DEBUG: length=%lf, dist=%lf\n", length, dist);
     printf("DEBUG: a1=%lf, a2=%lf, b1=%lf\n", a1, a2, b1);
@@ -65,23 +69,27 @@ void Leg::setPosition(int s, int e, int w) {
 }
 
 void Leg::forward(int size) {
-  shoulder.updatePosition(size);
+  setCoord(x, y, z - size);
+  //shoulder.updatePosition(size);
 }
 
 void Leg::backward(int size) {
-  shoulder.updatePosition(-size);
+  setCoord(x, y, z + size);
+  //shoulder.updatePosition(-size);
 }
 
 void Leg::up(int size) {
+  setCoord(x, y + size, z);
   // more check
-  vLevel(height - size);
-  height = height - size;
+  //vLevel(height - size);
+  //height = height - size;
 }
 
 void Leg::down(int size) {
+  setCoord(x, y - size, z);
   // more check
-  vLevel(height + size);
-  height = height + size;
+  //vLevel(height + size);
+  //height = height + size;
 }
 
 void Leg::vLevel(int size) {
