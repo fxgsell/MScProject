@@ -53,10 +53,10 @@ bool Dot::handle_input()
       if (event.jaxis.axis == 3) {
         buf.height = ((event.jaxis.value * -1 + 32767)) / 2500;
       }
-      else if (event.jaxis.axis == 0) { // X
+      else if (event.jaxis.axis == 1) { // X
         buf.x = event.jaxis.value / 1000;
       }
-      else if (event.jaxis.axis == 1) { // Y
+      else if (event.jaxis.axis == 0) { // Y
         buf.y = event.jaxis.value / 1000;
       }
       else if (event.jaxis.axis == 2) {  // pivot
@@ -70,8 +70,16 @@ bool Dot::handle_input()
       buf.flags |= B10;
     else if (event.jbutton.button == 11)
       buf.flags |= B11;
-    else if (event.jbutton.button == 7)
-      buf.flags |= B07;
+    else if (event.jbutton.button == 1)
+      buf.flags |= B01;
+    else if (event.jbutton.button == 2)
+      buf.flags |= B02;
+    else if (event.jbutton.button == 3)
+      buf.flags |= B03;
+    else if (event.jbutton.button == 4)
+      buf.flags |= B04;
+    else if (event.jbutton.button == 5)
+      buf.flags |= B05;
     else if (event.jbutton.button == 6)
       buf.flags |= B06;
   }
