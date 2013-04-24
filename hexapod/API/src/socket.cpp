@@ -46,21 +46,41 @@ void    client_read(int cs)
     clean_fd(cs);
   }
   else {
-    if (buf.flags)
-    {
-      if (buf.flags & B10) {
-        robot->addAction(standUp());
-        printf("Recv Up!\n");
-      }
-      else if (buf.flags & B11) {
-        robot->addAction(standDown());
-        printf("Recv Down!\n");
-      }
+    if (buf.flags & B11) {
+      robot->addAction(standUp());
+      printf("Recv Up!\n");
     }
-    else if (robot->height != buf.height)  {
+    else if (buf.flags & B01) {
+      printf("Recv Shot!\n");
+    }
+    else if (buf.flags & B12) {
+      robot->addAction(standDown());
+      printf("Recv Down!\n");
+    }
+    else if (buf.flags & B06) {
+      printf("Recv clear!\n");
+    }
+    else if (buf.flags & B05) {
+      robot->events.clear();
+      printf("Recv clear!\n");
+    }
+    
+    if (robot->turn != buf.turn)  {
+      robot->turn = buf.turn;
+      printf("Recv Turn:%d, !\n", buf.turn);
+    }
+    if (robot->height != buf.height)  {
       robot->height = buf.height;
       robot->addAction(updateHeight());
       printf("Recv Height:%d, !\n", buf.height);
+    }
+    if (buf.y != robot->y)  {
+      robot->y = buf.y;
+      printf("Recv y:%d, !\n", buf.y);
+    }
+    if (buf.x != robot->x)  {
+      robot->x = buf.x;
+      printf("Recv x:%d, !\n", buf.x);
     }
   }
 }

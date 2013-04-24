@@ -10,6 +10,15 @@ class Event;
 
 class Body {
   public:
+    enum Gait {STOP = 0, TRIPOD = 1};
+    enum GaitStatus {STARTGAIT = 0, WALKING = 1, STOPGAIT = 2};
+    enum GaitPose { UNKNOWN, AU, AD, AB, BU, BD, BB };
+
+    Gait       gait;
+    GaitStatus gaitStatus;
+    GaitPose   gaitPose;
+
+  public:
     Serial serial;
     int    direction;
     bool   run;
@@ -17,6 +26,8 @@ class Body {
   public:
     int  height;
     int  y;
+    int  x;
+    int  turn;
 
     Leg  fr;
     Leg  mr;

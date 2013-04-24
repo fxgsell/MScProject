@@ -16,6 +16,7 @@ class list {
     void *pop();
     bool empty();
     void print();
+    bool clear();
 
     list_elem *start;
 

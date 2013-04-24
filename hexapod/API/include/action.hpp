@@ -1,9 +1,11 @@
 #pragma once
 
 #include "list.hpp"
-
 #include "event.hpp"
 
+extern Body* robot;
+
+list *standStraight();
 list *updateHeight();
 list *setLegVLevel(Leg::LegId id, int level);
 list *positionWalk();

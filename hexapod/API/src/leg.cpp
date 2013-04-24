@@ -34,7 +34,7 @@ void Leg::setAngles(int s, int e, int w) {
   wrist.setAngle(w);
 }
 
-void Leg::setCoord(double x, double y, double z) {
+int Leg::setCoord(double x, double y, double z) {
   double length = sqrt(x*x + z*z);
   double dist   = sqrt(pow(length - SIZECOXA, 2) + y*y);
   double a1     = atan2((length - SIZECOXA), y);
@@ -59,7 +59,9 @@ void Leg::setCoord(double x, double y, double z) {
     printf("DEBUG: length=%lf, dist=%lf\n", length, dist);
     printf("DEBUG: a1=%lf, a2=%lf, b1=%lf\n", a1, a2, b1);
     printf("Set: s=%lf, e=%lf, w=%lf\n", s, e, w);
+    return 1;
   }
+  return 0;
 }
 
 void Leg::setPosition(int s, int e, int w) {
@@ -68,52 +70,20 @@ void Leg::setPosition(int s, int e, int w) {
   wrist.setPosition(w);
 }
 
-void Leg::forward(int size) {
-  setCoord(x, y, z - size);
-  //shoulder.updatePosition(size);
+int Leg::forward(int size) {
+  return setCoord(x, y, z - size);
 }
 
-void Leg::backward(int size) {
-  setCoord(x, y, z + size);
-  //shoulder.updatePosition(-size);
+int Leg::backward(int size) {
+  return setCoord(x, y, z + size);
 }
 
-void Leg::up(int size) {
-  setCoord(x, y + size, z);
-  // more check
-  //vLevel(height - size);
-  //height = height - size;
+int Leg::up(int size) {
+  return setCoord(x, y - size, z);
 }
 
-void Leg::down(int size) {
-  setCoord(x, y - size, z);
-  // more check
-  //vLevel(height + size);
-  //height = height + size;
-}
-
-void Leg::vLevel(int size) {
-  printf ("level %d\n", size);
-  if (size == 10) {
-    elbow.setPosition(-800);
-    wrist.setPosition(-200);
-  }
-  else if (size == 5) {
-    elbow.setPosition(0);
-    wrist.setPosition(0);
-  }
-  else if (size == 2) {
-    elbow.setPosition(400);
-    wrist.setPosition(300);
-  }
-  else if (size == 1) {
-    elbow.setPosition(800);
-    wrist.setPosition(600);
-  }
-  else if (size == 0) {
-    elbow.setPosition(1000);
-    wrist.setPosition(600);
-  }
+int Leg::down(int size) {
+  return setCoord(x, y + size, z);
 }
 
 void Leg::save() {
