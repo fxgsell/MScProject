@@ -70,6 +70,8 @@ bool Dot::handle_input()
       buf.flags |= B10;
     else if (event.jbutton.button == 11)
       buf.flags |= B11;
+    else if (event.jbutton.button == 7)
+      buf.flags |= B07;
   }
   else
     buf.flags = 0;
