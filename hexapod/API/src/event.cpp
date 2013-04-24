@@ -3,13 +3,7 @@
 #include "robot.hpp"
 #include "event.hpp"
 
-//Should be action
-int	EStandDown::execute() {
-  for (int i = 0; i < Body::LEGS; i++)
-    robot.legs[i]->setPosition(0, 300, 300);
-  robot.commit();
-  return (0);
-}
+
 
 /*
 ** SetCoor
@@ -82,43 +76,6 @@ int	ELegCenter::execute() {
   robot.commit();
   return (0);
 }
-
-/*
-** Down A, B
-*/
-int	ELegVLevel::execute() {
-  for (int i = 0; i < Body::LEGS; i++) {
-    if (robot.legs[i]->id & group)
-      robot.legs[i]->vLevel(range);
-  }
-  robot.commit();
-  return (0);
-}
-
-/*
-** Down A, B
-*/
-int	ELegDown::execute() {
-  for (int i = 0; i < Body::LEGS; i++) {
-    if (robot.legs[i]->id & group)
-      robot.legs[i]->down(range);
-  }
-  robot.commit();
-  return (0);
-}
-
-/*
-** Up A, B
-*/
-int	ELegUp::execute() {
-  for (int i = 0; i < Body::LEGS; i++) {
-    if (robot.legs[i]->id & group)
-      robot.legs[i]->up(range);
-  }
-  robot.commit();
-  return (0);
-}
-
 
 /*
 ** Backup

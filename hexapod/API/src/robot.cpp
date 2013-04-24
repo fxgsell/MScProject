@@ -10,6 +10,10 @@
 #include "robot.hpp"
 #include "socket.hpp"
 
+#include <typeinfo>
+
+int step();
+
 /*
 ** Body
 */
@@ -47,6 +51,14 @@ Body::Body(Leg fr, Leg mr, Leg br, Leg fl, Leg ml, Leg bl) :
   legs[3] = (&this->fr);
   legs[4] = (&this->mr);
   legs[5] = (&this->br);
+
+  gait = TRIPOD;
+  gaitStatus = STARTGAIT;
+  gaitPose = UNKNOWN;
+
+  x = 0;
+  y = 0;
+  turn = 0;
 
   commit();
 }
@@ -96,23 +108,30 @@ void Body::commit() {
 */
 
 void Body::start() {
-  struct timeval  tv_ptr;
+  struct timeval  tv;
   int r;
   run = true;
 
   for (;run;) { 
     init_fd();
 
-    tv_ptr.tv_usec = 0;
-    tv_ptr.tv_sec = 0;
-    r = select(lastfd + 1, &fd_read, &fd_write, NULL, &tv_ptr);
+    tv.tv_usec = 10000;
+    tv.tv_sec = 0;
+    if (!events.empty() || x || y || turn)
+      r = select(lastfd + 1, &fd_read, &fd_write, NULL, &tv);
+    else
+      r = select(lastfd + 1, &fd_read, &fd_write, NULL, 0);
+
     check_fd(r);
-    
-    if (!events.empty())
-    {
+
+    if (!events.empty()) {
       Event *e = (Event*)events.pop();
+      puts(typeid(*e).name());
       e->execute(); 
+      delete e;
     }
+    else
+      step();
   }
 }
 

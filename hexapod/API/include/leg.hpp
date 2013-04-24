@@ -28,13 +28,13 @@ class Leg {
     void setAngles(int = 0, int = 0, int = 0);
     void center();
 
-    void forward(int = 300);
-    void backward(int = 300); 
-    void up(int = 1);
-    void down(int = 1); 
+    int forward(int = 300);
+    int backward(int = 300); 
+    int up(int = 1);
+    int down(int = 1); 
 
     void vLevel(int);
-    void setCoord(double x, double y, double z);
+    int setCoord(double x, double y, double z);
 
   private:
     bool touch;

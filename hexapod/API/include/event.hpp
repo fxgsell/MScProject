@@ -2,12 +2,12 @@
 
 #include "robot.hpp"
 
+extern Body* robot;
+
 class Event {
   public:
-
     virtual int execute() = 0;
     virtual ~Event() {};
-
 };
 
 //should be waiting in poll
@@ -20,10 +20,12 @@ class ESleep : public Event {
     int time;
 };
 
-//Should not be an event
-class EStandDown : public Event {
+/*
+** Do next step
+*/
+class EStep : public Event {
   public:
-    EStandDown(Body &b) : robot(b) {};
+    EStep(Body &b) : robot(b) {};
     int execute();
 
   private:
