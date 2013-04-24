@@ -67,20 +67,20 @@ bool Dot::handle_input()
   if (event.type == SDL_JOYBUTTONDOWN) {
     printf("Jbutton %d\n", event.jbutton.button);
     if (event.jbutton.button == 10)
-      buf.flags |= B10;
-    else if (event.jbutton.button == 11)
       buf.flags |= B11;
-    else if (event.jbutton.button == 1)
+    else if (event.jbutton.button == 11)
+      buf.flags |= B12;
+    else if (event.jbutton.button == 0)
       buf.flags |= B01;
-    else if (event.jbutton.button == 2)
+    else if (event.jbutton.button == 1)
       buf.flags |= B02;
-    else if (event.jbutton.button == 3)
+    else if (event.jbutton.button == 2)
       buf.flags |= B03;
-    else if (event.jbutton.button == 4)
+    else if (event.jbutton.button == 3)
       buf.flags |= B04;
-    else if (event.jbutton.button == 5)
+    else if (event.jbutton.button == 4)
       buf.flags |= B05;
-    else if (event.jbutton.button == 6)
+    else if (event.jbutton.button == 5)
       buf.flags |= B06;
   }
   else
