@@ -128,6 +128,7 @@ void Body::start() {
       r = select(lastfd + 1, &fd_read, &fd_write, NULL, 0);
     check_fd(r);
 
+    // Make good time management
     if (i % 50 != 0) {
       if (!events.empty()) {
         Event *e = (Event*)events.pop();

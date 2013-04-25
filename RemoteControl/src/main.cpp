@@ -37,7 +37,6 @@ int main(int ac, char* av[])
 {
     bool quit = false;
     Dot myDot;
-    Timer fps;
 
     if (ac != 2) {
       fprintf(stderr, "Usage: ./control IP \n");
@@ -53,8 +52,6 @@ int main(int ac, char* av[])
     packet last;
     bzero(&buf, sizeof(buf));
     while (quit == false) {
-        //Start the frame timer
-        fps.start();
 
         memcpy(&last, &buf, sizeof(buf));
 

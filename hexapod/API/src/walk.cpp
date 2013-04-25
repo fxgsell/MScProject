@@ -22,39 +22,39 @@ int step() {
       current.turn = robot->turn;
       for (int i = 0; i < Body::LEGS; i += 2) {
         robot->legs[i]->setShoulder(current.turn * 2);
-        robot->legs[i]->up(50);
+        robot->legs[i]->setCoord(x, y - 50, z);  //UP
       }
     }
     else if (step % 7 == 1) {
       for (int i = 0; i < Body::LEGS; i += 2) {
-        robot->legs[i]->forward(5 * current.x);
+        robot->legs[i]->setCoord(x - 5 * current.y, y, z - 5 * current.x);  //forward
       }
     }
     else if (step % 7 == 2) {
       for (int i = 0; i < Body::LEGS; i += 2) {
-        robot->legs[i]->down(50);
+        robot->legs[i]->setCoord(x, y + 50, z);  //DOWN
       }
     }
     else if (step % 7 == 3) {
       for (int i = 1; i < Body::LEGS; i += 2) {
         robot->legs[i]->setShoulder(current.turn * 2);
-        robot->legs[i]->up(50);
+        robot->legs[i]->setCoord(x, y - 50, z);  //UP
       }
     }
     else if (step % 7 == 4) {
       for (int i = 1; i < Body::LEGS; i += 2) {
-        robot->legs[i]->forward(5 * current.x);
+        robot->legs[i]->setCoord(x - 5 * current.y, y, z - 5 * current.x);  //forward
       }
     }
     else if (step % 7 == 5) {
       for (int i = 1; i < Body::LEGS; i += 2) {
-        robot->legs[i]->down(50);
+        robot->legs[i]->setCoord(x, y + 50, z);  //DOWN
       }
     }
     else if (step % 7 == 6) {
       for (int i = 0; i < Body::LEGS; i += 1) {
         robot->legs[i]->angle = 0;
-        robot->legs[i]->backward(5 * current.x);
+        robot->legs[i]->setCoord(x + 5 * current.y, y, z + 5 * current.x);  //backward
       }
     }
     robot->commit();
