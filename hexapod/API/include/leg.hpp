@@ -28,7 +28,7 @@ class Leg {
     void setAngles(int = 0, int = 0, int = 0);
     void center();
 
-    void updateShoulder(int x);
+    void setShoulder(int x);
 
     int forward(int = 300);
     int backward(int = 300); 
@@ -38,9 +38,12 @@ class Leg {
     void vLevel(int);
     int setCoord(double x, double y, double z);
 
+    int	  angle;
+
   private:
     bool touch;
     int	 height;
+
 
     int   x;
     int   y;

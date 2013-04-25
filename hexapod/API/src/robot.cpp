@@ -109,29 +109,36 @@ void Body::commit() {
 
 void Body::start() {
   struct timeval  tv;
-  int r;
+  struct timeval  time;
+  struct timeval  optime;
+  int r = 0;
+  int stepCount = 0;
   run = true;
+  int i = 0;
 
   for (;run;) { 
     init_fd();
 
-    tv.tv_usec = 10000;
+    tv.tv_usec = 0;
     tv.tv_sec = 0;
-    if (!events.empty() || x || y || turn)
+    
+    if (!events.empty() || x || y || turn || stepCount % 7 != 0)
       r = select(lastfd + 1, &fd_read, &fd_write, NULL, &tv);
     else
       r = select(lastfd + 1, &fd_read, &fd_write, NULL, 0);
-
     check_fd(r);
 
-    if (!events.empty()) {
-      Event *e = (Event*)events.pop();
-      puts(typeid(*e).name());
-      e->execute(); 
-      delete e;
+    if (i % 50 != 0) {
+      if (!events.empty()) {
+        Event *e = (Event*)events.pop();
+        puts(typeid(*e).name());
+        e->execute(); 
+        delete e;
+      }
+      else
+        stepCount = step();
     }
-    else
-      step();
+    i++;
   }
 }
 
