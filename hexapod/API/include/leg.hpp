@@ -28,6 +28,8 @@ class Leg {
     void setAngles(int = 0, int = 0, int = 0);
     void center();
 
+    void updateShoulder(int x);
+
     int forward(int = 300);
     int backward(int = 300); 
     int up(int = 1);

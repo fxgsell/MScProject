@@ -24,8 +24,8 @@ Leg::Leg(const Leg & l): id(l.id), shoulder(l.shoulder), elbow(l.elbow), wrist(l
  height = 0;
 }
 
-void Leg::center() {
-  shoulder.center();
+void Leg::updateShoulder(int x) {
+  shoulder.updateAngle(x);
 }
 
 void Leg::setAngles(int s, int e, int w) {

@@ -19,7 +19,13 @@ Servo::Servo(int id, int a, bool i, int p = 0): id(id), changed(true), adjustmen
     position = p + a;
 }
 
+void Servo::updateAngle(double x) {
+  angle += x;
+  setPosition(angle * ANGLETOPULSE);
+}
+
 void Servo::setAngle(double x) {
+  angle = x;
   setPosition(x * ANGLETOPULSE);
 }
 

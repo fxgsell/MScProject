@@ -39,6 +39,7 @@ Dot::Dot()
   yVel = 0;
 
   height = 0;
+  turn = 0;
   xOri = 0;
   yOri = 0;
   xAxe = 0;
@@ -49,18 +50,17 @@ bool Dot::handle_input()
 {
   if (event.type == SDL_JOYAXISMOTION) {
     if (event.jaxis.which == 0) { // joystick 0
-      printf("Joy\n");
       if (event.jaxis.axis == 3) {
         buf.height = ((event.jaxis.value * -1 + 32767)) / 2500;
       }
-      else if (event.jaxis.axis == 1) { // X
-        buf.x = event.jaxis.value / 1000;
+      if (event.jaxis.axis == 1) { // X
+        buf.x = -event.jaxis.value / 3200;
       }
-      else if (event.jaxis.axis == 0) { // Y
-        buf.y = event.jaxis.value / 1000;
+      if (event.jaxis.axis == 0) { // Y
+        buf.y = event.jaxis.value / 3200;
       }
-      else if (event.jaxis.axis == 2) {  // pivot
-        buf.turn = event.jaxis.value;
+      if (event.jaxis.axis == 2) {  // pivot
+        buf.turn = event.jaxis.value / 3200;
       }
     }
   }

@@ -13,6 +13,7 @@ class Servo {
     void  changeDone();
     void  updatePosition(int);
     void  setAngle(double);
+    void  updateAngle(double);
     void  setPosition(int);
     void  center();
 
@@ -26,6 +27,7 @@ class Servo {
     int             adjustment;
     bool            invert;
     int             position; 
+    int             angle;
 };
 
 

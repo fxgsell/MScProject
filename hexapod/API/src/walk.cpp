@@ -26,8 +26,10 @@ int step() {
         robot->legs[i]->up(50);
     }
     else if (step % 7 == 1) {
-      for (int i = 0; i < Body::LEGS; i += 2)
+      for (int i = 0; i < Body::LEGS; i += 2) {
         robot->legs[i]->forward(5 * current.x);
+        robot->legs[i]->updateShoulder(5 * current.turn);
+      }
     }
     else if (step % 7 == 2) {
       for (int i = 0; i < Body::LEGS; i += 2)
@@ -38,8 +40,10 @@ int step() {
         robot->legs[i]->up(50);
     }
     else if (step % 7 == 4) {
-      for (int i = 1; i < Body::LEGS; i += 2)
+      for (int i = 1; i < Body::LEGS; i += 2) {
+        robot->legs[i]->updateShoulder(5 * -current.turn);
         robot->legs[i]->forward(5 * current.x);
+      }
     }
     else if (step % 7 == 5) {
       for (int i = 1; i < Body::LEGS; i += 2)
