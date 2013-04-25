@@ -35,7 +35,7 @@ class Leg {
     int up(int = 1);
     int down(int = 1); 
 
-    void vLevel(int);
+    int updateCoord(double x, double y, double z);
     int setCoord(double x, double y, double z);
 
     int	  angle;

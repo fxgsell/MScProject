@@ -37,6 +37,10 @@ void Leg::setAngles(int s, int e, int w) {
   wrist.setAngle(w);
 }
 
+int Leg::updateCoord(double x, double y, double z) {
+  return (setCoord(this->x + x, this->y + y, this->z + z));
+}
+
 int Leg::setCoord(double x, double y, double z) {
   double length = sqrt(x*x + z*z);
   double dist   = sqrt(pow(length - SIZECOXA, 2) + y*y);

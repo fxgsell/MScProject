@@ -47,14 +47,14 @@ void    client_read(int cs)
   }
   else {
     if (buf.flags & B11) {
-      robot->addAction(standUp());
+   // robot->addAction(standUp());
       printf("Recv Up!\n");
     }
     else if (buf.flags & B01) {
       printf("Recv Shot!\n");
     }
     else if (buf.flags & B12) {
-      robot->addAction(standDown());
+  //  robot->addAction(standDown());
       printf("Recv Down!\n");
     }
     else if (buf.flags & B06) {
@@ -71,7 +71,7 @@ void    client_read(int cs)
     }
     if (robot->height != buf.height)  {
       robot->height = buf.height;
-      robot->addAction(updateHeight());
+//      robot->addAction(updateHeight());
       printf("Recv Height:%d, !\n", buf.height);
     }
     if (buf.y != robot->y)  {
