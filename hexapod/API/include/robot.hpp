@@ -45,7 +45,7 @@ class Body {
     static const int     SERVOS = 18;
 
   public: 
-    Body(Leg, Leg, Leg, Leg, Leg, Leg);
+    Body(Leg&, Leg&, Leg&, Leg&, Leg&, Leg&);
     Body();
 
     void start();

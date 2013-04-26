@@ -1,5 +1,7 @@
+#include <strings.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <sys/time.h>
 #include <sstream>
 
 #include "list.hpp"
@@ -17,40 +19,40 @@ int step();
 /*
 ** Body
 */
-Body::Body(Leg fr, Leg mr, Leg br, Leg fl, Leg ml, Leg bl) :
+Body::Body(Leg &fr, Leg &mr, Leg &br, Leg &fl, Leg &ml, Leg &bl) :
 				serial("/dev/ttyAMA0"),
 				fr(fr), mr(mr), br(br), fl(fl), ml(ml), bl(bl) {
 
   if (srv_create(9930) == -1)
     throw ;
 
-  servos[0] = &this->fr.shoulder;
-  servos[1] = &this->mr.shoulder;
-  servos[2] = &this->br.shoulder;
-  servos[3] = &this->fl.shoulder;
-  servos[4] = &this->ml.shoulder;
-  servos[5] = &this->bl.shoulder;
+  servos[0] = &(this->fr.shoulder);
+  servos[1] = &(this->mr.shoulder);
+  servos[2] = &(this->br.shoulder);
+  servos[3] = &(this->fl.shoulder);
+  servos[4] = &(this->ml.shoulder);
+  servos[5] = &(this->bl.shoulder);
 
-  servos[6] = &this->fr.elbow;
-  servos[7] = &this->mr.elbow;
-  servos[8] = &this->br.elbow;
-  servos[9] = &this->ml.elbow;
-  servos[10] = &this->fl.elbow;
-  servos[11] = &this->bl.elbow;
+  servos[6] = &(this->fr.elbow);
+  servos[7] = &(this->mr.elbow);
+  servos[8] = &(this->br.elbow);
+  servos[9] = &(this->ml.elbow);
+  servos[10] = &(this->fl.elbow);
+  servos[11] = &(this->bl.elbow);
 
-  servos[12] = &this->fr.wrist;
-  servos[13] = &this->mr.wrist;
-  servos[14] = &this->br.wrist;
-  servos[15] = &this->fl.wrist;
-  servos[16] = &this->ml.wrist;
-  servos[17] = &this->bl.wrist;
+  servos[12] = &(this->fr.wrist);
+  servos[13] = &(this->mr.wrist);
+  servos[14] = &(this->br.wrist);
+  servos[15] = &(this->fl.wrist);
+  servos[16] = &(this->ml.wrist);
+  servos[17] = &(this->bl.wrist);
   
-  legs[0] = (&this->fl);
-  legs[1] = (&this->ml);
-  legs[2] = (&this->bl);
-  legs[3] = (&this->fr);
-  legs[4] = (&this->mr);
-  legs[5] = (&this->br);
+  legs[0] = &(this->fl);
+  legs[1] = &(this->ml);
+  legs[2] = &(this->bl);
+  legs[3] = &(this->fr);
+  legs[4] = &(this->mr);
+  legs[5] = &(this->br);
 
   gait = TRIPOD;
   gaitStatus = STARTGAIT;
@@ -59,6 +61,7 @@ Body::Body(Leg fr, Leg mr, Leg br, Leg fl, Leg ml, Leg bl) :
   x = 0;
   y = 0;
   turn = 0;
+  height = 0;
 
   commit();
 }
@@ -68,9 +71,9 @@ Body::Body(Leg fr, Leg mr, Leg br, Leg fl, Leg ml, Leg bl) :
 */
 void Body::commit() {
   std::string s;
-  std::stringstream shoulder;
-  std::stringstream elbow;
-  std::stringstream wrist;
+  std::stringstream shoulder("");
+  std::stringstream elbow("");
+  std::stringstream wrist("");
 
   shoulder << "S";
   elbow << "S";
@@ -109,36 +112,44 @@ void Body::commit() {
 
 void Body::start() {
   struct timeval  tv;
-  struct timeval  time;
-  struct timeval  optime;
+  struct timeval  tv_cur;
+  struct timeval  tv_act;
+  struct timeval  tv_nxt;
   int r = 0;
   int stepCount = 0;
   run = true;
   int i = 0;
 
+  bzero(&tv, sizeof(struct timeval));
+  bzero(&tv_cur, sizeof(struct timeval));
+  bzero(&tv_act, sizeof(struct timeval));
+  bzero(&tv_nxt, sizeof(struct timeval));
+
   for (;run;) { 
     init_fd();
 
-    tv.tv_usec = 0;
-    tv.tv_sec = 0;
-    
+    gettimeofday(&tv_cur, 0);
+    timersub(&tv_nxt, &tv_act, &tv);
     if (!events.empty() || x || y || turn || stepCount % 7 != 0)
       r = select(lastfd + 1, &fd_read, &fd_write, NULL, &tv);
     else
       r = select(lastfd + 1, &fd_read, &fd_write, NULL, 0);
     check_fd(r);
 
-    // Make good time management
-    if (i % 50 != 0) {
+    gettimeofday(&tv_cur, 0);
+    if (timercmp(&tv_cur, &tv_nxt, >=)) {
       if (!events.empty()) {
         Event *e = (Event*)events.pop();
         puts(typeid(*e).name());
-        e->execute(); 
+        tv_act.tv_usec = e->execute();
         delete e;
       }
       else
-        stepCount = step();
+        tv_act.tv_usec = step();
     }
+    tv_act.tv_usec = 0; // Delete that when ready
+    gettimeofday(&tv_cur, 0);
+    timeradd(&tv_cur, &tv_act, &tv_nxt);
     i++;
   }
 }

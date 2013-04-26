@@ -18,10 +18,16 @@ const double Pi = 3.14159265358979323846;
 */
 Leg::Leg(LegId i, Servo s, Servo e, Servo w): id(i), shoulder(s), elbow(e), wrist(w) {
  height = 0;
+ x = 120;
+ y = 150;
+ z = 0;
 }
 
 Leg::Leg(const Leg & l): id(l.id), shoulder(l.shoulder), elbow(l.elbow), wrist(l.wrist) {
  height = 0;
+ x = 120;
+ y = 150;
+ z = 0;
 }
 
 void Leg::setShoulder(int x) {

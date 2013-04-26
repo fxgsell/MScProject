@@ -9,14 +9,14 @@
 ** Servo
 */
 
-Servo::Servo(const Servo &s): id(s.id), changed(true), adjustment(s.adjustment), invert(s.invert), position(s.position) {
+Servo::Servo(const Servo &s): id(s.id), changed(false), adjustment(s.adjustment), invert(s.invert), position(s.position) {
 }
 
-Servo::Servo(int id, int a, bool i, int p = 0): id(id), changed(true), adjustment(a), invert(i) {
+Servo::Servo(int id, int a, bool i): id(id), changed(false), adjustment(a), invert(i) {
   if (i == true)
-    position = - p - a;
+    position = -a;
   else
-    position = p + a;
+    position = +a;
 }
 
 void Servo::updateAngle(double x) {

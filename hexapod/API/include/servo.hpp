@@ -4,7 +4,7 @@
 
 class Servo {
   public:
-    Servo(int, int, bool, int);
+    Servo(int, int, bool);
     Servo(const Servo &);
 
     int   getRealPosition();

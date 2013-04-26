@@ -84,7 +84,7 @@ void *list::push_back(void *data) {
   if (e) {
     e->data = data;
     e->next = 0;
-    if (start)
+    if (start && end)
       end->next = e;
     else
       start = e;
