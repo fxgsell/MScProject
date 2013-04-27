@@ -67,20 +67,20 @@ void    client_read(int cs)
     
     if (robot->turn != buf.turn)  {
       robot->turn = buf.turn;
-      printf("Recv Turn:%d, !\n", buf.turn);
+      printf("Recv Turn:%d\n", buf.turn);
     }
     if (robot->height != buf.height)  {
       robot->height = buf.height;
 //      robot->addAction(updateHeight());
-      printf("Recv Height:%d, !\n", buf.height);
+      printf("Recv Height:%d\n", buf.height);
     }
     if (buf.y != robot->y)  {
       robot->y = buf.y;
-      printf("Recv y:%d, !\n", buf.y);
+      printf("Recv y:%d\n", buf.y);
     }
-    if (buf.x != robot->x)  {
-      robot->x = buf.x;
-      printf("Recv x:%d, !\n", buf.x);
+    if (buf.x != -robot->x)  {
+      robot->x = -buf.x;
+      printf("Recv x:%d\n", buf.x);
     }
   }
 }
