@@ -110,13 +110,14 @@ void Body::commit() {
 ** Event Manager
 */
 
+int stepCount = 0;
+
 void Body::start() {
   struct timeval  tv;
   struct timeval  tv_cur;
   struct timeval  tv_act;
   struct timeval  tv_nxt;
   int r = 0;
-  int stepCount = 0;
   run = true;
   int i = 0;
 
@@ -130,6 +131,7 @@ void Body::start() {
 
     gettimeofday(&tv_cur, 0);
     timersub(&tv_nxt, &tv_act, &tv);
+    bzero(&tv, sizeof(struct timeval)); //delete when ready
     if (!events.empty() || x || y || turn || stepCount % 7 != 0)
       r = select(lastfd + 1, &fd_read, &fd_write, NULL, &tv);
     else
@@ -146,10 +148,9 @@ void Body::start() {
       }
       else
         tv_act.tv_usec = step();
+      gettimeofday(&tv_cur, 0);
+      timeradd(&tv_cur, &tv_act, &tv_nxt);
     }
-    tv_act.tv_usec = 0; // Delete that when ready
-    gettimeofday(&tv_cur, 0);
-    timeradd(&tv_cur, &tv_act, &tv_nxt);
     i++;
   }
 }

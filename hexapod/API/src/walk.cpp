@@ -8,6 +8,7 @@
 #include "socket.hpp"
 
 extern Body *robot;
+extern int stepCount;
 
 int step() {
   static int step = 0;
@@ -15,14 +16,13 @@ int step() {
   static packet current;
 
   if (step % 7 != 0 || robot->x || robot->y || robot->turn) {
-    printf("loop\n");
     if (step % 7 == 0) {
       printf("Stepping %d %d %d\n", robot->x, robot->y, robot->turn);
       current.x = robot->x;
       current.y = robot->y;
       current.turn = robot->turn;
       for (int i = 0; i < Body::LEGS; i += 2) {
-        robot->legs[i]->setShoulder(current.turn * 2);
+        robot->legs[i]->setShoulder(current.turn * 10);
         robot->legs[i]->updateCoord(0, -50, 0);  //UP
       }
     }
@@ -38,13 +38,13 @@ int step() {
     }
     else if (step % 7 == 3) {
       for (int i = 1; i < Body::LEGS; i += 2) {
-        robot->legs[i]->setShoulder(current.turn * 2);
+        robot->legs[i]->setShoulder(current.turn * 10);
         robot->legs[i]->updateCoord(0, -50, 0);  //UP
       }
     }
     else if (step % 7 == 4) {
       for (int i = 1; i < Body::LEGS; i += 2) {
-        robot->legs[i]->updateCoord(-5 * current.y, 0, -5 * current.x);  //forward
+        robot->legs[i]->updateCoord(-5 * current.y, 0, 5 * current.x);  //forward
       }
     }
     else if (step % 7 == 5) {
@@ -60,6 +60,7 @@ int step() {
     }
     robot->commit();
     step++;
+    stepCount = step % 7;
   }
   return 100000;
 }
