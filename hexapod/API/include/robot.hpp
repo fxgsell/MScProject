@@ -12,7 +12,7 @@ class Body {
   public:
     enum Gait {STOP = 0, TRIPOD = 1};
     enum GaitStatus {STARTGAIT = 0, WALKING = 1, STOPGAIT = 2};
-    enum GaitPose { UNKNOWN, AU, AD, AB, BU, BD, BB };
+    enum GaitPose {UNKNOWN, AU, AD, AB, BU, BD, BB };
 
     Gait       gait;
     GaitStatus gaitStatus;
@@ -22,6 +22,7 @@ class Body {
     Serial serial;
     int    direction;
     bool   run;
+    int    time;
 
   public:
     int  height;
@@ -50,7 +51,7 @@ class Body {
 
     void start();
     void addAction(list *action);
-    void commit();
+    int commit();
 
     void setAllLeg(int, int, int);
     void setALeg(int, int, int);

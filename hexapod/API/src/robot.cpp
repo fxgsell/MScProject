@@ -14,16 +14,19 @@
 
 #include <typeinfo>
 
+#define SERIALPORT "/dev/ttyAMA0"
+#define TCPPORT 9930
+
 int step();
 
 /*
 ** Body
 */
 Body::Body(Leg &fr, Leg &mr, Leg &br, Leg &fl, Leg &ml, Leg &bl) :
-				serial("/dev/ttyAMA0"),
+				serial(SERIALPORT),
 				fr(fr), mr(mr), br(br), fl(fl), ml(ml), bl(bl) {
 
-  if (srv_create(9930) == -1)
+  if (srv_create(TCPPORT) == -1)
     throw ;
 
   servos[0] = &(this->fr.shoulder);
@@ -58,6 +61,7 @@ Body::Body(Leg &fr, Leg &mr, Leg &br, Leg &fl, Leg &ml, Leg &bl) :
   gaitStatus = STARTGAIT;
   gaitPose = UNKNOWN;
 
+  time = 0;
   x = 0;
   y = 0;
   turn = 0;
@@ -69,7 +73,7 @@ Body::Body(Leg &fr, Leg &mr, Leg &br, Leg &fl, Leg &ml, Leg &bl) :
 /*
 ** Push moves to serial
 */
-void Body::commit() {
+int Body::commit() {
   std::string s;
   std::stringstream shoulder("");
   std::stringstream elbow("");
@@ -104,6 +108,7 @@ void Body::commit() {
   if ((s = wrist.str()).compare("S\x0d")) {
     serial.write(s.c_str());
   }
+  return (time);
 }
 
 /*
@@ -127,6 +132,7 @@ void Body::start() {
   bzero(&tv_nxt, sizeof(struct timeval));
 
   for (;run;) { 
+    time = 0;
     init_fd();
 
     gettimeofday(&tv_cur, 0);

@@ -150,10 +150,9 @@ int Serial::write(const char *s) {
 			}
 			microdelay (10000);
 			tries--;
-      free(msg);
 			continue;		/* while() */
 		} else if (n < 0) {
-			//fprintf (stderr, "Error: write error to serial port: %s\n", strerror (errno));
+			fprintf (stderr, "Error: write error to serial port: %s\n", strerror (errno));
 	    free(msg);
 			return gone; //THROW -1
 		}
