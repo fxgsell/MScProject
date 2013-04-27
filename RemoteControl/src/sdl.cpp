@@ -60,7 +60,7 @@ bool Dot::handle_input()
         buf.y = event.jaxis.value / 10000;
       }
       if (event.jaxis.axis == 2) {  // pivot
-        buf.turn = event.jaxis.value / 3200;
+        buf.turn = (event.jaxis.value - 16383) / 3200;
       }
     }
   }

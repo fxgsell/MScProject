@@ -68,7 +68,7 @@ int main(int ac, char* av[])
         last.flags = last.flags & buf.flags ;
         last.id = buf.id;
         if (memcmp(&last, &buf, sizeof(buf))) {
-          printf("Sending packet %ld: Y=%d\tX=%d\n", i, buf.y, buf.x);
+          printf("Sending packet %ld:\tY=%d\tX=%d\tTurn=%d\n", i, buf.y, buf.x, buf.turn);
           if (send(s, &buf, sizeof(buf), 0) == -1)
             fprintf(stderr, "Error: packet %ld\n", i);
           i++;
