@@ -3,7 +3,7 @@
 
 #include "servo.hpp"
 
-#define ANGLETOPULSE 10.0
+#define ANGLETOPULSE 10
 
 /*
 ** Servo

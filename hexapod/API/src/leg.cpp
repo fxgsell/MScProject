@@ -32,9 +32,9 @@ Leg::Leg(const Leg & l): id(l.id), shoulder(l.shoulder), elbow(l.elbow), wrist(l
 
 void Leg::setShoulder(int x) {
   if (id & RIGHT)
-    angle = -x;
-  else
     angle = x;
+  else
+    angle = -x;
 }
 
 void Leg::setAngles(int s, int e, int w) {

@@ -18,6 +18,7 @@
 #define TCPPORT 9930
 
 int step();
+int stepCount = 0;
 
 /*
 ** Body
@@ -115,8 +116,6 @@ int Body::commit() {
 ** Event Manager
 */
 
-int stepCount = 0;
-
 void Body::start() {
   struct timeval  tv;
   struct timeval  tv_cur;
@@ -158,6 +157,7 @@ void Body::start() {
       timeradd(&tv_cur, &tv_act, &tv_nxt);
     }
     i++;
+  usleep(100000);
   }
 }
 
