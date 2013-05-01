@@ -74,41 +74,37 @@ Body::Body(Leg &fr, Leg &mr, Leg &br, Leg &fl, Leg &ml, Leg &bl) :
 ** Push moves to serial
 */
 int Body::commit() {
+  int maxTime;
   std::string s;
-  std::stringstream shoulder("");
-  std::stringstream elbow("");
-  std::stringstream wrist("");
+  std::stringstream a;
+  std::stringstream b;
 
-  shoulder << "S";
-  elbow << "S";
-  wrist << "S";
+  a << "S";
+  b << "S";
   for (int i = 0; i < Body::SERVOS; i++) { 
     int id = servos[i]->getId();
 
     if (servos[i]->hasChanged()) {
-      if (id == 0 || id == 4 || id == 8 || id == 18 || id == 22 || id == 26)
-        shoulder << " #" << id << " P" << servos[i]->getRealPosition();
-      else if (id == 1 || id == 5 || id == 9 || id == 17 || id == 21 || id == 25)
-        elbow << " #" << id << " P" << servos[i]->getRealPosition();
-      else if (id == 2 || id == 6 || id == 10 || id == 16 || id == 20 || id == 24)
-        wrist << " #" << id << " P" << servos[i]->getRealPosition();
+      if (id >= 0 && id <= 10) {
+        a << " #" << id << " P" << servos[i]->getRealPosition();
+      }
+      if (id >= 11 && id <= 24) {
+        b << " #" << id << " P" << servos[i]->getRealPosition();
+      }
       servos[i]->changeDone();
     }
   }
-  shoulder << "\x0d";
-  elbow << "\x0d";
-  wrist << "\x0d";
+  maxTime = 1000;
+  a << " T" << maxTime << " \x0d";
+  b << " T" << maxTime << " \x0d";
 
-  if ((s = shoulder.str()).compare("S\x0d")) {
+  if ((s = a.str()).compare("S T1000 \x0d")) {
     serial.write(s.c_str());
   }
-  if ((s = elbow.str()).compare("S\x0d")) {
+  if ((s = b.str()).compare("S T1000 \x0d")) {
     serial.write(s.c_str());
   }
-  if ((s = wrist.str()).compare("S\x0d")) {
-    serial.write(s.c_str());
-  }
-  return (time);
+  return (maxTime);
 }
 
 /*
