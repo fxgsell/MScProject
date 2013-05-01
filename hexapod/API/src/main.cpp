@@ -32,7 +32,7 @@ int main() {
   Servo s21(21,  -25, true);
   Servo s20(20,  150, true);
   Servo s26(26,  -25, true);
-  Servo s25(25,  000, true);
+  Servo s25(25,    0, true);
   Servo s24(24,   50, true);
 
   Leg fr(Leg::FR, s18, s17, s16);
