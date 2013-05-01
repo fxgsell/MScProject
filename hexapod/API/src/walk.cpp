@@ -10,6 +10,8 @@
 extern Body *robot;
 extern int stepCount;
 
+const int TURNCOEF = 3;
+
 int step() {
   static packet c;
 
@@ -20,7 +22,7 @@ int step() {
       c.y = robot->y;
       c.turn = robot->turn;
       for (int i = 0; i < Body::LEGS; i += 2) {
-        robot->legs[i]->setShoulder(c.turn * 10);
+        robot->legs[i]->setShoulder(c.turn * TURNCOEF);
         robot->legs[i]->updateCoord(0, -50, 0);  //UP
       }
     }
@@ -36,7 +38,7 @@ int step() {
     }
     else if (stepCount == 3) {
       for (int i = 1; i < Body::LEGS; i += 2) {
-        robot->legs[i]->setShoulder(c.turn * 10);
+        robot->legs[i]->setShoulder(c.turn * TURNCOEF);
         robot->legs[i]->updateCoord(0, -50, 0);  //UP
       }
     }
