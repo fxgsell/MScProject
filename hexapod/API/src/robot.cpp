@@ -77,44 +77,22 @@ Body::Body(Leg &fr, Leg &mr, Leg &br, Leg &fl, Leg &ml, Leg &bl) :
 int Body::commit() {
   int maxTime;
   std::string s;
-  std::stringstream a, b, c;
+  std::stringstream a;
 
   a << "S";
-  b << "S";
-  c << "S";
   for (int i = 0; i < Body::SERVOS; i++) { 
     int id = servos[i]->getId();
 
     if (servos[i]->hasChanged()) {
-        a << " #" << id << " P" << servos[i]->getRealPosition();
-/*
-      if ((id >= 0 && id <= 3)) {
-      }
-      else if (id >= 7 && id <= 16) {
-        b << " #" << id << " P" << servos[i]->getRealPosition();
-      }
-      else if (id >= 17 && id <= 24) {
-        c << " #" << id << " P" << servos[i]->getRealPosition();
-      }
-  
-*/
+      a << " #" << id << " P" << servos[i]->getRealPosition();
       servos[i]->changeDone();
     }
   }
   maxTime = 100;
   a << " T" << maxTime << " \x0d";
- // b << " T" << maxTime << " \x0d";
- // c << " T" << maxTime << " \x0d";
 
   if ((s = a.str()).compare("S T1000 \x0d"))
     serial.write(s.c_str());
-  puts(a.str().c_str());
-  //if ((s = b.str()).compare("S T1000 \x0d"))
-  //  serial.write(s.c_str());
-  //puts(b.str().c_str());
-  //if ((s = c.str()).compare("S T1000 \x0d"))
-  //  serial.write(s.c_str());
-  //puts(c.str().c_str());
   return (maxTime);
 }
 

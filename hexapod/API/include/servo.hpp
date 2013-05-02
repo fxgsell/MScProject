@@ -4,7 +4,7 @@
 
 class Servo {
   public:
-    Servo(int, int, bool);
+    Servo(int, int, bool, int, int);
     Servo(const Servo &);
 
     int   getRealPosition();
@@ -21,13 +21,15 @@ class Servo {
     void  restore();
 
   private:
-    list            states;
-    int	            id;
-    bool            changed;
-    int             adjustment;
-    bool            invert;
-    int             position; 
-    int             angle;
+    list  states;
+    int	  id;
+    bool  changed;
+    int   adjustment;
+    bool  invert;
+    int   position; 
+    int   angle;
+    int	  minAngle;
+    int	  maxAngle;
 };
 
 

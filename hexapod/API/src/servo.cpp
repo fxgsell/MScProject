@@ -9,10 +9,13 @@
 ** Servo
 */
 
-Servo::Servo(const Servo &s): id(s.id), changed(false), adjustment(s.adjustment), invert(s.invert), position(s.position) {
+Servo::Servo(const Servo &s): id(s.id), changed(false), adjustment(s.adjustment),
+			      invert(s.invert), position(s.position),
+			      minAngle(s.minAngle), maxAngle(s.maxAngle) {
 }
 
-Servo::Servo(int id, int a, bool i): id(id), changed(false), adjustment(a), invert(i) {
+Servo::Servo(int id, int a, bool i, int min, int max): id(id), changed(false), adjustment(a),
+				     invert(i), minAngle(min), maxAngle(max) {
   if (i == true)
     position = -a;
   else
@@ -21,12 +24,22 @@ Servo::Servo(int id, int a, bool i): id(id), changed(false), adjustment(a), inve
 
 void Servo::updateAngle(double x) {
   angle += x;
-  setPosition(angle * ANGLETOPULSE);
+  if (angle >= minAngle && angle <= maxAngle)
+    setPosition(angle * ANGLETOPULSE);
+  else {
+    printf("[ERROR] Servo::updateAngle(double x): Invalid servo angle %d\n", angle);
+    angle -= x;
+  }
 }
 
 void Servo::setAngle(double x) {
-  angle = x;
-  setPosition(x * ANGLETOPULSE);
+  if (x >= minAngle && x <= maxAngle) {
+    angle = x;
+    setPosition(x * ANGLETOPULSE);
+  } else {
+    printf("[ERROR] Servo::setAngle(double x): Invalid servo angle %lf\n", x);
+    printf("maxAngle: %d, minAngle: %d, angle:%d\n", maxAngle, minAngle, (int)x);
+  }
 }
 
 void Servo::changeDone() {

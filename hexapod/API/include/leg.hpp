@@ -51,9 +51,9 @@ class Leg {
 
   public: //TOPRIVATE
     LegId id;
-    Servo shoulder;
-    Servo elbow;
-    Servo wrist;
+    Servo &shoulder;
+    Servo &elbow;
+    Servo &wrist;
 };
 
 
