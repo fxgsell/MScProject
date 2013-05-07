@@ -6,6 +6,9 @@
 #include <sys/socket.h>
 #include <unistd.h>
 #include <string.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netinet/tcp.h>
 
 #include "action.hpp"
 #include "socket.hpp"
@@ -162,6 +165,8 @@ int       srv_create(int port)
     return (die("socket in srv_create"));
   on = 1;
   if (setsockopt(s, SOL_SOCKET, SO_REUSEADDR, &on, sizeof(on)) == -1)
+    return (die("setsockopt in srv_create"));
+  if (setsockopt(s, IPPROTO_TCP, TCP_NODELAY, &on, sizeof(on)) == -1)
     return (die("setsockopt in srv_create"));
   sin.sin_family = AF_INET;
   sin.sin_addr.s_addr = INADDR_ANY;

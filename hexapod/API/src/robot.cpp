@@ -17,8 +17,7 @@
 #define SERIALPORT "/dev/ttyAMA0"
 #define TCPPORT 9930
 
-int step();
-int stepCount = 0;
+int walk();
 
 /*
 ** Body
@@ -66,7 +65,7 @@ Body::Body(Leg &fr, Leg &mr, Leg &br, Leg &fl, Leg &ml, Leg &bl) :
   x = 0;
   y = 0;
   turn = 0;
-  height = 0;
+  height = 20;
 
   commit();
 }
@@ -93,6 +92,7 @@ int Body::commit() {
 
   if ((s = a.str()).compare("S T1000 \x0d"))
     serial.write(s.c_str());
+  return (0); //remove when ready
   return (maxTime);
 }
 
@@ -105,7 +105,7 @@ void Body::start() {
   struct timeval  tv_cur;
   struct timeval  tv_act;
   struct timeval  tv_nxt;
-  int r = 0;
+  int r = 100;
   run = true;
   int i = 0;
 
@@ -120,12 +120,12 @@ void Body::start() {
 
     gettimeofday(&tv_cur, 0);
     timersub(&tv_nxt, &tv_act, &tv);
+    //if (!events.empty() || x || y || turn || stepCount % 7 != 0)
+    //  bzero(&tv, sizeof(struct timeval)); //delete when ready
     bzero(&tv, sizeof(struct timeval)); //delete when ready
-    if (!events.empty() || x || y || turn || stepCount % 7 != 0)
-      r = select(lastfd + 1, &fd_read, &fd_write, NULL, &tv);
-    else
-      r = select(lastfd + 1, &fd_read, &fd_write, NULL, 0);
-    check_fd(r);
+    while ((r = select(lastfd + 1, &fd_read, &fd_write, NULL, &tv))) {
+      check_fd(r);
+    }
 
     gettimeofday(&tv_cur, 0);
     if (timercmp(&tv_cur, &tv_nxt, >=)) {
@@ -136,7 +136,7 @@ void Body::start() {
         delete e;
       }
       else
-        tv_act.tv_usec = step();
+        tv_act.tv_usec = walk();
         gettimeofday(&tv_cur, 0);
         timeradd(&tv_cur, &tv_act, &tv_nxt);
     }

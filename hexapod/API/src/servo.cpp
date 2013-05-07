@@ -27,7 +27,7 @@ void Servo::updateAngle(double x) {
   if (angle >= minAngle && angle <= maxAngle)
     setPosition(angle * ANGLETOPULSE);
   else {
-    printf("[ERROR] Servo::updateAngle(double x): Invalid servo angle %d\n", angle);
+    printf("[ERROR] Servo::updateAngle(double x): Invalid servo angle %lf\n", angle + x);
     angle -= x;
   }
 }

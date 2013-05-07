@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 
 
@@ -8,61 +9,168 @@
 #include "socket.hpp"
 
 extern Body *robot;
-extern int stepCount;
 
-const int TURNCOEF = 3;
+const double TURNCOEF = 2.0;
+const double VERTCOEF = 1;
+const double HORICOEF = 5.0;
 
-int step() {
-  static packet c;
+#define MIN(a, b) (a < b ? a : b)
+#define MAX(a, b) (a > b ? a : b)
 
-  if (stepCount != 0 || robot->x || robot->y || robot->turn) {
-    if (stepCount == 0) {
-      printf("Stepping %d %d %d\n", robot->x, robot->y, robot->turn);
-      c.x = robot->x;
-      c.y = robot->y;
-      c.turn = robot->turn;
-      for (int i = 0; i < Body::LEGS; i += 2) {
-        robot->legs[i]->setShoulder(c.turn * TURNCOEF);
-        robot->legs[i]->updateCoord(0, -50, 0);  //UP
-      }
+enum LegMoves {UP = 0, FWD = 1, DOWN = 2, BWD = 3};
+
+static int stepCount = 0;
+
+int startwalk(packet &c) {
+
+  if (stepCount == 0) {
+    for (int i = 0; i < Body::LEGS; i += 2) {
+      c.height = robot->height;
+      c.height = MAX(c.height, 10);
+      c.height = MIN(c.height, 21);
+      robot->legs[i]->up(VERTCOEF * c.height);
     }
-    else if (stepCount == 1) {
-      for (int i = 0; i < Body::LEGS; i += 2) {
-        robot->legs[i]->updateCoord(-5 * c.y, 0, -5 * c.x);  //forward
-      }
-    }
-    else if (stepCount == 2) {
-      for (int i = 0; i < Body::LEGS; i += 2) {
-        robot->legs[i]->updateCoord(0, 50, 0);  //DOWN
-      }
-    }
-    else if (stepCount == 3) {
-      for (int i = 1; i < Body::LEGS; i += 2) {
-        robot->legs[i]->setShoulder(c.turn * TURNCOEF);
-        robot->legs[i]->updateCoord(0, -50, 0);  //UP
-      }
-    }
-    else if (stepCount == 4) {
-      for (int i = 1; i < Body::LEGS; i += 2) {
-        robot->legs[i]->updateCoord(-5 * c.y, 0, -5 * c.x);  //forward
-      }
-    }
-    else if (stepCount == 5) {
-      for (int i = 1; i < Body::LEGS; i += 2) {
-        robot->legs[i]->updateCoord(0, 50, 0);  //DOWN
-      }
-    }
-    else if (stepCount == 6) {
-      for (int i = 0; i < Body::LEGS; i++) {
-        robot->legs[i]->setShoulder(0);
-        robot->legs[i]->updateCoord(5 * c.y, 0, 5 * c.x);  //backward
-      }
-    }
-    stepCount++;
-    stepCount = stepCount % 7;
-    printf("%d\n", stepCount);
-    return robot->commit();
   }
+  else if (stepCount == 1) {
+    for (int i = 0; i < Body::LEGS; i += 2) {
+      robot->legs[i]->forward((HORICOEF * c.x) / 2);  //FORWARD HALF
+    }
+  }
+  else if (stepCount == 2) {
+    for (int i = 0; i < Body::LEGS; i += 2) {
+      robot->legs[i]->down(VERTCOEF * c.height);
+    }
+  }
+  else if (stepCount == 3) {
+    for (int i = 0; i < Body::LEGS; i += 2) { //GROUP A
+      robot->legs[i]->backward(HORICOEF * c.x);  //BACKWARD COMPLETE
+    }
+    for (int i = 1; i < Body::LEGS; i += 2) { //GROUP B
+      c.height = robot->height;
+      c.height = MAX(c.height, 10);
+      c.height = MIN(c.height, 21);
+      robot->legs[i]->up(VERTCOEF * c.height);
+    }
+  }
+  else if (stepCount == 4) {
+    for (int i = 1; i < Body::LEGS; i += 2) {
+      robot->legs[i]->forward((HORICOEF * c.x) / 2);  //FORWARD HALF
+    }
+  }
+  else if (stepCount == 5) {
+    for (int i = 1; i < Body::LEGS; i += 2) {
+      robot->legs[i]->down(VERTCOEF * c.height);
+    }
+    robot->gaitStatus = Body::WALKING;
+  }
+  stepCount++;
+  stepCount %= 6;
+  return robot->commit();
+}
+
+int stopwalk(packet &c) {
+
+  if (stepCount == 0) {
+    for (int i = 0; i < Body::LEGS; i += 2) {
+      c.height = robot->height;
+      c.height = MAX(c.height, 10);
+      c.height = MIN(c.height, 21);
+      robot->legs[i]->up(VERTCOEF * c.height);
+    }
+    for (int i = 1; i < Body::LEGS; i += 2) { //GROUP B
+      robot->legs[i]->backward((HORICOEF * c.x)/2);
+    }
+  }
+  else if (stepCount == 1) {
+    for (int i = 0; i < Body::LEGS; i += 2) {
+      robot->legs[i]->forward((HORICOEF * c.x)/2);
+    }
+  }
+  else if (stepCount == 2) {
+    for (int i = 0; i < Body::LEGS; i += 2) {
+      robot->legs[i]->down(VERTCOEF * c.height);
+    }
+    stepCount = -1;
+  }
+  stepCount++;
+  return robot->commit();
+}
+
+
+     // robot->legs[i]->setShoulder(c.turn * TURNCOEF);
+
+int step(packet &c) {
+
+  if (stepCount == 0) {
+    for (int i = 0; i < Body::LEGS; i += 2) { //GROUP A 
+      c.height = robot->height;
+      c.height = MAX(c.height, 10);
+      c.height = MIN(c.height, 21);
+      robot->legs[i]->up(VERTCOEF * c.height);
+    }
+    for (int i = 1; i < Body::LEGS; i += 2) { //GROUP B 
+      robot->legs[i]->backward(HORICOEF * c.x);
+    }
+  }
+  else if (stepCount == 1) {
+    for (int i = 0; i < Body::LEGS; i += 2) {
+      robot->legs[i]->forward(HORICOEF * c.x);
+    }
+  }
+  else if (stepCount == 2) {
+    for (int i = 0; i < Body::LEGS; i += 2) {
+      robot->legs[i]->down(VERTCOEF * c.height);
+    }
+  }
+  else if (stepCount == 3) {
+    for (int i = 0; i < Body::LEGS; i += 2) { //GROUP A
+      robot->legs[i]->backward(HORICOEF * c.x);
+    }
+    for (int i = 1; i < Body::LEGS; i += 2) { //GROUP B
+      c.height = robot->height;
+      c.height = MAX(c.height, 10);
+      c.height = MIN(c.height, 21);
+      robot->legs[i]->up(VERTCOEF * c.height);
+    }
+  }
+  else if (stepCount == 4) {
+    for (int i = 1; i < Body::LEGS; i += 2) {
+      robot->legs[i]->forward(HORICOEF * c.x);
+    }
+  }
+  else if (stepCount == 5) {
+    for (int i = 1; i < Body::LEGS; i += 2) {
+      robot->legs[i]->down(VERTCOEF * c.height);
+    }
+    robot->gaitStatus = Body::WALKING;
+  }
+  stepCount++;
+  stepCount %= 6;
+  return robot->commit();
+}
+
+int walk() {
+  static packet c = {0, 0, -10, 0, 0, 21};
+  static int i = 0;
+
+  int stop = 6*24;
+  while (i < stop - 3) {
+    i++;
+
+    if  (i == stop - 6)
+      robot->gaitStatus = Body::STOPGAIT;
+    if (stepCount == 0 && c.x == 0 && c.y == 0 &&
+	robot->gaitStatus == Body::WALKING)
+      robot->gaitStatus = Body::STOPGAIT;
+
+    if (robot->gaitStatus == Body::STARTGAIT)
+      return (startwalk(c));
+    else if (robot->gaitStatus == Body::WALKING) {
+      return (step(c)); }
+    else if (robot->gaitStatus == Body::STOPGAIT)
+      return (stopwalk(c));
+  }
+  exit(0);
   return 0;
 }
 

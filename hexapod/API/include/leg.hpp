@@ -19,7 +19,7 @@ class Leg {
 
   public:
     Leg(const Leg &);
-    Leg(LegId, Servo, Servo, Servo);
+    Leg(LegId, double, Servo, Servo, Servo);
 
     void save();	//IMPLEMENT IN Leg:: ? (for now call save of servo)
     void restore();
@@ -51,6 +51,7 @@ class Leg {
 
   public: //TOPRIVATE
     LegId id;
+    double angleOffset;
     Servo &shoulder;
     Servo &elbow;
     Servo &wrist;

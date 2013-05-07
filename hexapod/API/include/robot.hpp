@@ -17,6 +17,7 @@ class Body {
     Gait       gait;
     GaitStatus gaitStatus;
     GaitPose   gaitPose;
+    int stepCount;
 
   public:
     Serial serial;

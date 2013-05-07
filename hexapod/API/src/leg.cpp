@@ -11,19 +11,22 @@ const double SIZETIBIA  = 141.0;
 const double SIZEFEMUR  = 58.0;
 const double SIZECOXA   = 37.0;
 
-const double Pi = 3.14159265358979323846;
+static const double Pi = 3.14159265358979323846;
 
 /*
 ** Legs
 */
-Leg::Leg(LegId i, Servo s, Servo e, Servo w): id(i), shoulder(s), elbow(e), wrist(w) {
+Leg::Leg(LegId i, double a, Servo s, Servo e, Servo w):
+	id(i), angleOffset(a), shoulder(s), elbow(e), wrist(w) {
  height = 0;
  x = 120;
  y = 150;
  z = 0;
 }
 
-Leg::Leg(const Leg & l): id(l.id), shoulder(l.shoulder), elbow(l.elbow), wrist(l.wrist) {
+Leg::Leg(const Leg & l):
+	id(l.id), angleOffset(l.angleOffset), shoulder(l.shoulder),
+	elbow(l.elbow), wrist(l.wrist) {
  height = 0;
  x = 120;
  y = 150;
@@ -47,22 +50,37 @@ int Leg::updateCoord(double x, double y, double z) {
   return (setCoord(this->x + x, this->y + y, this->z + z));
 }
 
-int Leg::setCoord(double x, double y, double z) {
-  double length = sqrt(x*x + z*z);
-  double dist   = sqrt(pow(length - SIZECOXA, 2) + y*y);
-  double a1     = atan2((length - SIZECOXA), y);
-  double a2     = acos((SIZETIBIA*SIZETIBIA - SIZEFEMUR*SIZEFEMUR - dist*dist) /
-                       (-2 * SIZEFEMUR * dist));
-  double b1     = acos((dist*dist - SIZETIBIA*SIZETIBIA - SIZEFEMUR*SIZEFEMUR) /
-                       (-2 * SIZEFEMUR * SIZETIBIA));
+int Leg::setCoord(double px, double py, double pz) {
 
-  double s = 90 - (atan2(x, z) * 180 / Pi);
-  double e = -90 + ((a1 + a2) * 180 / Pi);
-  double w = 90 - (b1 * 180 / Pi);
+  double x = px;
+  double z = pz;
+  double y = py;
+
+  if (angleOffset != 0) {
+//    printf("Do shit: %d\n", angleOffset);
+//    x = px * cos(angleOffset) - pz * sin(angleOffset);
+//    z = px * cos(angleOffset) + pz * sin(angleOffset);
+  }
+
+  double length = sqrt(x*x + z*z);
+  double dist   = sqrt(pow(length - SIZECOXA, 2.0) + y*y);
+  double a1     = atan2((length - SIZECOXA), y);
+  double a2     = acos((SIZEFEMUR*SIZEFEMUR + dist*dist - SIZETIBIA*SIZETIBIA) /
+                       (2.0 * SIZEFEMUR * dist));
+  double b1     = acos((SIZETIBIA*SIZETIBIA + SIZEFEMUR*SIZEFEMUR - dist*dist) /
+                       (2.0 * SIZEFEMUR * SIZETIBIA));
+
+  double rs = atan2(x, z);
+  double re = a1 + a2;
+  double rw = b1;
+
+  double s =  90 - (rs * 180 / Pi);
+  double e = -90 + (re * 180 / Pi);
+  double w =  90 - (rw * 180 / Pi);
   
 
   if (s == s && e == e && w == w) {
-    shoulder.setAngle(s + angle);
+    shoulder.setAngle(s + angle + angleOffset);
     elbow.setAngle(e);
     wrist.setAngle(w);
     this->x = x;
@@ -84,19 +102,19 @@ void Leg::setPosition(int s, int e, int w) {
 }
 
 int Leg::forward(int size) {
-  return setCoord(x, y, z - size);
+  return updateCoord(0, 0, -size);
 }
 
 int Leg::backward(int size) {
-  return setCoord(x, y, z + size);
+  return updateCoord(0, 0, size);
 }
 
 int Leg::up(int size) {
-  return setCoord(x, y - size, z);
+  return updateCoord(0, -size, 0);
 }
 
 int Leg::down(int size) {
-  return setCoord(x, y + size, z);
+  return updateCoord(0, size, 0);
 }
 
 void Leg::save() {
