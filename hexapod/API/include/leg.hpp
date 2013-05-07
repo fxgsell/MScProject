@@ -39,6 +39,7 @@ class Leg {
     int setCoord(double x, double y, double z);
 
     int	  angle;
+    
 
   private:
     bool touch;

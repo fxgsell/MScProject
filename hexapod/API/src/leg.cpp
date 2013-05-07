@@ -56,12 +56,6 @@ int Leg::setCoord(double px, double py, double pz) {
   double z = pz;
   double y = py;
 
-  if (angleOffset != 0) {
-//    printf("Do shit: %d\n", angleOffset);
-//    x = px * cos(angleOffset) - pz * sin(angleOffset);
-//    z = px * cos(angleOffset) + pz * sin(angleOffset);
-  }
-
   double length = sqrt(x*x + z*z);
   double dist   = sqrt(pow(length - SIZECOXA, 2.0) + y*y);
   double a1     = atan2((length - SIZECOXA), y);
@@ -102,11 +96,23 @@ void Leg::setPosition(int s, int e, int w) {
 }
 
 int Leg::forward(int size) {
-  return updateCoord(0, 0, -size);
+  static int state = 0;
+
+  if (state != size) {
+    updateCoord(0, 0, -(state/2) + -(size/2));
+    state = size;
+  } else
+    updateCoord(0, 0, -state);
 }
 
 int Leg::backward(int size) {
-  return updateCoord(0, 0, size);
+  static int state = 0;
+
+  if (state != size) {
+    updateCoord(0, 0, (state/2) + (size/2));
+    state = size;
+  } else
+    updateCoord(0, 0, state);
 }
 
 int Leg::up(int size) {
