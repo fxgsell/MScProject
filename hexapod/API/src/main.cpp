@@ -17,24 +17,24 @@ static const double Pi = 3.14159265358979323846;
 */
 int main() {
   Servo s0( 0,    50, false, -60, 60);
-  Servo s1( 1,  -175, false, -30, 90); // + up
-  Servo s2( 2,    50, false, -90, 40); // ERROR
+  Servo s1( 1,  -160, false, -30, 90); // + up
+  Servo s2( 2,    50, false, -80, 45); // ERROR
   Servo s4( 4,   -50, false, -60, 60);
   Servo s5( 5,    75, false, -30, 90); //
-  Servo s6( 6,    50, false, -90, 40); // + in
+  Servo s6( 6,    30, false, -80, 45); // + in
   Servo s8( 8,   -25, false, -60, 60);
   Servo s9( 9,     0, false, -30, 90);
-  Servo s10(10,  100, false, -90, 40); // + in
+  Servo s10(10,   50, false, -80, 45); // + in
 
   Servo s18(18,   55, true, -60, 60);
   Servo s17(17, -100, true, -30, 90);
-  Servo s16(16,  140, true, -90, 40);
+  Servo s16(16,  120, true, -80, 45);
   Servo s22(22,  -60, true, -60, 60);
   Servo s21(21,  -25, true, -30, 90);
-  Servo s20(20,  150, true, -90, 40);
+  Servo s20(20,  150, true, -80, 45);
   Servo s26(26,  -25, true, -60, 60);
   Servo s25(25,    0, true, -30, 90);
-  Servo s24(24,   50, true, -90, 40);
+  Servo s24(24,   50, true, -80, 45);
 
   Leg fr(Leg::FR, 30, s18, s17, s16);
   Leg mr(Leg::MR,  0, s22, s21, s20);
@@ -47,19 +47,21 @@ int main() {
 
   //shoulder -60 to 60 
   //elbow -30 to 90
-  //wrist -90 to 30
+  //wrist -80 to 30
 
   //  x = dist from shoulder
   //  y = height    Max:160 Ground:40
   //  z = forward/backward
-  ELegSetCoord init1(*robot, Leg::MIDLE, 90, 120, 0);
-  ELegSetCoord init2(*robot, Leg::FRONT, 90, 120, 0);
-  ELegSetCoord init3(*robot, Leg::BACK , 90, 120, 0);
+  //ELegSetAngles init1(*robot, Leg::MIDLE, 0, 0, -0);
+  //ELegSetAngles init2(*robot, Leg::FRONT, 0, 0, -0);
+  //ELegSetAngles init3(*robot, Leg::BACK , 0, 0, -0);
+  ELegSetCoord init1(*robot, Leg::MIDLE, 100, 120, -0);
+  ELegSetCoord init2(*robot, Leg::FRONT, 100, 120, -0);
+  ELegSetCoord init3(*robot, Leg::BACK , 100, 120, -0);
   init1.execute();
   init2.execute();
   init3.execute();
 
-  usleep(1000000);
 //  robot->addAction(hello(Leg::A));
 //  robot->events.push_back(new ESleep(10000));
 //  robot->addAction(hello(Leg::B));

@@ -9,6 +9,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netinet/tcp.h>
+#include <errno.h>
 
 #include "action.hpp"
 #include "socket.hpp"
@@ -51,26 +52,26 @@ void    client_read(int cs)
   else {
     if (buf.flags & B11) {
    // robot->addAction(standUp());
-      printf("Recv Up!\n");
+   //   printf("Recv Up!\n");
     }
     else if (buf.flags & B01) {
-      printf("Recv Shot!\n");
+     // printf("Recv Shot!\n");
     }
     else if (buf.flags & B12) {
   //  robot->addAction(standDown());
-      printf("Recv Down!\n");
+   //   printf("Recv Down!\n");
     }
     else if (buf.flags & B06) {
-      printf("Recv clear!\n");
+    //  printf("Recv clear!\n");
     }
     else if (buf.flags & B05) {
       robot->events.clear();
-      printf("Recv clear!\n");
+    //  printf("Recv clear!\n");
     }
     
     if (robot->turn != buf.turn)  {
       robot->turn = buf.turn;
-      printf("Recv Turn:%d\n", buf.turn);
+    //  printf("Recv Turn:%d\n", buf.turn);
     }
     if (robot->height != buf.height)  {
       robot->height = buf.height;
@@ -79,12 +80,60 @@ void    client_read(int cs)
     }
     if (buf.y != robot->y)  {
       robot->y = buf.y;
-      printf("Recv y:%d\n", buf.y);
+  //    printf("Recv y:%d\n", buf.y);
     }
     if (buf.x != -robot->x)  {
       robot->x = -buf.x;
-      printf("Recv x:%d\n", buf.x);
+   //   printf("Recv x:%d\n", buf.x);
     }
+  }
+}
+
+enum SerialReadStatus {HEAD = 0, BODYSENS = 1, BODYMAP = 2, TAIL = 3};
+
+void serial_read(int fd) {
+  unsigned char rbuf = 0;
+
+  static SerialReadStatus status = HEAD;
+  static int64_t cur_value = 0;
+  static int total_len = 0;
+  static int stop = 0;
+
+  int i = read (fd, &rbuf, 1);
+  
+  if (i < 0) {
+    fprintf (stderr, "Serial: Read error: %s\n", strerror (errno));
+  } else if (!i) {
+    fprintf (stderr, "Serial: Unexpected EOF\n");
+  } else {
+    if (status == HEAD){
+      if (rbuf == 'R') {
+        printf ("%c: ", rbuf);
+        status = BODYSENS;
+        cur_value = 0;
+        stop = 50;
+      }
+      if (rbuf == 'P') {
+        printf ("%c: ", rbuf);
+        cur_value = 0;
+        status = BODYMAP;
+        stop = 100;
+      }
+      else
+        return;
+    } else if (status == TAIL) {
+      printf (" : %c\n", rbuf);
+      status = HEAD;
+      total_len = 0;
+    } else if (status == BODYMAP) {
+      total_len++;
+      printf ("%c", rbuf);
+    } else if (status == BODYSENS) {
+      total_len++;
+      printf ("%c", rbuf);
+    }
+    if (total_len == stop)
+      status = TAIL;
   }
 }
 
@@ -151,7 +200,7 @@ void      srv_accept(int s)
 }
 
 
-int       srv_create(int port)
+int       srv_create(int port, int serialfd)
 {
   int     s;
   int     on;
@@ -175,6 +224,8 @@ int       srv_create(int port)
     return (die("bind in srv_create"));
   if (listen(s, 42) == -1)
     return (die("listen in srv_create"));
+  fds[serialfd].type = FD_SERIAL;
+  fds[serialfd].fct_read = serial_read;
   fds[s].type = FD_SERV;
   fds[s].fct_read = srv_accept;
   return (0);

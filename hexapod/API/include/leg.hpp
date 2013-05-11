@@ -23,7 +23,8 @@ class Leg {
 
     void save();	//IMPLEMENT IN Leg:: ? (for now call save of servo)
     void restore();
-
+ 
+    int  setHeight(int);
     void setPosition(int = 0, int = 0, int = 0);
     void setAngles(int = 0, int = 0, int = 0);
     void center();
@@ -39,12 +40,11 @@ class Leg {
     int setCoord(double x, double y, double z);
 
     int	  angle;
-    
+    int	  hstate;
 
   private:
     bool touch;
     int	 height;
-
 
     int   x;
     int   y;

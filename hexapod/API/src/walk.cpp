@@ -11,18 +11,17 @@
 extern Body *robot;
 
 const double TURNCOEF = 2.0;
-const double VERTCOEF = 1;
-const double HORICOEF = 5.0;
+const double VERTCOEF = 1.0; //even numbers
+const double HORICOEF = 8.0;
 
-const int MAXHEIGHT = 21;
+const int MAXHEIGHT = 30;
 const int MINHEIGHT = 10;
 const int MAXX = 9;
 const int MAXY = 4;
 
-#define MIN(a, b) (a < b ? a : b)
-#define MAX(a, b) (a > b ? a : b)
-
 enum LegMoves {UP = 0, FWD = 1, DOWN = 2, BWD = 3};
+
+#define MIN(a, b) ((a < b) ? (a) : (b))
 
 static int stepCount = 0;
 
@@ -33,9 +32,7 @@ int step(packet &c) {
       c.turn = robot->turn;
       c.x = robot->x;
       c.y = robot->y;
-      c.height = robot->height;
-      c.height = MAX(c.height, 10);
-      c.height = MIN(c.height, 21);
+      c.height = MIN((MINHEIGHT + robot->height), MAXHEIGHT);
 
       robot->legs[i]->setShoulder(c.turn * TURNCOEF);
       robot->legs[i]->up(VERTCOEF * c.height);
@@ -61,9 +58,8 @@ int step(packet &c) {
       robot->legs[i]->backward(HORICOEF * c.x);
     }
     for (int i = 1; i < Body::LEGS; i += 2) { //GROUP B
-      c.height = robot->height;
-      c.height = MAX(c.height, 10);
-      c.height = MIN(c.height, 21);
+      c.turn = robot->turn;
+      c.height = MIN((MINHEIGHT + robot->height), MAXHEIGHT);
       robot->legs[i]->setShoulder(c.turn * TURNCOEF);
       robot->legs[i]->up(VERTCOEF * c.height);
     }
@@ -89,15 +85,12 @@ int walk() {
   static int i = 0;
 
   i++;
-
-  
-  if (robot->x != 0 || robot->y != 0) {
+  if (robot->x != 0 || robot->y != 0 || robot->turn) {
     robot->gaitStatus = Body::WALKING;
   }
-  else if (stepCount == 0 && c.x == 0 && c.y == 0) {
+  else if (stepCount == 0) {
     robot->gaitStatus = Body::STOPGAIT;
   }
-
   if (robot->gaitStatus == Body::WALKING)
     return (step(c));
   return 0;
