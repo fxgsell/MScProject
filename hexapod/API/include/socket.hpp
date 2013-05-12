@@ -2,6 +2,7 @@
 
 #include <sys/select.h>
 
+#include "list.hpp"
 #include "../../../Protocol/protocol.h"
 
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
@@ -19,8 +20,8 @@ struct      s_fd
   int       type;
   void      (*fct_read)(int);
   void      (*fct_write)(int);
-  int       buf_write;
-  int       buf_read;
+  list      buf_write;
+  list      buf_read;
 };
 
 extern s_fd fds[FDS];

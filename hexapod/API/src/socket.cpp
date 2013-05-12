@@ -34,6 +34,8 @@ void      clean_fd(int fd)
   fds[fd].fct_write = NULL;
   fds[fd].buf_write = 0;
   fds[fd].buf_read = 0;
+  fds[fd].buf_read.clear();
+  fds[fd].buf_write.clear();
 }
 
 
@@ -103,8 +105,8 @@ void      init_fd()
     if (fds[i].type != FD_FREE)
     {
       FD_SET(i, &fd_read);
-      //if (get_buf(&fds[i].buf_write))
-      //  FD_SET(i, &fd_write);
+      if (!fds[i].buf_write.empty())
+        FD_SET(i, &fd_write);
       lastfd = MAX(lastfd, i); 
     }
     i++;
@@ -120,8 +122,8 @@ void      check_fd(int r)
   {     
     if (FD_ISSET(i, &fd_read))
       fds[i].fct_read(i);
-//    if (FD_ISSET(i, &e->fd_write))
-//      e->fds[i].fct_write(e, i);
+    if (FD_ISSET(i, &fd_write))
+      fds[i].fct_write(i);
     if (FD_ISSET(i, &fd_read) || FD_ISSET(i, &fd_write))
       r--;
     i++;
