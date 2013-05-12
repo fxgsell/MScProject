@@ -79,8 +79,8 @@ int Body::commit() {
   std::stringstream a, b, c;
 
   a << "S";
-  b << "S";
-  c << "S";
+  b << "";
+  c << "";
   for (int i = 0; i < Body::SERVOS; i++) { 
     int id = servos[i]->getId();
 
@@ -95,15 +95,14 @@ int Body::commit() {
     }
   }
   maxTime = 100;
-  a << " T" << maxTime << " \x0d";
-  b << " T" << maxTime << " \x0d";
-  c << " T" << maxTime << " \x0d";
+  a << " T" << maxTime << " ";
+  c << " \x0d";
 
-  if ((s = a.str()).compare("S T1000 \x0d"))
+  if ((s = a.str()).compare("S T1000 "))
     serial.write(s.c_str());
-  if ((s = b.str()).compare("S T1000 \x0d"))
+  if ((s = b.str()).compare(""))
     serial.write(s.c_str());
-  if ((s = c.str()).compare("S T1000 \x0d"))
+  if ((s = c.str()).compare(" \x0d"))
     serial.write(s.c_str());
   return (0); //remove when ready
   return (maxTime);

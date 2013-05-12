@@ -93,6 +93,40 @@ void    client_read(int cs)
 
 enum SerialReadStatus {HEAD = 0, BODYSENS = 1, BODYMAP = 2, TAIL = 3};
 
+void serial_write(int fd) {
+  static int len = 0;
+  static char *wbuf = "";
+
+  if (len == 0) {
+    if (!fds[fd].buf_write.empty()) {
+      wbuf = (char *)fds[fd].buf_write.start;
+    }
+    else
+      return;
+  }
+  else if (strlen(wbuf) <= len) {
+    wbuf = (char *)fds[fd].buf_write.pop();
+    if (!fds[fd].buf_write.empty()) {
+      wbuf = (char *)fds[fd].buf_write.start;
+      len = 0;
+    }
+    else
+      return;
+  }
+
+  int i = write(fd, wbuf+len, 1);
+  len++;
+  
+  if (i < 0) {
+    fprintf (stderr, "Serial: Read error: %s\n", strerror (errno));
+  } else if (!i) {
+    fprintf (stderr, "Serial: Unexpected EOF\n");
+  } else {
+    printf ("%c: ", *(wbuf+len));
+  }
+}
+
+
 void serial_read(int fd) {
   unsigned char rbuf = 0;
 
@@ -226,10 +260,11 @@ int       srv_create(int port, int serialfd)
     return (die("bind in srv_create"));
   if (listen(s, 42) == -1)
     return (die("listen in srv_create"));
-  fds[serialfd].type = FD_SERIAL;
-  fds[serialfd].fct_read = serial_read;
   fds[s].type = FD_SERV;
   fds[s].fct_read = srv_accept;
+  fds[serialfd].type = FD_SERIAL;
+  fds[serialfd].fct_read = serial_read;
+  fds[serialfd].fct_read = serial_write;
   return (0);
 }
 

@@ -24,7 +24,7 @@ struct      s_fd
   list      buf_read;
 };
 
-extern s_fd fds[FDS];
+extern s_fd fds[];
 
 extern fd_set  fd_read;
 extern fd_set  fd_write;

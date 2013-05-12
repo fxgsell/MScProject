@@ -9,8 +9,8 @@ OBJ_FILES = $(addprefix $(OBJ_DIR)/,$(notdir $(CPP_FILES:.cpp=.o)))
 
 OBJS =  $(patsubst %.cpp,$(OBJ_DIR)/%.o,$(notdir $(CPP_FILES)))
 
-CXXFLAGS = -W -Wall -I$(INC_DIR) -ansi
-CFLAGS = -W -Wall -I$(INC_DIR) -ansi 
+CXXFLAGS = -W -Wall -I$(INC_DIR) -ansi -g3
+CFLAGS = -W -Wall -I$(INC_DIR) -ansi  -g3
 LDFLAGS = 
 CXX=g++
 CC=gcc
