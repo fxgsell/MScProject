@@ -3,8 +3,6 @@
 #include "robot.hpp"
 #include "event.hpp"
 
-
-
 /*
 ** SetCoor
 */

@@ -25,9 +25,9 @@ int walk();
 Body::Body(Leg &fr, Leg &mr, Leg &br, Leg &fl, Leg &ml, Leg &bl) :
 				serial(SERIALPORT),
 				fr(fr), mr(mr), br(br), fl(fl), ml(ml), bl(bl) {
-
-  if (srv_create(TCPPORT) == -1)
+  if (srv_create(TCPPORT, serial.getfd()) == -1)
     throw ;
+
 
   servos[0] = &(this->fr.shoulder);
   servos[1] = &(this->mr.shoulder);
@@ -76,21 +76,34 @@ Body::Body(Leg &fr, Leg &mr, Leg &br, Leg &fl, Leg &ml, Leg &bl) :
 int Body::commit() {
   int maxTime;
   std::string s;
-  std::stringstream a;
+  std::stringstream a, b, c;
 
   a << "S";
+  b << "S";
+  c << "S";
   for (int i = 0; i < Body::SERVOS; i++) { 
     int id = servos[i]->getId();
 
     if (servos[i]->hasChanged()) {
-      a << " #" << id << " P" << servos[i]->getRealPosition();
+      if (id < 6)
+        a << " #" << id << " P" << servos[i]->getRealPosition();
+      else if (id > 11)
+        b << " #" << id << " P" << servos[i]->getRealPosition();
+      else
+        c << " #" << id << " P" << servos[i]->getRealPosition();
       servos[i]->changeDone();
     }
   }
   maxTime = 100;
   a << " T" << maxTime << " \x0d";
+  b << " T" << maxTime << " \x0d";
+  c << " T" << maxTime << " \x0d";
 
   if ((s = a.str()).compare("S T1000 \x0d"))
+    serial.write(s.c_str());
+  if ((s = b.str()).compare("S T1000 \x0d"))
+    serial.write(s.c_str());
+  if ((s = c.str()).compare("S T1000 \x0d"))
     serial.write(s.c_str());
   return (0); //remove when ready
   return (maxTime);
@@ -123,6 +136,7 @@ void Body::start() {
     //if (!events.empty() || x || y || turn || stepCount % 7 != 0)
     //  bzero(&tv, sizeof(struct timeval)); //delete when ready
     bzero(&tv, sizeof(struct timeval)); //delete when ready
+    tv.tv_usec = 100000;
     while ((r = select(lastfd + 1, &fd_read, &fd_write, NULL, &tv))) {
       check_fd(r);
     }
@@ -141,7 +155,6 @@ void Body::start() {
         timeradd(&tv_cur, &tv_act, &tv_nxt);
     }
     i++;
-    usleep(100000);
   }
 }
 

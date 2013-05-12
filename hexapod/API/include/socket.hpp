@@ -33,7 +33,7 @@ extern int cls;
 extern int lastfd;
 
 
-int       srv_create(int port);
+int       srv_create(int port, int serialfd);
 void      init_fd();
 void      check_fd(int r);
 int       srv_create(int port);

@@ -8,7 +8,7 @@ class Serial {
     virtual ~Serial();
 
     int write(const char *);
-    //int read(const char *);
+    int getfd() { return fd; };
 
   private:
     int		    fd;

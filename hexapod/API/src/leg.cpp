@@ -22,6 +22,7 @@ Leg::Leg(LegId i, double a, Servo s, Servo e, Servo w):
  x = 120;
  y = 150;
  z = 0;
+ hstate = 0;
 }
 
 Leg::Leg(const Leg & l):
@@ -31,6 +32,7 @@ Leg::Leg(const Leg & l):
  x = 120;
  y = 150;
  z = 0;
+ hstate = 0;
 }
 
 void Leg::setShoulder(int x) {
@@ -96,31 +98,25 @@ void Leg::setPosition(int s, int e, int w) {
 }
 
 int Leg::forward(int size) {
-  static int state = 0;
-
-  if (state != size) {
-    updateCoord(0, 0, -(state/2) + -(size/2));
-    state = size;
-  } else
-    updateCoord(0, 0, -state);
+  updateCoord(0, 0, -(hstate/2 + size/2));
+  hstate = size;
 }
 
 int Leg::backward(int size) {
-  static int state = 0;
+  updateCoord(0, 0, (hstate/2 + size/2));
+  hstate = size;
+}
 
-  if (state != size) {
-    updateCoord(0, 0, (state/2) + (size/2));
-    state = size;
-  } else
-    updateCoord(0, 0, state);
+int Leg::setHeight(int size) {
+  updateCoord(x, size, z);
 }
 
 int Leg::up(int size) {
-  return updateCoord(0, -size, 0);
+  updateCoord(0, -size, 0);
 }
 
 int Leg::down(int size) {
-  return updateCoord(0, size, 0);
+  updateCoord(0, size, 0);
 }
 
 void Leg::save() {
