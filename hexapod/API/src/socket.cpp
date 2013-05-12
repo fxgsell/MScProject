@@ -22,6 +22,7 @@ fd_set  fd_write;
 
 s_fd fds[128];
 int cls;
+int fdserial;
 
 int die (const char *s) {
   perror(s);
@@ -95,34 +96,29 @@ enum SerialReadStatus {HEAD = 0, BODYSENS = 1, BODYMAP = 2, TAIL = 3};
 
 void serial_write(int fd) {
   static int len = 0;
-  static char *wbuf = "";
+  static const char *wbuf = "";
 
   if (len == 0) {
     if (!fds[fd].buf_write.empty()) {
-      wbuf = (char *)fds[fd].buf_write.start;
+      wbuf = (char *)fds[fd].buf_write.start->data;
     }
     else
       return;
   }
-  else if (strlen(wbuf) <= len) {
+  else if (!wbuf[len]) {
     wbuf = (char *)fds[fd].buf_write.pop();
-    if (!fds[fd].buf_write.empty()) {
-      wbuf = (char *)fds[fd].buf_write.start;
-      len = 0;
-    }
-    else
-      return;
+    len = 0;
+    return;
   }
 
   int i = write(fd, wbuf+len, 1);
+  //printf("%c", wbuf[len]);
   len++;
   
   if (i < 0) {
     fprintf (stderr, "Serial: Read error: %s\n", strerror (errno));
   } else if (!i) {
     fprintf (stderr, "Serial: Unexpected EOF\n");
-  } else {
-    printf ("%c: ", *(wbuf+len));
   }
 }
 
@@ -205,7 +201,7 @@ void      check_fd(int r)
   {     
     if (FD_ISSET(i, &fd_read))
       fds[i].fct_read(i);
-    if (FD_ISSET(i, &fd_write))
+    if (FD_ISSET(i, &fd_write) && i == fdserial)
       fds[i].fct_write(i);
     if (FD_ISSET(i, &fd_read) || FD_ISSET(i, &fd_write))
       r--;
@@ -262,9 +258,11 @@ int       srv_create(int port, int serialfd)
     return (die("listen in srv_create"));
   fds[s].type = FD_SERV;
   fds[s].fct_read = srv_accept;
+  printf("Serial fd:%d, Server fd:%d\n",serialfd, s);
+  fdserial = serialfd;
   fds[serialfd].type = FD_SERIAL;
   fds[serialfd].fct_read = serial_read;
-  fds[serialfd].fct_read = serial_write;
+  fds[serialfd].fct_write = serial_write;
   return (0);
 }
 

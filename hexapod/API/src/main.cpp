@@ -52,9 +52,9 @@ int main() {
   //  x = dist from shoulder
   //  y = height    Max:160 Ground:40
   //  z = forward/backward
-  //ELegSetAngles init1(*robot, Leg::MIDLE, 0, 0, -0);
-  //ELegSetAngles init2(*robot, Leg::FRONT, 0, 0, -0);
-  //ELegSetAngles init3(*robot, Leg::BACK , 0, 0, -0);
+  //ELegSetAngles init1(*robot, Leg::MIDLE, 0, 90, -80);
+  //ELegSetAngles init2(*robot, Leg::FRONT, 0, 90, -80);
+  //ELegSetAngles init3(*robot, Leg::BACK , 0, 90, -80);
   ELegSetCoord init1(*robot, Leg::MIDLE, 100, 120, -0);
   ELegSetCoord init2(*robot, Leg::FRONT, 100, 120, -0);
   ELegSetCoord init3(*robot, Leg::BACK , 100, 120, -0);

@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <sys/time.h>
 #include <sstream>
+#include <string.h>
 
 #include "list.hpp"
 #include "servo.hpp"
@@ -65,46 +66,35 @@ Body::Body(Leg &fr, Leg &mr, Leg &br, Leg &fl, Leg &ml, Leg &bl) :
   x = 0;
   y = 0;
   turn = 0;
-  height = 20;
+  height = 25;
 
   commit();
 }
 
+extern int fdserial;
 /*
 ** Push moves to serial
 */
 int Body::commit() {
   int maxTime;
-  std::string s;
-  std::stringstream a, b, c;
+  std::stringstream a;
 
   a << "S";
-  b << "";
-  c << "";
   for (int i = 0; i < Body::SERVOS; i++) { 
     int id = servos[i]->getId();
 
     if (servos[i]->hasChanged()) {
-      if (id < 6)
-        a << " #" << id << " P" << servos[i]->getRealPosition();
-      else if (id > 11)
-        b << " #" << id << " P" << servos[i]->getRealPosition();
-      else
-        c << " #" << id << " P" << servos[i]->getRealPosition();
+      a << " #" << id << " P" << servos[i]->getRealPosition();
       servos[i]->changeDone();
     }
   }
   maxTime = 100;
-  a << " T" << maxTime << " ";
-  c << " \x0d";
+  a << " T" << maxTime;
+  a << "\x0d";
 
-  if ((s = a.str()).compare("S T1000 "))
-    serial.write(s.c_str());
-  if ((s = b.str()).compare(""))
-    serial.write(s.c_str());
-  if ((s = c.str()).compare(" \x0d"))
-    serial.write(s.c_str());
-  return (0); //remove when ready
+  char * s = strdup(a.str().c_str());
+  fds[fdserial].buf_write.push_back( s);
+  //printf("{{%s}}\n", s);
   return (maxTime);
 }
 
@@ -122,37 +112,29 @@ void Body::start() {
   int i = 0;
 
   bzero(&tv, sizeof(struct timeval));
-  bzero(&tv_cur, sizeof(struct timeval));
   bzero(&tv_act, sizeof(struct timeval));
   bzero(&tv_nxt, sizeof(struct timeval));
+  gettimeofday(&tv_cur, 0);
 
   for (;run;) { 
-    time = 0;
-    init_fd();
-
-    gettimeofday(&tv_cur, 0);
-    timersub(&tv_nxt, &tv_act, &tv);
-    //if (!events.empty() || x || y || turn || stepCount % 7 != 0)
-    //  bzero(&tv, sizeof(struct timeval)); //delete when ready
-    bzero(&tv, sizeof(struct timeval)); //delete when ready
-    tv.tv_usec = 100000;
-    while ((r = select(lastfd + 1, &fd_read, &fd_write, NULL, &tv))) {
+    while (timercmp(&tv_cur, &tv_nxt, <)) {
+      init_fd();
+      r = select(lastfd + 1, &fd_read, &fd_write, NULL, &tv);
       check_fd(r);
+      gettimeofday(&tv_cur, 0);
     }
 
-    gettimeofday(&tv_cur, 0);
-    if (timercmp(&tv_cur, &tv_nxt, >=)) {
-      if (!events.empty()) {
-        Event *e = (Event*)events.pop();
-        puts(typeid(*e).name());
-        tv_act.tv_usec = e->execute();
-        delete e;
-      }
-      else
-        tv_act.tv_usec = walk();
-        gettimeofday(&tv_cur, 0);
-        timeradd(&tv_cur, &tv_act, &tv_nxt);
+    if (!events.empty()) {
+      Event *e = (Event*)events.pop();
+      puts(typeid(*e).name());
+      tv_act.tv_usec = e->execute();
+      delete e;
     }
+    else
+      tv_act.tv_usec = walk();
+    tv_act.tv_usec = 150000;  //remove when ready
+    gettimeofday(&tv_cur, 0);
+    timeradd(&tv_cur, &tv_act, &tv_nxt);
     i++;
   }
 }

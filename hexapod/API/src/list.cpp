@@ -5,7 +5,7 @@
 list::list(): start(0), end(0) {
 }
 
-list::list(void *data): start(0), end(0) {
+list::list( void *data): start(0), end(0) {
   push_back(data);
 }
 
@@ -30,9 +30,9 @@ bool list::empty() {
 }
 
 
-void  *list::pop() {
+ void  *list::pop() {
   if (start) {
-    void *ret = start->data;
+     void *ret = start->data;
     list_elem *t = start->next;
     delete start;
     start = t;
@@ -63,7 +63,7 @@ void list::insert(list *l) {
   end = l->end;
 };
 
-void *list::push_front(void *data) {
+void *list::push_front( void *data) {
   list_elem *e;
 
   e = new list_elem;
@@ -77,7 +77,7 @@ void *list::push_front(void *data) {
   return e;
 };
 
-void *list::push_back(void *data) {
+void *list::push_back( void *data) {
   list_elem *e;
 
   e = new list_elem;
