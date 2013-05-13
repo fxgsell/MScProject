@@ -9,8 +9,10 @@
 
 #define FD_FREE    0
 #define FD_SERV    1
-#define FD_CLIENT  3
-#define FD_SERIAL  3
+#define FD_SERIAL  2
+#define FD_NEW	   3
+#define FD_CLIENT  4
+#define FD_VIEWER  5
 
 #define FDS 128
 

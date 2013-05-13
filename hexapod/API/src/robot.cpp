@@ -20,6 +20,8 @@
 
 int walk();
 
+extern int fdviewer;
+
 /*
 ** Body
 */
@@ -31,24 +33,27 @@ Body::Body(Leg &fr, Leg &mr, Leg &br, Leg &fl, Leg &ml, Leg &bl) :
 
 
   servos[0] = &(this->fr.shoulder);
-  servos[1] = &(this->mr.shoulder);
-  servos[2] = &(this->br.shoulder);
-  servos[3] = &(this->fl.shoulder);
-  servos[4] = &(this->ml.shoulder);
-  servos[5] = &(this->bl.shoulder);
+  servos[1] = &(this->fr.elbow);
+  servos[2] = &(this->fr.wrist);
 
-  servos[6] = &(this->fr.elbow);
-  servos[7] = &(this->mr.elbow);
-  servos[8] = &(this->br.elbow);
-  servos[9] = &(this->ml.elbow);
-  servos[10] = &(this->fl.elbow);
-  servos[11] = &(this->bl.elbow);
+  servos[3] = &(this->mr.shoulder);
+  servos[4] = &(this->mr.elbow);
+  servos[5] = &(this->mr.wrist);
 
-  servos[12] = &(this->fr.wrist);
-  servos[13] = &(this->mr.wrist);
-  servos[14] = &(this->br.wrist);
-  servos[15] = &(this->fl.wrist);
-  servos[16] = &(this->ml.wrist);
+  servos[6] = &(this->br.shoulder);
+  servos[7] = &(this->br.elbow);
+  servos[8] = &(this->br.wrist);
+
+  servos[9] = &(this->fl.shoulder);
+  servos[10] = &(this->ml.elbow);
+  servos[11] = &(this->fl.wrist);
+
+  servos[12] = &(this->ml.shoulder);
+  servos[13] = &(this->fl.elbow);
+  servos[14] = &(this->ml.wrist);
+
+  servos[15] = &(this->bl.shoulder);
+  servos[16] = &(this->bl.elbow);
   servos[17] = &(this->bl.wrist);
   
   legs[0] = &(this->fl);
@@ -86,6 +91,13 @@ int Body::commit() {
     if (servos[i]->hasChanged()) {
       a << " #" << id << " P" << servos[i]->getRealPosition();
       servos[i]->changeDone();
+      if (fdviewer) {
+        std::stringstream viewer;
+        
+        viewer << " moveLeg " << i/3 << " " << i%3 << " " << servos[i]->getAngle();
+        char *s = strdup(viewer.str().c_str());
+        fds[fdviewer].buf_write.push_back(s);
+      }
     }
   }
   maxTime = 100;

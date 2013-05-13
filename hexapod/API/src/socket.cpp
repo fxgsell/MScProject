@@ -23,6 +23,7 @@ fd_set  fd_write;
 s_fd fds[128];
 int cls;
 int fdserial;
+int fdviewer;
 
 int die (const char *s) {
   perror(s);
@@ -34,8 +35,6 @@ void      clean_fd(int fd)
   fds[fd].type = FD_FREE;
   fds[fd].fct_read = NULL;
   fds[fd].fct_write = NULL;
-  fds[fd].buf_write = 0;
-  fds[fd].buf_read = 0;
   fds[fd].buf_read.clear();
   fds[fd].buf_write.clear();
 }
@@ -106,7 +105,7 @@ void serial_write(int fd) {
       return;
   }
   else if (!wbuf[len]) {
-    wbuf = (char *)fds[fd].buf_write.pop();
+    delete (char *)fds[fd].buf_write.pop();
     len = 0;
     return;
   }
@@ -127,7 +126,6 @@ void serial_read(int fd) {
   unsigned char rbuf = 0;
 
   static SerialReadStatus status = HEAD;
-  static int64_t cur_value = 0;
   static int total_len = 0;
   static int stop = 0;
 
@@ -142,12 +140,10 @@ void serial_read(int fd) {
       if (rbuf == 'R') {
         printf ("%c: ", rbuf);
         status = BODYSENS;
-        cur_value = 0;
         stop = 50;
       }
       if (rbuf == 'P') {
         printf ("%c: ", rbuf);
-        cur_value = 0;
         status = BODYMAP;
         stop = 100;
       }
@@ -169,6 +165,54 @@ void serial_read(int fd) {
   }
 }
 
+void viewer_write(int fd) {
+  char *wbuf = 0;
+
+  if (!fds[fd].buf_write.empty()) 
+    wbuf = (char *)fds[fd].buf_write.pop();
+  else
+    return;
+
+  int i = write(fd, wbuf, strlen(wbuf));
+  printf("Sending: %s\n", wbuf);
+  delete wbuf;
+  
+  if (i < 0) {
+    fprintf (stderr, "Serial: Read error: %s\n", strerror (errno));
+  } else if (!i) {
+    fprintf (stderr, "Serial: Unexpected EOF\n");
+  }
+}
+
+void      new_read(int fd)
+{
+  char rbuf[6];
+  int i = read (fd, &rbuf, 6);
+
+  if (i < 0) {
+    fprintf (stderr, "Socket: Read error: %s\n", strerror (errno));
+  } else if (!i) {
+    clean_fd(fd);
+  } else {
+    printf("read New\n");
+    if (!strncmp(rbuf, "VIEWER", 6)) {
+      printf("New viewer\n");
+      fds[fd].type = FD_VIEWER;
+      fdviewer = fd;
+      fds[fd].fct_write = viewer_write;
+    }
+    else if (!strncmp(rbuf, "CLIENT", 6)) {
+      printf("New client\n");
+      fds[fd].type = FD_CLIENT;
+      fds[fd].fct_read = client_read;
+      //fds[fd].fct_write = client_write;
+    }
+    fds[fd].buf_read.clear();
+    fds[fd].buf_write.clear();
+    ++cls;
+  }
+}
+
 int lastfd;
 
 void      init_fd()
@@ -184,8 +228,9 @@ void      init_fd()
     if (fds[i].type != FD_FREE)
     {
       FD_SET(i, &fd_read);
-      if (!fds[i].buf_write.empty())
+      if (!fds[i].buf_write.empty()) {
         FD_SET(i, &fd_write);
+      }
       lastfd = MAX(lastfd, i); 
     }
     i++;
@@ -201,13 +246,14 @@ void      check_fd(int r)
   {     
     if (FD_ISSET(i, &fd_read))
       fds[i].fct_read(i);
-    if (FD_ISSET(i, &fd_write) && i == fdserial)
+    if (FD_ISSET(i, &fd_write))
       fds[i].fct_write(i);
     if (FD_ISSET(i, &fd_read) || FD_ISSET(i, &fd_write))
       r--;
     i++;
   }
 }
+
 
 void      srv_accept(int s)
 {
@@ -223,11 +269,10 @@ void      srv_accept(int s)
     perror("accept in srv_accept");
     return;
   }
-  fds[cs].type = FD_CLIENT;
-  fds[cs].fct_read = client_read;
-  //fds[cs].fct_write = client_write;
-  fds[cs].buf_read = 0;
-  fds[cs].buf_write = 0;
+  fds[cs].type = FD_NEW;
+  fds[cs].fct_read = new_read;
+  fds[cs].buf_read.clear();
+  fds[cs].buf_write.clear();
   ++cls;
 }
 
@@ -258,11 +303,15 @@ int       srv_create(int port, int serialfd)
     return (die("listen in srv_create"));
   fds[s].type = FD_SERV;
   fds[s].fct_read = srv_accept;
+  fds[s].buf_read.clear();
+  fds[s].buf_write.clear();
   printf("Serial fd:%d, Server fd:%d\n",serialfd, s);
   fdserial = serialfd;
   fds[serialfd].type = FD_SERIAL;
   fds[serialfd].fct_read = serial_read;
   fds[serialfd].fct_write = serial_write;
+  fds[serialfd].buf_read.clear();
+  fds[serialfd].buf_write.clear();
   return (0);
 }
 

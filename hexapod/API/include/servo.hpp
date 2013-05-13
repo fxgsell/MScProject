@@ -9,6 +9,7 @@ class Servo {
 
     int   getRealPosition();
     int   getId();
+    int   getAngle() {return angle;};
     bool  hasChanged();
     void  changeDone();
     void  updatePosition(int);
