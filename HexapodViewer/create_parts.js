@@ -80,15 +80,15 @@ function createBody() {
     geometry.faces.push(new THREE.Face4(1, 3, 5, 7));
     geometry.faces.push(new THREE.Face4(7, 9, 11, 1));
     for (var i = 0; i < 6; ++i)
-        geometry.faces.push(new THREE.Face4(1 + (i + 1) * 2 % 12, 1 + i * 2 % 12, i * 2 % 12, (i + 1) * 2 % 12));
+      geometry.faces.push(new THREE.Face4(1 + (i + 1) * 2 % 12, 1 + i * 2 % 12, i * 2 % 12, (i + 1) * 2 % 12));
     //create the 3D model of the body
     var object = new THREE.Mesh(geometry);
     //create the 6 legs
-    for (var i = 0; i < 6; ++i) {
-        var base = createLegBase();
-        base.rotation.y = i * Math.PI / 3;
-        base.translateX(1);
-        object.add(base);
+    for (var i in [0, 1, 2, 3, 4, 5]) {
+      var base = createLegBase();
+      base.rotation.y = i * Math.PI / 3;
+      base.translateX(1);
+      object.add(base);
     }
     return object;
 }

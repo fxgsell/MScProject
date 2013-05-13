@@ -13,13 +13,15 @@ var spider;
 function moveLeg(position, motor, angle) {
     switch (motor){
         case 0:
-            (spider.children[position]).children[0].rotation.y = (1 - (position / 3) * 2) * angle * Math.PI / 180; //to Check
+            if (position > 2)
+              angle = -angle;
+            (spider.children[position]).children[0].rotation.y = angle * Math.PI / 180; 
             break;
         case 1:
             ((spider.children[position]).children[0]).children[0].rotation.z = angle * Math.PI / 180;
             break;
         case 2:
-            ((((spider.children[position]).children[0]).children[0]).children[0]).children[0].rotation.z = angle * Math.PI / 180;
+            ((((spider.children[position]).children[0]).children[0]).children[0]).children[0].rotation.z = (angle - 90) * Math.PI / 180;
             break;
     }
 }
@@ -41,8 +43,8 @@ function init() {
 	renderer.setSize(window.innerWidth, window.innerHeight);
 	document.body.appendChild(renderer.domElement);
 	var arena = new THREE.Object3D();
-    //display axes xyz
-	arena.add(axes(10));
+  //display axes xyz
+	//arena.add(axes(10));
 	spider = createBody();
 	arena.add(spider);
 	scene.add(arena);
@@ -55,12 +57,12 @@ function init() {
 
 function run()
 {
-    renderer.render(scene, camera);
+  renderer.render(scene, camera);
 	camera.position.x = Math.sin(ry / ( 2 * Math.PI)) * 3;
 	camera.position.z = Math.cos(ry / ( 2 * Math.PI)) * 3;
 	camera.position.y = rx / 10.0;
 	camera.lookAt(new THREE.Vector3(0, 0, 0));
-    requestAnimationFrame(run);
+  requestAnimationFrame(run);
 }
 
 init();
