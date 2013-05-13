@@ -45,10 +45,13 @@ int main(int ac, char* av[])
     if (init() == false)
       return 1;
     s = initNet(av[1]);
-    if (!s)
-      return -1;
 
     long int i = 0;
+    if (!s)
+      return -1;
+    if (send(s, "CLIENT", 6, 0) == -1)
+      fprintf(stderr, "Error: packet %ld\n", i);
+
     packet last;
     bzero(&buf, sizeof(buf));
     while (quit == false) {
