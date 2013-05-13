@@ -78,7 +78,7 @@ void    client_read(int cs)
     if (robot->height != buf.height)  {
       robot->height = buf.height;
 //      robot->addAction(updateHeight());
-      printf("Recv Height:%d\n", buf.height);
+    //  printf("Recv Height:%d\n", buf.height);
     }
     if (buf.y != robot->y)  {
       robot->y = buf.y;
@@ -111,7 +111,10 @@ void serial_write(int fd) {
   }
 
   int i = write(fd, wbuf+len, 1);
-  //printf("%c", wbuf[len]);
+  //if (wbuf[len] == '\x0d')
+  //  printf("\\x0d\n");
+  //else
+  //  printf("%c", wbuf[len]);
   len++;
   
   if (i < 0) {

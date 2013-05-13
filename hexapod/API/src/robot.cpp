@@ -32,29 +32,29 @@ Body::Body(Leg &fr, Leg &mr, Leg &br, Leg &fl, Leg &ml, Leg &bl) :
     throw ;
 
 
-  servos[ 0] = &(this->fr.shoulder);
-  servos[ 1] = &(this->fr.elbow);
-  servos[ 2] = &(this->fr.wrist);
+  servos[0] = &(this->fr.shoulder);
+  servos[1] = &(this->fr.elbow);
+  servos[2] = &(this->fr.wrist);
 
-  servos[ 3] = &(this->mr.shoulder);
-  servos[ 4] = &(this->mr.elbow);
-  servos[ 5] = &(this->mr.wrist);
+  servos[3] = &(this->mr.shoulder);
+  servos[4] = &(this->mr.elbow);
+  servos[5] = &(this->mr.wrist);
 
-  servos[ 6] = &(this->br.shoulder);
-  servos[ 7] = &(this->br.elbow);
-  servos[ 8] = &(this->br.wrist);
+  servos[6] = &(this->br.shoulder);
+  servos[7] = &(this->br.elbow);
+  servos[8] = &(this->br.wrist);
 
-  servos[ 9] = &(this->bl.shoulder);
+  servos[9] = &(this->bl.shoulder);
   servos[10] = &(this->bl.elbow);
   servos[11] = &(this->bl.wrist);
 
-  servos[12] = &(this->ml.shoulder);
-  servos[13] = &(this->fl.elbow);
-  servos[14] = &(this->ml.wrist);
-
   servos[15] = &(this->fl.shoulder);
-  servos[16] = &(this->ml.elbow);
+  servos[16] = &(this->fl.elbow);
   servos[17] = &(this->fl.wrist);
+
+  servos[12] = &(this->ml.shoulder);
+  servos[13] = &(this->ml.elbow);
+  servos[14] = &(this->ml.wrist);
   
   legs[0] = &(this->fl);
   legs[1] = &(this->ml);

@@ -60,6 +60,8 @@ int Servo::getRealPosition() {
 }
 
 void Servo::setPosition(int p) {
+  int old = position;
+
   if (invert == true)
     position = - p - adjustment;
   else
@@ -70,7 +72,8 @@ void Servo::setPosition(int p) {
   else if (position > 1000)
     position = 1000;
 
-  changed = true;
+  if (position != old)
+    changed = true;
 }
 
 void Servo::updatePosition(int offset) {

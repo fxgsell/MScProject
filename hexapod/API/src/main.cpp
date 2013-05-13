@@ -55,15 +55,12 @@ int main() {
   //ELegSetAngles init1(*robot, Leg::MIDLE, 0, 90, -80);
   //ELegSetAngles init2(*robot, Leg::FRONT, 0, 90, -80);
   //ELegSetAngles init3(*robot, Leg::BACK , 0, 90, -80);
-  ELegSetCoord init1(*robot, Leg::MIDLE, 100, 120, 0);
-  ELegSetCoord init2(*robot, Leg::FRONT, 100, 120, 0);
-  ELegSetCoord init3(*robot, Leg::BACK , 100, 120, 0);
+  ELegSetCoord init1(*robot, Leg::MIDLE, 100, 120, -0);
+  ELegSetCoord init2(*robot, Leg::FRONT, 100, 120, -0);
+  ELegSetCoord init3(*robot, Leg::BACK , 100, 120, -0);
   init1.execute();
   init2.execute();
   init3.execute();
-  ELegSetCoord init4(*robot, Leg::FR , 100, 40, 0);
-  init4.execute();
-  robot->commit();
 
 //  robot->addAction(hello(Leg::A));
 //  robot->events.push_back(new ESleep(10000));

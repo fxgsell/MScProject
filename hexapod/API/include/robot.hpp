@@ -40,11 +40,11 @@ class Body {
 
     list   events;
 
-    Servo                *servos[18];
-    Leg                  *legs[6];
-
     static const int     LEGS = 6;
     static const int     SERVOS = 18;
+
+    Servo                *servos[SERVOS];
+    Leg                  *legs[6];
 
   public: 
     Body(Leg&, Leg&, Leg&, Leg&, Leg&, Leg&);
