@@ -73,7 +73,13 @@ root@raspberrypi:/home/pi/serial# ./sendserial -b 38400 /dev/ttyAMA0 'S#1 P1500 
 
 The command structure can be found in the "hexapod-v2.c" source file near the
 top.  I've not tested all of this by any means, but forwarding commands through
-to the SSC-32 board (as the last line here does) seems to be sane :).
+to the SSC-32 board (as the last line here does) seems to be sane :).  There is
+a limit of 128 characters in any command/response to/from the Arduino, though that
+could be increased if it proves problematic.
+
+The Arduino code is kept on csprojects in subversion, along with schematics for
+wiring and whatnot.  I plan on keeping this in there, but will copy in/out of the
+Git repos as needed.
 
 
 SSC-32 docs
@@ -85,5 +91,19 @@ for that (and other hexapod stuff) can be found here:
     http://www.lynxmotion.com/images/html/build136.htm
 
 
+
+Incomplete
+----------
+
+The digital I/O pins are brought to the interface board through a ribbon cable;
+this is not currently connected to anything: my plan was to sprinkle some
+high-power LEDs around the place for cool white/blue lighting, but a bit later,
+once you folks have had a chance to play with the robot itself!
+
+I also need to redo the serial 5v-3.3v interfacing, once RS deliver some suitable
+ICs to do this (I tried with some MOSFETs, but the ones I used didn't respond in
+the right way).
+
+There were a couple of other things I'm sure, recall error..
 
 
