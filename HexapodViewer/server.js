@@ -2,6 +2,9 @@ var string = require('string');
 var http = require('http');
 var io = require('socket.io');
   
+var host = process.argv.splice(2);
+var PORT = 9930;
+
 //WebSocket
 var server = http.createServer(function(request, response) {
     response.writeHead(200, {'Content-Type': 'text/html'});
@@ -28,13 +31,11 @@ socket.on('connection', function(client) {
 
 });
 
-var HOST = '127.0.0.1';
-var PORT = 9930;
 
 var client = new net.Socket();
-client.connect(PORT, HOST, function() {
+client.connect(PORT, host, function() {
 
-    console.log('CONNECTED TO: ' + HOST + ':' + PORT);
+    console.log('CONNECTED TO: ' + host + ':' + PORT);
     // Write a message to the socket as soon as the client is connected, the server will receive it as message from the client 
     client.write('VIEWER');
 });
