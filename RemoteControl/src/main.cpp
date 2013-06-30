@@ -14,13 +14,19 @@ packet buf;
 
 bool init()
 {
-  if( SDL_Init( SDL_INIT_EVERYTHING ) == -1 )
+  if( SDL_Init( SDL_INIT_EVERYTHING ) == -1 ) {
+    fprintf(stderr, "Error: SDL not working\n");
     return false;
-  if( SDL_NumJoysticks() < 1 )
+  }
+  if( SDL_NumJoysticks() < 1 ) {
+    fprintf(stderr, "Error: no joystick detected\n");
     return false;
+  }
   stick = SDL_JoystickOpen( 0 );
-  if( stick == NULL )
+  if( stick == NULL ) {
+    fprintf(stderr, "Error: unable to open joystick\n");
     return false;
+  }
   return true;
 }
 
@@ -47,8 +53,10 @@ int main(int ac, char* av[])
     s = initNet(av[1]);
 
     long int i = 0;
-    if (!s)
-      return -1;
+    if (!s) {
+      fprintf(stderr, "Error: unable to open socket \n");
+      return 1;
+    }
     if (send(s, "CLIENT", 6, 0) == -1)
       fprintf(stderr, "Error: packet %ld\n", i);
 
