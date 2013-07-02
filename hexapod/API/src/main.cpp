@@ -55,18 +55,20 @@ int main() {
   //ELegSetAngles init1(*robot, Leg::MIDLE, 0, 90, -80);
   //ELegSetAngles init2(*robot, Leg::FRONT, 0, 90, -80);
   //ELegSetAngles init3(*robot, Leg::BACK , 0, 90, -80);
-  ELegSetCoord init1(*robot, Leg::MIDLE, 100, 120, -0);
-  ELegSetCoord init2(*robot, Leg::FRONT, 100, 120, -0);
-  ELegSetCoord init3(*robot, Leg::BACK , 100, 120, -0);
-  init1.execute();
-  init2.execute();
-  init3.execute();
-
-//  robot->addAction(hello(Leg::A));
-//  robot->events.push_back(new ESleep(10000));
-//  robot->addAction(hello(Leg::B));
-//  robot->addAction(standDown());
-
+    ELegSetCoord init1(*robot, Leg::MIDLE, 100, 120, -0);
+    ELegSetCoord init2(*robot, Leg::FRONT, 100, 120, -0);
+    ELegSetCoord init3(*robot, Leg::BACK , 100, 120, -0);
+    init1.execute();
+    init2.execute();
+    init3.execute();
+  
+  for (int i = 0; i < 50; i++) {
+    robot->events.push_back(new ESleep(1000000));
+    robot->addAction(hello(Leg::FR));
+    robot->events.push_back(new ESleep(1000000));
+    robot->addAction(hello(Leg::FL));
+  
+  }
 
   robot->start();
 

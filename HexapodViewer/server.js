@@ -2,7 +2,7 @@ var string = require('string');
 var http = require('http');
 var io = require('socket.io');
   
-var host = process.argv.splice(2);
+var host = "" + process.argv.splice(2);
 var PORT = 9930;
 
 //WebSocket
@@ -32,17 +32,16 @@ socket.on('connection', function(client) {
 });
 
 
-var client = new net.Socket();
-client.connect(PORT, host, function() {
-
-    console.log('CONNECTED TO: ' + host + ':' + PORT);
-    // Write a message to the socket as soon as the client is connected, the server will receive it as message from the client 
-    client.write('VIEWER');
+var robot = new net.Socket();
+robot.connect(9930, host, function() {
+    // Something is weird around here
+    console.log('Conected to robot: ' + host + ':' + PORT);
+    robot.write('VIEWER');
 });
 
-// Add a 'data' event handler for the client socket
+// Add a 'data' event handler for the robot socket
 // data is what the server sent to this socket
-client.on('data', function(data) {
+robot.on('data', function(data) {
     console.log('DATA: ' + data);
 
     var count = 0;
@@ -60,11 +59,10 @@ client.on('data', function(data) {
     }
 });
 
-// Add a 'close' event handler for the client socket
-client.on('close', function() {
-    console.log('Connection closed');
-    // Close the client socket completely
-    client.destroy();
+// Add a 'close' event handler for the robot socket
+robot.on('close', function() {
+    console.log('Connection to the robot closed');
+    robot.destroy();
 });
 
 
