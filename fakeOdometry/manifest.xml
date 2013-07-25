@@ -1,2 +1,4 @@
-<depend package="tf"/>
-<depend package="nav_msgs"/>
+<package>
+ <depend package="tf"/>
+ <depend package="nav_msgs"/>
+</package>
