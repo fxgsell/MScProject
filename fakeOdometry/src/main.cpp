@@ -1,6 +1,7 @@
 #include <ros/ros.h>
 #include <tf/transform_broadcaster.h>
 #include <nav_msgs/Odometry.h>
+#include <boost/assign/list_of.hpp>
 
 int main(int argc, char** argv) {
   ros::init(argc, argv, "odometry_publisher");
@@ -37,12 +38,13 @@ int main(int argc, char** argv) {
     y += delta_y;
     th += delta_th;
 
+    //std::cout << "x=" << x << " y=" << y << std::endl;
     //since all odometry is 6DOF we'll need a quaternion created from yaw
     geometry_msgs::Quaternion odom_quat = tf::createQuaternionMsgFromYaw(th);
 
     //first, we'll publish the transform over tf
     geometry_msgs::TransformStamped odom_trans;
-    odom_trans.header.stamp = current_time;
+    odom_trans.header.stamp = last_time;//current_time;
     odom_trans.header.frame_id = "odom";
     odom_trans.child_frame_id = "base_link";
 
@@ -65,15 +67,29 @@ int main(int argc, char** argv) {
     odom.pose.pose.position.z = 0.0;
     odom.pose.pose.orientation = odom_quat;
 
+    odom.pose.covariance =  boost::assign::list_of(1e-3) (0)   (0)  (0)  (0)  (0)
+      (0) (1e-3)  (0)  (0)  (0)  (0)
+      (0)   (0)  (1e6) (0)  (0)  (0)
+      (0)   (0)   (0) (1e6) (0)  (0)
+      (0)   (0)   (0)  (0) (1e6) (0)
+      (0)   (0)   (0)  (0)  (0)  (1e3) ; 
+
     //set the velocity
     odom.child_frame_id = "base_link";
     odom.twist.twist.linear.x = vx;
     odom.twist.twist.linear.y = vy;
     odom.twist.twist.angular.z = vth;
 
+    odom.twist.covariance =  boost::assign::list_of(1e-3) (0)   (0)  (0)  (0)  (0)
+      (0) (1e-3)  (0)  (0)  (0)  (0)
+      (0)   (0)  (1e6) (0)  (0)  (0)
+      (0)   (0)   (0) (1e6) (0)  (0)
+      (0)   (0)   (0)  (0) (1e6) (0)
+      (0)   (0)   (0)  (0)  (0)  (1e3) ; 
+
     //publish the message
     odom_pub.publish(odom);
-    std::cout << "published" << std::endl;
+    //std::cout << "published: [" << last_time << " " << current_time << " " << dt << "]" << std::endl;
     last_time = current_time;
     r.sleep();
   }
