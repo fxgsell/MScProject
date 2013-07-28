@@ -32,16 +32,15 @@ int main(int argc, char** argv) {
     double dt = (current_time - last_time).toSec();
     double delta_x = (vx * cos(th) - vy * sin(th)) * dt;
     double delta_y = (vx * sin(th) + vy * cos(th)) * dt;
-    double compass_angle = arctan(-compass_degree/0);
+    double compass_yaw = arctan(-compass_angle/0);
 
-    double compass_degree = 90;
+    double compass_angle = 90;
     x += delta_x;
     y += delta_y;
-    th += delta_th;
 
     //std::cout << "x=" << x << " y=" << y << std::endl;
     //since all odometry is 6DOF we'll need a quaternion created from yaw
-    geometry_msgs::Quaternion odom_quat = tf::createQuaternionMsgFromYaw(th);
+    geometry_msgs::Quaternion odom_quat = tf::createQuaternionMsgFromYaw(compass_yaw);
 
     //first, we'll publish the transform over tf
     geometry_msgs::TransformStamped odom_trans;
