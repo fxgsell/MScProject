@@ -2,6 +2,7 @@
 #include <tf/transform_broadcaster.h>
 #include <nav_msgs/Odometry.h>
 #include <boost/assign/list_of.hpp>
+#include <math.h>
 
 int main(int argc, char** argv) {
   ros::init(argc, argv, "odometry_publisher");
@@ -18,6 +19,8 @@ int main(int argc, char** argv) {
   double vy = -0.1;
   double vth = 0.1;
 
+  double compass_angle = 90;
+
   ros::Time current_time, last_time;
   current_time = ros::Time::now();
   last_time = ros::Time::now();
@@ -32,7 +35,7 @@ int main(int argc, char** argv) {
     double dt = (current_time - last_time).toSec();
     double delta_x = (vx * cos(th) - vy * sin(th)) * dt;
     double delta_y = (vx * sin(th) + vy * cos(th)) * dt;
-    double compass_yaw = arctan(-compass_angle/0);
+    double compass_yaw = atan (-compass_angle/0);
 
     double compass_angle = 90;
     x += delta_x;
