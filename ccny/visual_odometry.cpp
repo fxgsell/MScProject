@@ -381,7 +381,7 @@ void VisualOdometry::publishOdom(const std_msgs::Header& header)
                                                (0)(0)(999999)(0)(0)(0)
                                                (0)(0)(0)(999999)(0)(0)
                                                (0)(0)(0)(0)(999999)(0)
-                                               (0)(0)(0)(0)(0)(VISUAL_COVARIANCE);
+                                               (0)(0)(0)(0)(0)(999999);
     odom.twist.covariance = boost::assign::list_of(VISUAL_COVARIANCE)(0)(0)(0)(0)(0)
                                                (0)(VISUAL_COVARIANCE)(0)(0)(0)(0)
                                                (0)(0)(999999)(0)(0)(0)
