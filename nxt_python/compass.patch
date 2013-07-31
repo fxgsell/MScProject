@@ -1,0 +1,11 @@
+--- compass.orig	2010-10-12 21:58:50.171841823 +1100
++++ compass.py	2010-10-12 21:35:35.431838750 +1100
+@@ -14,6 +14,8 @@
+ 
+ import sensor
+ from time import sleep
++from nxt.sensor import Type
++from nxt.sensor import Mode
+ 
+ class Command(object):
+         'Namespace for enumeration compass sensor commands'

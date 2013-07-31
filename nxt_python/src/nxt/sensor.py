@@ -394,4 +394,15 @@ class GyroSensor(AnalogSensor):
                 self.get_input_values() 
                 self.zero = -self.scaled_value # negative sign to make it return angular rate about z axis up.  
 		 
-                
+class CompassSensor(DigitalSensor):
+
+	def __init__(self, brick, port):
+		super(CompassSensor, self).__init__(brick, port)
+		self.sensor_type = Type.LOW_SPEED_9V
+		self.mode = Mode.RAW
+		self.set_input_mode()
+		sleep(0.1)	# Give I2C time to initialize
+
+        def get_sample(self):
+	    	
+		return 1                

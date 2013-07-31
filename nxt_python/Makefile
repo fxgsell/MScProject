@@ -17,6 +17,7 @@ $(INSTALL_DIR)/installed: $(SOURCE_DIR)/unpacked
 	#patch -p0<ultrasonic.patch 
 	patch -p0 src/nxt/sensor.py gyro.patch 
 	patch -p0 src/nxt/sensor.py colorsensor.patch 
+	patch -p0 src/nxt/compass.py compass.patch 
 	touch $(INSTALL_DIR)/installed
 
 clean:

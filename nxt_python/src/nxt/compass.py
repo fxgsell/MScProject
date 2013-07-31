@@ -14,6 +14,8 @@
 
 import sensor
 from time import sleep
+from nxt.sensor import Type
+from nxt.sensor import Mode
 
 class Command(object):
         'Namespace for enumeration compass sensor commands'
