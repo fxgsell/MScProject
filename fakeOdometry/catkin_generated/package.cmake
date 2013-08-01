@@ -1,0 +1,7 @@
+set(_CATKIN_CURRENT_PACKAGE "fake_odometry")
+set(fake_odometry_MAINTAINER "root <root@todo.todo>")
+set(fake_odometry_DEPRECATED "")
+set(fake_odometry_VERSION "0.0.0")
+set(fake_odometry_BUILD_DEPENDS "roscpp" "nav_msgs" "rospy" "std_msgs" "tf")
+set(fake_odometry_RUN_DEPENDS "roscpp" "nav_msgs" "rospy" "std_msgs" "tf")
+set(fake_odometry_BUILDTOOL_DEPENDS "catkin")

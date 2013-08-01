@@ -2,6 +2,15 @@
 #include <tf/transform_broadcaster.h>
 #include <nav_msgs/Odometry.h>
 #include <boost/assign/list_of.hpp>
+#include <math.h>
+#include "std_msgs/String.h"
+
+void chatterCallback(const std_msgs::String::ConstPtr& msg)
+ {
+  ROS_INFO("I heard: [%s]", msg->data.c_str());
+ }
+
+
 
 int main(int argc, char** argv) {
   ros::init(argc, argv, "odometry_publisher");
@@ -18,11 +27,19 @@ int main(int argc, char** argv) {
   double vy = -0.1;
   double vth = 0.1;
 
+  double compass_angle = 90;
+
   ros::Time current_time, last_time;
   current_time = ros::Time::now();
   last_time = ros::Time::now();
 
-  ros::Rate r(1.0);
+
+
+  ros::Subscriber sub = n.subscribe<nav_msgs::Compass>("compass", 1000, chatterCallback);
+
+
+
+  ros::Rate r(30.0);
   while(n.ok()){
 
     ros::spinOnce();               // check for incoming messages
@@ -32,15 +49,15 @@ int main(int argc, char** argv) {
     double dt = (current_time - last_time).toSec();
     double delta_x = (vx * cos(th) - vy * sin(th)) * dt;
     double delta_y = (vx * sin(th) + vy * cos(th)) * dt;
-    double delta_th = vth * dt;
+    double compass_yaw = atan (compass_angle);
 
+    double compass_angle = 90;
     x += delta_x;
     y += delta_y;
-    th += delta_th;
 
     //std::cout << "x=" << x << " y=" << y << std::endl;
     //since all odometry is 6DOF we'll need a quaternion created from yaw
-    geometry_msgs::Quaternion odom_quat = tf::createQuaternionMsgFromYaw(th);
+    geometry_msgs::Quaternion odom_quat = sub;
 
     //first, we'll publish the transform over tf
     geometry_msgs::TransformStamped odom_trans;
