@@ -1,0 +1,7 @@
+ros install
+rbx1 install
+hector_exploration install 
+ccny install pi
+nxt ros install pi
+
+
