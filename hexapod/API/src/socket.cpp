@@ -82,11 +82,11 @@ void    client_read(int cs)
     }
     if (buf.y != robot->y)  {
       robot->y = buf.y;
-  //    printf("Recv y:%d\n", buf.y);
+      printf("Recv y:%d\n", buf.y);
     }
     if (buf.x != -robot->x)  {
       robot->x = -buf.x;
-   //   printf("Recv x:%d\n", buf.x);
+      printf("Recv x:%d\n", buf.x);
     }
   }
 }
