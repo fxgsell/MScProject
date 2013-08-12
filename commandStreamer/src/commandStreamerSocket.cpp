@@ -18,13 +18,13 @@ CommandStreamerSocket::CommandStreamerSocket(const char *addr) {
   echoserver.sin_port = htons(PORT);                /* server port */
 
   /* Establish connection */
-  if (connect(_sock, (struct sockaddr *) &echoserver,
-	      sizeof(echoserver)) < 0) {
+  if (connect(_sock, (struct sockaddr *) &echoserver, sizeof(echoserver)) < 0) {
     perror("socket");
     exit(-1);
   }
   if (send(_sock, "CLIENT", sizeof("CLIENT"), 0) == -1)
     fprintf(stderr, "Error: send packet failed\n");
+  std::cout << "Connected to the robot... (" << addr << " " << PORT << std::endl;
 }
 
 CommandStreamerSocket::~CommandStreamerSocket() {

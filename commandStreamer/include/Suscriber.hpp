@@ -6,16 +6,13 @@
 
 template<typename T>
 class Suscriber {
- public:
-  Suscriber(const char *base_name, int argc, char **argv) {
-  ros::init(argc, argv, base_name);
-}
-
-  void init(const char* topic, 
-	    void (*cb)(const ros::MessageEvent<T>&))  {
+private:
   ros::NodeHandle n;
-  ros::Subscriber sub = n.subscribe(topic, 1000, cb);
-  ros::spin();
+  ros::Subscriber sub;
+public:
+  Suscriber(const char* topic, void (*cb)(const ros::MessageEvent<T>&))  {
+    sub = n.subscribe("cmd_vel", 1000, cb);
+    std::cout << "init suscriber: OK" << std::endl;
 }
 
   ~Suscriber() {}
