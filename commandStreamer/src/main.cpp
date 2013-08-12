@@ -7,7 +7,9 @@
 #include "commandStreamerSocket.h"
 #include <math.h>
 
-CommandStreamerSocket sock("192.168.120.102");
+CommandStreamerSocket *sock;
+int speedRate = 20;
+const char *ip = "192.168.120.102";
 
 packet p;
 #define TO_RADIAN 0.0174532925
@@ -28,12 +30,20 @@ void commandCallback(const ros::MessageEvent<geometry_msgs::Twist>& event)
   p.turn = data->angular.z / TO_RADIAN; // -10 < orientation < 10 => 10 = 90°
   p.height = 5;
   std::cout << "SEND PACKET: [" << p.x << ";" << p.turn << "]" << std::endl;
-  sock.sendPacket(p);
+  sock->sendPacket(p);
 }
 
 int main(int argc, char **argv)
 {
+  if (argc > 1) {
+    ip = argv[1];
+    if (argc == 3)
+      speedRate = atoi(argv[2]);
+  }
+  std::cout << "Start: IP=" << ip << " speedRate=" << speedRate << std::endl;  
   ros::init(argc, argv, "cmd_vel");
+  sock = new CommandStreamerSocket(ip);
+
   Suscriber<geometry_msgs::Twist> s("cmd_vel", commandCallback);
   ros::spin();
   /*
