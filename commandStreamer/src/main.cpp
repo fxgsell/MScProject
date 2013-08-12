@@ -21,7 +21,7 @@ void commandCallback(const ros::MessageEvent<geometry_msgs::Twist>& event)
 	    << (float)data->angular.z << "(rad)  " << std::endl;
   p.id = 42; //
   p.flags = 0;
-  p.x = data->linear.x * 20; // -10 < speed < 10
+  p.x = data->linear.x * speedRate; // -10 < speed < 10
   if (data->linear.x < 1 && data->linear.x > 0)
     p.x = 1;
   else if (data->linear.x > 1 && data->linear.x < 0)
