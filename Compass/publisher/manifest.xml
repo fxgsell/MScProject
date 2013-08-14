@@ -1,4 +1,0 @@
-<package>
- <depend package="tf"/>
- <depend package="sensor_imu"/>
-</package>
