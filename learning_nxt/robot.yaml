@@ -1,6 +1,0 @@
-nxt_robot:
-  - type: compass
-    frame_id: imu_data
-    name: compass_data
-    port: PORT_1
-    desired_frequency: 20
