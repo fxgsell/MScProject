@@ -1,3 +1,5 @@
+General Launch sequence:
+
 roslaunch ccny_openni_launch openni.launch publish_cloud:=true
 roslaunch ccny_rgbd visual_odometry.launch 
 roslaunch rbx1_nav gmapping.launch
@@ -5,6 +7,11 @@ rosrun depthimage_to_laserscan depthimage_to_laserscan image:=/camera/depth/imag
 roslaunch hector_exploration_node exploration_planner.launch 
 roslaunch rbx1_bringup turtlebot_minimal_create.launch
 rosrun rviz rviz -d `rospack find rbx1_nav`/gmapping.rviz
-roslaunch robot_pose_ekf robot_pose_ekf.launch 
+roslaunch robot_pose_ekf robot_pose_ekf.launch
+cd /opt/ros/groovy/share/nxt/compass
+roslaunch compass.launch 
 rosrun hector_exploration_controller simple_exploration_controller 
 rosrun hector_path_follower hector_path_follower_node
+roscd /opt/ros/groovy/share/commandStreamer/devel/lib/commandStreamer 
+./commandStreamer 192.168.120.102
+		  /\ ip of the robot
