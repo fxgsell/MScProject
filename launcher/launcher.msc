@@ -1,0 +1,35 @@
+"LaunchProcess" :
+[
+{"cmd":"roslaunch ccny_openni_launch openni.launch publish_cloud:=true",
+"topicName":"camera/rgb/image_raw"
+"topicType":"sensor_msgs::Image"},
+
+{"cmd":"roslaunch ccny_rgbd visual_odometry.launch", 
+"topicName":"vo","topicType":"nav_msgs/Odometry"},
+
+{"cmd":"roslaunch rbx1_nav gmapping.launch", 
+"topicName":"map","topicType":"sensor_msgs::Image"},
+
+{"cmd":"rosrun depthimage_to_laserscan depthimage_to_laserscan image:=/camera/depth/image_raw",
+"topicName":"","topicType":""},
+
+{"cmd":"roslaunch hector_exploration_node exploration_planner.launch",
+"topicName":"","topicType":"sensor_msgs::Image"},
+
+{"cmd":roslaunch rbx1_bringup turtlebot_minimal_create.launch,
+"topicName":"","topicType":""},
+
+{"cmd":roslaunch rbx1_bringup robot.launch,
+"topicName":"","topicType":""},
+
+{"cmd":"roslaunch robot_pose_ekf.launch",
+"topicName":"/robot_pose/combined_odom","topicType":"nav_msgs/Odometry"},
+
+{"cmd":"rosrun hector_exploration_controller simple_exploration_controller",
+"topicName":"","topicType":""},
+
+{"cmd":"rosrun hector_path_follower hector_path_follower_node", 
+"topicName":"cmd_vel","topicType":"geometry_msgs::Twist"}
+]
+
+
