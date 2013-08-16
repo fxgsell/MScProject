@@ -1,8 +1,0 @@
-prefix=/opt/ros/groovy/share/fakeOdometry/devel
-
-Name: fake_odometry
-Description: Description of fake_odometry
-Version: 0.0.0
-Cflags: 
-Libs: -L/opt/ros/groovy/share/fakeOdometry/devel/lib 
-Requires: 
