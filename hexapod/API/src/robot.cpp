@@ -4,6 +4,7 @@
 #include <sys/time.h>
 #include <sstream>
 #include <string.h>
+#include <cstdlib>
 
 #include "list.hpp"
 #include "servo.hpp"
@@ -83,29 +84,42 @@ extern int fdserial;
 int Body::commit() {
   int maxTime;
   std::stringstream a;
+  std::stringstream b;
+  std::stringstream c;
   std::stringstream viewer;
 
   a << "S";
+  b << "S";
+  c << "S";
   for (int i = 0; i < Body::SERVOS; i++) { 
     int id = servos[i]->getId();
 
     if (servos[i]->hasChanged()) {
-      a << " #" << id << " P" << servos[i]->getRealPosition();
+      if (i <= 8)
+        a << " #" << id << " P" << servos[i]->getRealPosition();
+      else if (i <= 16)
+        b << " #" << id << " P" << servos[i]->getRealPosition();
+      else 
+        c << " #" << id << " P" << servos[i]->getRealPosition();
       servos[i]->changeDone();
       if (fdviewer) {
-        
         viewer << " moveLeg " << i/3 << " " << i%3 << " " << servos[i]->getAngle();
       }
     }
   }
   maxTime = 100;
-  a << " T" << maxTime;
-  a << "\x0d";
+  a << " T" << maxTime << "\x0d";
+  b << " T" << maxTime << "\x0d";
+  c << " T" << maxTime << "\x0d";
 
   char *s = strdup(viewer.str().c_str());
   fds[fdviewer].buf_write.push_back(s);
 
   s = strdup(a.str().c_str());
+  fds[fdserial].buf_write.push_back( s);
+  s = strdup(b.str().c_str());
+  fds[fdserial].buf_write.push_back( s);
+  s = strdup(c.str().c_str());
   fds[fdserial].buf_write.push_back( s);
   //printf("{{%s}}\n", s);
   return (maxTime);
