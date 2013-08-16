@@ -35,8 +35,8 @@ int main(int argc, char** argv) {
 
     //compute odometry in a typical way given the velocities of the robot
     double dt = (current_time - last_time).toSec();
-    double delta_x = (vx * cos(th) - vy * sin(th)) * dt;
-    double delta_y = (vx * sin(th) + vy * cos(th)) * dt;
+    double delta_x = -(vx * cos(th) - vy * sin(th)) * dt;
+    double delta_y = -(vx * sin(th) + vy * cos(th)) * dt;
     double compass_yaw = atan (-compass_angle);
 
     double compass_angle = 90;

@@ -1,4 +1,3 @@
-
 #include "ros/ros.h"
 #include "geometry_msgs/Twist.h"
 #include <ros/message_event.h>
@@ -8,13 +7,19 @@
 #include <math.h>
 
 CommandStreamerSocket *sock;
-int speedRate = 20;
+int speedRate = 10;
 const char *ip = "192.168.120.102";
 
+unsigned int mxtime = 100; // update time
+
 packet p;
-#define TO_RADIAN 0.0174532925
+#define TO_DEGRE 0.0174532925
 void commandCallback(const ros::MessageEvent<geometry_msgs::Twist>& event)
 {
+  static int cpt = 0;
+  cpt++;
+  if (cpt % 500 == 0)
+    return;
   const boost::shared_ptr<geometry_msgs::Twist>& data = event.getMessage();
 
   std::cout << (float)data->linear.x << "  " 
@@ -22,24 +27,26 @@ void commandCallback(const ros::MessageEvent<geometry_msgs::Twist>& event)
   p.id = 42; //
   p.flags = 0;
   p.x = data->linear.x * speedRate; // -10 < speed < 10
+  p.y = 0; // unused
+  p.turn = (data->angular.z / TO_DEGRE) / 9; // -10 < orientation < 10 => 10 = 90°
   if (data->linear.x < 1 && data->linear.x > 0)
     p.x = 1;
   else if (data->linear.x > 1 && data->linear.x < 0)
     p.x = -1;
-  p.y = 0; // unused
-  p.turn = data->angular.z / TO_RADIAN; // -10 < orientation < 10 => 10 = 90°
-  p.height = 5;
-  std::cout << "SEND PACKET: [" << p.x << ";" << p.turn << "]" << std::endl;
+  if (data->linear.z < 6)
+    data->linear.z = 6;
+  else if (data->linear.z < -6)
+    data->linear.z = -6;
+
+  p.height = 20;// ~maximum value
+  std::cout << "SEND PACKET: [x=" << p.x << ";turn=" << p.turn << ";height=" << p.height << "]" << std::endl;
   sock->sendPacket(p);
 }
 
 int main(int argc, char **argv)
 {
-  if (argc > 1) {
+  if (argc > 1)
     ip = argv[1];
-    if (argc == 3)
-      speedRate = atoi(argv[2]);
-  }
   std::cout << "Start: IP=" << ip << " speedRate=" << speedRate << std::endl;  
   ros::init(argc, argv, "cmd_vel");
   sock = new CommandStreamerSocket(ip);
