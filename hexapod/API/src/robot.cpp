@@ -84,19 +84,14 @@ extern int fdserial;
 int Body::commit() {
   int maxTime;
   std::stringstream a;
-  std::stringstream b;
   std::stringstream viewer;
 
   a << "S";
-  b << "S";
   for (int i = 0; i < Body::SERVOS; i++) { 
     int id = servos[i]->getId();
 
     if (servos[i]->hasChanged()) {
-      if (i <= 10)
-        a << " #" << id << " P" << servos[i]->getRealPosition();
-      else 
-        b << " #" << id << " P" << servos[i]->getRealPosition();
+      a << " #" << id << " P" << servos[i]->getRealPosition();
       servos[i]->changeDone();
       if (fdviewer) {
         viewer << " moveLeg " << i/3 << " " << i%3 << " " << servos[i]->getAngle();
@@ -105,15 +100,11 @@ int Body::commit() {
   }
   maxTime = 100;
   a << " T" << maxTime << "\x0d";
-  b << " T" << maxTime << "\x0d";
 
   char *s = strdup(viewer.str().c_str());
   fds[fdviewer].buf_write.push_back(s);
 
   s = strdup(a.str().c_str());
-  fds[fdserial].buf_write.push_back(s);
-  printf("{{%s}}\n", s);
-  s = strdup(b.str().c_str());
   fds[fdserial].buf_write.push_back(s);
   printf("{{%s}}\n", s);
   return (maxTime);
