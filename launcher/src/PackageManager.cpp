@@ -4,28 +4,27 @@
 #include "geometry_msgs/PoseWithCovarianceStamped.h"
 bool           packageLaunched;
 ProcessManager process;
+bool first = true;
 
 void PackageManager::killThemAll() {
  process.killThemAll();
 }
 
-void sensor_msgs_Image_callback(const ros::MessageEvent<sensor_msgs::Image>&) 
-{ 
-  packageLaunched = true; 
-}
 
 template<typename T>
 void run(std::string const &cmd, std::string const &topic, void (*cb)(const ros::MessageEvent<T>&)) {
-  std::cout << "wait launch" << std::endl;
-  sleep(10);
-  std::cout << "launch" << std::endl;
-  Suscriber<T> s(topic, cb);
-
-
+  char **dummy;
+  int a = 0;
   process.launchNewPackage(cmd);
+  if (first) {
+    std::cout << "First_launch... init" << std::endl;
+    ros::init(a, dummy, "launcher");
+    sleep(1);
+  }
+  Suscriber<T> s(topic, cb);
   while(!packageLaunched) {
     ros::spinOnce();
-    usleep(500);
+    usleep(10);
   }
 }
 
@@ -33,17 +32,26 @@ void PackageManager::launchPackage(std::string const &cmd, std::string const &to
   packageLaunched = false;
   if ((topic != "none" && type != "none") 
       && _handler.find(type) != _handler.end()) {
-    std::cout << "start & wait" << topic << std::endl;
+    std::cout << "start & wait: " << topic << std::endl;
     (*_handler.find(type)->second)(cmd, topic);
   }
- else
+  else {
+    if (_handler.find(type) != _handler.end())
+      std::cout << "[WARNING] type doesnt found: " << type << std::endl;
     process.launchNewPackage(cmd); 
+  }
 }
 
 /* openni.launch */
 
+void sensor_msgs_Image_callback(const ros::MessageEvent<sensor_msgs::Image>&) 
+{ 
+  std::cout << "cb" << std::endl;
+  packageLaunched = true; 
+}
 
 void sensor_msgs_Image_handler(std::string const &cmd, std::string const &topic) {
+  std::cout << "YAY" << std::endl;
   run<sensor_msgs::Image>(cmd, topic, sensor_msgs_Image_callback);
 }
 
