@@ -300,7 +300,7 @@ class CompassSensor(Device):
 	# create header (provides time stamp)
         cs.header.stamp = rospy.Time.now()
 	# convert orientation from the CompassSensor.get_heading_lsb byte (heading in the 0-255 range) 
-	  to quaternion
+	# to quaternion
  
 	self.orientation = self.compass.get_sample()*-2.0 * math.pi/180.0
 
