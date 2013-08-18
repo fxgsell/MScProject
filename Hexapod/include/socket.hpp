@@ -3,7 +3,7 @@
 #include <sys/select.h>
 
 #include "list.hpp"
-#include "../../../Protocol/protocol.h"
+#include "protocol.h"
 
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 
