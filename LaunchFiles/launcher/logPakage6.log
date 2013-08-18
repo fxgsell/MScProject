@@ -1,0 +1,57 @@
+... logging to /home/tm333/.ros/log/358cf012-06cd-11e3-8907-dc85de529682/roslaunch-ubuntu-5908.log
+Checking log directory for disk usage. This may take awhile.
+Press Ctrl-C to interrupt
+Done checking log file disk usage. Usage is <1GB.
+]2;/opt/ros/groovy/share/hector_navigation/hector_exploration_node/launch/exploration_planner.launch
+[1mstarted roslaunch server http://ubuntu:43238/[0m
+
+SUMMARY
+========
+
+PARAMETERS
+ * /hector_exploration_node/global_costmap/circumscribed_radius
+ * /hector_exploration_node/global_costmap/cost_scaling_factor
+ * /hector_exploration_node/global_costmap/footprint
+ * /hector_exploration_node/global_costmap/global_frame
+ * /hector_exploration_node/global_costmap/inflation_radius
+ * /hector_exploration_node/global_costmap/inscribed_radius
+ * /hector_exploration_node/global_costmap/map_type
+ * /hector_exploration_node/global_costmap/obstacle_range
+ * /hector_exploration_node/global_costmap/publish_frequency
+ * /hector_exploration_node/global_costmap/raytrace_range
+ * /hector_explo[0m[ INFO] [1376697519.011131827]: Subscribed to Topics: [0m
+[0m[ INFO] [1376697519.036183982]: Requesting the map...
+[0m
+[0m[ INFO] [1376697519.037229892]: Still waiting on map...
+[0m
+[0m[ INFO] [1376697520.037311974]: Still waiting on map...
+[0m
+[0m[ INFO] [1376697521.037459661]: Still waiting on map...
+[0m
+[33m[ WARN] [1376697522.042228146]: You have set map parameters, but also requested to use the static map. Your parameters will be overwritten by those given by the map server[0m
+[0m[ INFO] [1376697522.042289165]: Received a 32 X 32 map at 0.050000 m/pix
+[0m
+[33m[ WARN] [1376697522.066026108]: You have set an inflation radius that is less than the inscribed and circumscribed radii of the robot. This is dangerous and could casue the robot to hit obstacles. Please change your inflation radius setting appropraitely.[0m
+[0m[ INFO] [1376697522.232687567]: [hector_exploration_planner] Initializing HectorExplorationPlanner[0m
+[0m[ INFO] [1376697522.263940462]: [hector_exploration_planner] Parameter set. security_const: 0.500000, min_obstacle_dist: 1000, plan_in_unknown: 0, use_inflated_obstacle: 1, p_goal_angle_penalty_:50 , min_frontier_size: 5, p_dist_for_goal_reached_: 0.250000, same_frontier: 0.250000[0m
+ration_node/global_costmap/robot_base_frame
+ * /hector_exploration_node/global_costmap/rolling_window
+ * /hector_exploration_node/global_costmap/static_map
+ * /hector_exploration_node/global_costmap/track_unknown_space
+ * /hector_exploration_node/global_costmap/unknown_cost_value
+ * /hector_exploration_node/global_costmap/update_frequency
+ * /rosdistro
+ * /rosversion
+
+NODES
+  /
+    hector_exploration_node (hector_exploration_node/exploration_planner_node)
+
+[1mROS_MASTER_URI=http://localhost:11311[0m
+]2;/opt/ros/groovy/share/hector_navigation/hector_exploration_node/launch/exploration_planner.launch http://localhost:11311
+core service [/rosout] found
+[1mprocess[hector_exploration_node-1]: started with pid [5928][0m
+[hector_exploration_node-1] killing on exit
+shutting down processing monitor...
+... shutting down processing monitor complete
+[1mdone[0m
