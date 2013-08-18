@@ -295,20 +295,29 @@ class CompassSensor(Device):
 
     def trigger(self):
 	cs = Compass()
+	# create frame id
         cs.header.frame_id = self.frame_id
+	# create header (provides time stamp)
         cs.header.stamp = rospy.Time.now()
+	# convert orientation from the CompassSensor.get_heading_lsb byte (heading in the 0-255 range) 
+	  to quaternion
+ 
 	self.orientation = self.compass.get_sample()*-2.0 * math.pi/180.0
 
 
 	sample = self.compass.get_sample()
+	# create new imu msgs for the compass with time stamp as before
 	imu = Imu()
         imu.header.frame_id = self.frame_id
         imu.header.stamp = rospy.Time.now()
         imu.angular_velocity.x = 0.0
         imu.angular_velocity.y = 0.0
-        imu.angular_velocity.z = 0.0
+        imu.angular_velocity.z = 1*math.pi/180.0
+
+	# covariance required by robot_pose_ekf
         imu.angular_velocity_covariance = [0, 0, 0, 0, 0, 0, 0, 0, 1]
         imu.orientation_covariance = [0.001, 0, 0, 0, 0.001, 0, 0, 0, 0.1]
+        self.orienation += imu.angular_velocity.z * (imu.header.stamp - self.prev_time).to_sec()
         imu.orientation = cs.orientation
         self.prev_time = imu.header.stamp
         (imu.orientation.x, imu.orientation.y, imu.orientation.z, imu.orientation.w) = Rotation.RotZ(self.orientation).GetQuaternion()
