@@ -1,11 +1,8 @@
-Import the project folder if you haven't already:
+# Import the project folder if you haven't already:
 
 sudo git clone git@github.com:zukoo/MScProject.git
 
-
-
-
-Install ROS groovy:
+# Install ROS groovy:
 
 Setup the sources.list:
 
@@ -30,7 +27,7 @@ sudo apt-get install python-rosinstall python-rosdep
 sudo rosdep init
 rosdep update
 
-For networking with ROS:
+# For networking with ROS:
 
 To setup an ethernet network type:
 
@@ -72,7 +69,7 @@ rostopic list
 
 Should output /rosout and /rosout_agg.
 
-rbx1 install -
+# rbx1 install (for simulating a robot model)-
 
 Installing the prerequisites: 
 
@@ -91,7 +88,7 @@ cd rbx1
 rosmake
 rospack profile
 
-Hector_exploration install
+# Hector_exploration install
 
 cd /opt/ros/groovy/share
 sudo -s
