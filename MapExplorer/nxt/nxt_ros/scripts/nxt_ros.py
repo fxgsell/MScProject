@@ -312,7 +312,7 @@ class CompassSensor(Device):
         imu.header.stamp = rospy.Time.now()
         imu.angular_velocity.x = 0.0
         imu.angular_velocity.y = 0.0
-        imu.angular_velocity.z = 1*math.pi/180.0
+        imu.angular_velocity.z = 1*math.pi/180.0 # the rotation speed
 
 	# covariance required by robot_pose_ekf
         imu.angular_velocity_covariance = [0, 0, 0, 0, 0, 0, 0, 0, 1]
@@ -322,7 +322,7 @@ class CompassSensor(Device):
         self.prev_time = imu.header.stamp
         (imu.orientation.x, imu.orientation.y, imu.orientation.z, imu.orientation.w) = Rotation.RotZ(self.orientation).GetQuaternion()
 
-        self.pub.publish(imu)
+        self.pub.publish(imu) # publish the message 
 	
 
         
