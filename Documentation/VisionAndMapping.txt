@@ -1,3 +1,10 @@
+Import the project folder if you haven't already:
+
+sudo git clone git@github.com:zukoo/MScProject.git
+
+
+
+
 Install ROS groovy:
 
 Setup the sources.list:
