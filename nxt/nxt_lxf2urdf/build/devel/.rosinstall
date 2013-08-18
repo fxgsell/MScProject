@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /opt/ros/groovy/share/nxt/nxt_lxf2urdf/build/devel/setup.sh
