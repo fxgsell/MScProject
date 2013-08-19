@@ -133,8 +133,7 @@ sudo -s
 sudo cp -r ~/MScProject/MapExplorer/nxt .
 cd nxt
 rosdep install nxt
-rosmake nxt
-(There is an unavoidable failure building a visualisation part of the package but as this is uneeded you can ignore the build failure).
+rosmake nxt_ros
 
 Warning: This launcher can be temperamental, if the launcher fails for whatever reason: first make sure the nxt brick is turned on, secondly recopy and remake the folder and it will work.
 
