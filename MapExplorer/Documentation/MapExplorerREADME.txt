@@ -249,7 +249,7 @@ cd MapExplorer/commandStreamer
 cmake .
 make
 cd /devel/lib/commandStreamer
-./commandStreamer [ip]	## ip defaut value 192.168.120.102
+./commandStreamer [ip]	## ip default value 192.168.120.102
 		  /\ ip of the robot
 
 
