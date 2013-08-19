@@ -5,7 +5,7 @@
 #include <string.h>
 #include "PackageManager.h"
 #include "ProcessManager.h"
-#include "Suscriber.hpp"
+#include "Subscriber.hpp"
 #include <unistd.h>
 #include <fcntl.h>
 #include "JsonParser.h"
@@ -21,7 +21,7 @@ int              main(int ac, char **av) {
     std::cout << "launch package:" << cmd << "   " << topic << "   " << type <<std::endl;
     pkgMan.launchPackage(cmd, topic, type);
     std::cout << "Package " << cpt << "/" << size << " launched..." << std::endl;
-    sleep(1);
+    sleep(2);
   }
   std::cout << std::endl << "<<< MscProject launched >>>" << std::endl << std::endl;
   return 0;

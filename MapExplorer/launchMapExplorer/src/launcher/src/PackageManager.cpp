@@ -1,6 +1,6 @@
  
 #include "PackageManager.h"
-#include "Suscriber.hpp"
+#include "Subscriber.hpp"
 #include "geometry_msgs/PoseWithCovarianceStamped.h"
 bool           packageLaunched;
 ProcessManager process;
@@ -17,7 +17,7 @@ void run(std::string const &cmd, std::string const &topic, void (*cb)(const ros:
   int a = 0;
   process.launchNewPackage(cmd);
   if (first) {
-    std::cout << "First_launch... init" << std::endl;
+    first = false;
     ros::init(a, dummy, "launcher");
     sleep(1);
   }
@@ -32,26 +32,22 @@ void PackageManager::launchPackage(std::string const &cmd, std::string const &to
   packageLaunched = false;
   if ((topic != "none" && type != "none") 
       && _handler.find(type) != _handler.end()) {
-    std::cout << "start & wait: " << topic << std::endl;
     (*_handler.find(type)->second)(cmd, topic);
   }
   else {
     if (_handler.find(type) != _handler.end())
-      std::cout << "[WARNING] type doesnt found: " << type << std::endl;
+      std::cout << "[WARNING]: Type wasn't found: " << type << std::endl;
     process.launchNewPackage(cmd); 
   }
 }
 
 /* openni.launch */
 
-void sensor_msgs_Image_callback(const ros::MessageEvent<sensor_msgs::Image>&) 
-{ 
-  std::cout << "cb" << std::endl;
+void sensor_msgs_Image_callback(const ros::MessageEvent<sensor_msgs::Image>&) { 
   packageLaunched = true; 
 }
 
 void sensor_msgs_Image_handler(std::string const &cmd, std::string const &topic) {
-  std::cout << "YAY" << std::endl;
   run<sensor_msgs::Image>(cmd, topic, sensor_msgs_Image_callback);
 }
 
@@ -80,18 +76,13 @@ void nav_msgs_OccupancyGrid_handler(std::string const &cmd, std::string const &t
 }
 
 /* robot_pose_ekf */
-void geometry_msgs_PoseWithCovarianceStamped_callback(const ros::MessageEvent<geometry_msgs::PoseWithCovarianceStamped>&) 
-{ packageLaunched = true; 
-  std::cout << "test2" << std::endl;
+void geometry_msgs_PoseWithCovarianceStamped_callback(const ros::MessageEvent<geometry_msgs::PoseWithCovarianceStamped>&) {
+  packageLaunched = true; 
 }
 
 void geometry_msgs_PoseWithCovarianceStamped_handler(std::string const &cmd, std::string const &topic) {
-  std::cout << "test" << std::endl;
-  run<geometry_msgs::PoseWithCovarianceStamped>(cmd, topic, geometry_msgs_PoseWithCovarianceStamped_callback);
+   run<geometry_msgs::PoseWithCovarianceStamped>(cmd, topic, geometry_msgs_PoseWithCovarianceStamped_callback);
 }
-
-
-
 
 PackageManager::PackageManager() {
   _handler["sensor_msgs::Image"] = sensor_msgs_Image_handler;
