@@ -133,7 +133,7 @@ sudo -s
 sudo cp -r ~/MScProject/MapExplorer/nxt .
 cd nxt
 rosdep install nxt
-rosmake nxt_ros
+rosmake nxt
 
 Warning: This launcher can be temperamental, if the launcher fails for whatever reason: first make sure the nxt brick is turned on, secondly recopy and remake the folder and it will work.
 
@@ -201,8 +201,7 @@ roslaunch hector_exploration_node exploration_planner.launch
 roslaunch rbx1_bringup turtlebot_minimal_create.launch
 rosrun rviz rviz -d `rospack find rbx1_nav`/gmapping.rviz
 roslaunch robot_pose_ekf robot_pose_ekf.launch
-cd /opt/ros/groovy/share/nxt/compass
-roslaunch compass.launch 
+roslaunch compass compass.launch 
 rosrun hector_exploration_controller simple_exploration_controller 
 rosrun hector_path_follower hector_path_follower_node
 roscd /opt/ros/groovy/share/commandStreamer/devel/lib/commandStreamer 
