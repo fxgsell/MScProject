@@ -134,9 +134,9 @@ sudo cp -r ~/MScProject/MapExplorer/nxt .
 cd nxt
 rosdep install nxt
 rosmake nxt
-(there is an unavoidable failure building a visualisation part of the package but as this is uneeded you can ignore the build failure).
+(There is an unavoidable failure building a visualisation part of the package but as this is uneeded you can ignore the build failure).
 
-Warning: This launcher can be tempramental, if the launcher fails for whatever reason: first make sure the nxt brick is turned on, secondly recopy and remake the folder and it will work.
+Warning: This launcher can be temperamental, if the launcher fails for whatever reason: first make sure the nxt brick is turned on, secondly recopy and remake the folder and it will work.
 
 
 ## Make and compile commandStreamer for the hexapod.
@@ -162,7 +162,7 @@ roscd rbx1_nav
 cd launch
 sudo nano gmapping.launch
 change map_update_interval to a lower number for a higher update rate 
-(higher computation rate and may create a less accurate map)
+(higher computation rate and may create a less accurate map, depending on the accuracy of your odometry, the less accurate the odometry the less accurate the map will be with more frequent updates)
 
 ## To change the minimium collision distance
 
