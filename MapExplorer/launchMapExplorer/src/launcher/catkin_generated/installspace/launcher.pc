@@ -1,8 +1,0 @@
-prefix=/usr/local
-
-Name: launcher
-Description: Description of launcher
-Version: 0.0.0
-Cflags: 
-Libs: -L/usr/local/lib 
-Requires: 

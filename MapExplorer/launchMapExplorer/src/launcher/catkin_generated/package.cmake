@@ -1,7 +1,0 @@
-set(_CATKIN_CURRENT_PACKAGE "launcher")
-set(launcher_MAINTAINER "root <root@todo.todo>")
-set(launcher_DEPRECATED "")
-set(launcher_VERSION "0.0.0")
-set(launcher_BUILD_DEPENDS "roscpp" "nav_msgs" "rospy" "std_msgs" "tf")
-set(launcher_RUN_DEPENDS "roscpp" "nav_msgs" "rospy" "std_msgs" "tf")
-set(launcher_BUILDTOOL_DEPENDS "catkin")
