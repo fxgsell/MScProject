@@ -133,7 +133,7 @@ sudo -s
 sudo cp -r ~/MScProject/MapExplorer/nxt .
 cd nxt
 rosdep install nxt
-rosmake nxt
+rosmake nxt_ros
 
 Warning: This launcher can be temperamental, if the launcher fails for whatever reason: first make sure the nxt brick is turned on, secondly recopy and remake the folder and it will work.
 
@@ -201,17 +201,20 @@ roslaunch hector_exploration_node exploration_planner.launch
 roslaunch rbx1_bringup turtlebot_minimal_create.launch
 rosrun rviz rviz -d `rospack find rbx1_nav`/gmapping.rviz
 roslaunch robot_pose_ekf robot_pose_ekf.launch
-roslaunch compass compass.launch 
+cd /opt/ros/groovy/share/nxt/compass
+roslaunch compass.launch 
 rosrun hector_exploration_controller simple_exploration_controller 
 rosrun hector_path_follower hector_path_follower_node
 roscd /opt/ros/groovy/share/commandStreamer/devel/lib/commandStreamer 
 ./commandStreamer 192.168.120.102
-		  /\ ip of the robot
 
 
-## launcher
+## Launcher
+
 Instead of using the manual launching sequence, you can use the launcher, which will launch step by step the whole sequence.
-## how to build it
+
+## How to build it
+
 cd MapExplorer/LaunchMapExplorer/src/launcher/
 cmake .
 make
@@ -220,18 +223,17 @@ cd devel/lib/launcher/
 ./launcher
 
 
-
 ## How to use it
 cd MapExplorer/LaunchMapExplorer
 ./launcher
-If you want to update the sequence, you have to edit the launcher.msc file, which contain the sequence to Json format. The launcher parses this file and executes each command in it.
+If you want to update the sequence, you have to edit the launcher.msc file, which contain the sequence in Json format. The launcher parses this file and executes each command in it.
 Command example:
 {"cmd":"roslaunch ccny_rgbd visual_odometry.launch",
 "topicName":"/vo",
 "topicType":"nav_msgs::Odometry"}, ## Remove the comma for the last sequence
 
 
-Json files contain a collection of pair name/value, in the ‘launcher.msc’ file we have:
+Json files contain a collection of pair name/values, in the ‘launcher.msc’ file we have:
 -cmd: which is the command that have to be launch
 -topicName: some ROS packages have to be launch only when the previous package has been launched and has started to publish on a specific topic. You can stop the launch sequence while nothing is publish on the specify topicName or write “none” to go directly to the next sequence.
 -topicType: If you have specified a topicName you have to specify the type of message publish on this topic.
@@ -240,16 +242,17 @@ Json files contain a collection of pair name/value, in the ‘launcher.msc’ fi
 If one or both topicName and TopicType are set to “none”, the launcher goes directly to the next sequence.
 
 
-
-
 ## commandStreamer
-commandStreamer is a program use to convert and stream the command create by ROS (cmd_vel topic) to command the robot.
+commandStreamer is a program used to convert and stream commands create by ROS (on the cmd_vel topic) to control a robot.
 ## how to build & use the commandStreamer
 cd MapExplorer/commandStreamer
 cmake .
 make
 cd /devel/lib/commandStreamer
 ./commandStreamer [ip]	## ip defaut value 192.168.120.102
+		  /\ ip of the robot
+
+
 
 
 
