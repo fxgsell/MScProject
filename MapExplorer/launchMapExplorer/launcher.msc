@@ -7,7 +7,7 @@
 
 {"cmd":"roslaunch rbx1_bringup turtlebot_minimal_create.launch", "topicName":"none","topicType":"none"},
 
-{"cmd":"roslaunch learning_nxt robot.launch","topicName":"none","topicType":"none"},
+{"cmd":"roslaunch compass compass.launch","topicName":"none","topicType":"none"},
 
 {"cmd":"roslaunch robot_pose_ekf.launch","topicName":"/robot_pose_ekf/odom_combined","topicType":"geometry_msgs::PoseWithCovarianceStamped"},
 
