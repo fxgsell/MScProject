@@ -215,7 +215,7 @@ Instead of using the manual launching sequence, you can use the launcher, which 
 
 ## How to build it
 
-cd MapExplorer/LaunchMapExplorer/src/launcher/
+cd MapExplorer/launchMapExplorer/src/launcher/
 cmake .
 make
 cd devel/lib/launcher/
@@ -224,7 +224,7 @@ cd devel/lib/launcher/
 
 
 ## How to use it
-cd MapExplorer/LaunchMapExplorer
+cd MapExplorer/launchMapExplorer
 ./launcher
 If you want to update the sequence, you have to edit the launcher.msc file, which contain the sequence in Json format. The launcher parses this file and executes each command in it.
 Command example:
