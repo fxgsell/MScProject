@@ -57,10 +57,14 @@
       </geometry>
     </visual>
 
+<!-- Change the following radius if you wish to optimise getting closer to objects or have
+a lower minimum distance on your laser scanner.
+-->
+
     <collision>
       <origin xyz="0.0 0.0 0.0308" rpy="0 0 0" />
       <geometry>
-        <cylinder length="0.0611632" radius="0.425"/>
+        <cylinder length="0.0611632" radius="0.1"/>
       </geometry>
     </collision>
   </link>

@@ -1,8 +1,8 @@
 <stack>
   <description brief="rbx1">
-    ROS By Example Volume 1
+    Modified code from ROS By Example Volume 1
   </description>
-  <author>Maintained by Patrick Goebel</author>
+  <author>Patrick Goebel and Tim Fisher</author>
   <license>BSD</license>  
   <review status="unreviewed" notes=""/>
   <url>http://ros.org/wiki/rbx_vol_1</url>

@@ -24,8 +24,6 @@
 #include "ccny_rgbd/apps/visual_odometry.h"
 #include <boost/assign/list_of.hpp>
 
-double VISUAL_COVARIANCE;
-
 namespace ccny_rgbd {
   
 VisualOdometry::VisualOdometry(
@@ -370,24 +368,42 @@ void VisualOdometry::publishTf(const std_msgs::Header& header)
 void VisualOdometry::publishOdom(const std_msgs::Header& header)
 {
   OdomMsg odom;
-  // this prevents the "out of sync" / "no time" error
+  // Adding a time stamp and tf transform
   odom.header.stamp = ros::Time::now();
   odom.header.frame_id = fixed_frame_;
   odom.child_frame_id = "base_link";
   tf::poseTFToMsg(f2b_, odom.pose.pose);
-  // robot_pose_ekf doesn't accept all-zeros in the covariance matrix
+  // robot_pose_ekf covariance matrices:
+
+  // Pose position of the robot
+
   odom.pose.covariance = boost::assign::list_of(VISUAL_COVARIANCE)(0)(0)(0)(0)(0)
                                                (0)(VISUAL_COVARIANCE)(0)(0)(0)(0)
                                                (0)(0)(999999)(0)(0)(0)
                                                (0)(0)(0)(999999)(0)(0)
                                                (0)(0)(0)(0)(999999)(0)
                                                (0)(0)(0)(0)(0)(999999);
-    odom.twist.covariance = boost::assign::list_of(VISUAL_COVARIANCE)(0)(0)(0)(0)(0)
+
+
+  // The covariance matrix is formed of these parameters:
+  // x y z roll pitch yaw  
+  // y
+  // z
+  // roll^T
+  // pitch^T
+  // yaw^T
+  // 
+  // z roll pitch and yaw are set at very high values meaning they are not taken into account
+
+  // Updating twist (movement command covariance)
+
+  odom.twist.covariance = boost::assign::list_of(VISUAL_COVARIANCE)(0)(0)(0)(0)(0)
                                                (0)(VISUAL_COVARIANCE)(0)(0)(0)(0)
                                                (0)(0)(999999)(0)(0)(0)
                                                (0)(0)(0)(999999)(0)(0)
                                                (0)(0)(0)(0)(999999)(0)
-                                               (0)(0)(0)(0)(0)(VISUAL_COVARIANCE);
+                                               (0)(0)(0)(0)(0)(999999);
+     
   odom_publisher_.publish(odom);
 }
 
