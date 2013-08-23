@@ -115,8 +115,8 @@ void serial_write(int fd) {
     printf("\\x0d\n");
   else
     printf("%c", wbuf[len]);
-  len++;
   #endif
+  len++;
   
   if (i < 0) {
     fprintf (stderr, "Serial: Read error: %s\n", strerror (errno));

@@ -1,7 +1,7 @@
 /*
- * **      create_parts.js
- * **      functions to create each part of the robot
- * */
+**      create_parts.js
+**      functions to create each part of the robot
+*/
 
 //create arrow
 function createArrow(material) {
