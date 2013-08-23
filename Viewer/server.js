@@ -1,6 +1,7 @@
 var string = require('string');
 var http = require('http');
 var io = require('socket.io');
+var net = require('net');
   
 var host = "" + process.argv.splice(2);
 var PORT = 9930;
@@ -14,7 +15,6 @@ var server = http.createServer(function(request, response) {
 //Socket.IO
 var socket = io.listen(server).set('log level', 9);
   
-var net = require('net');
 
 //Listeners for intercepting client messages
 socket.on('connection', function(client) {

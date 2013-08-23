@@ -53,15 +53,15 @@ void    client_read(int cs)
   }
   else {
     if (buf.flags & B11) {
-   // robot->addAction(standUp());
-   //   printf("Recv Up!\n");
+    //  robot->addAction(standUp());
+    //  printf("Recv Up!\n");
     }
     else if (buf.flags & B01) {
-     // printf("Recv Shot!\n");
+    //  printf("Recv Shot!\n");
     }
     else if (buf.flags & B12) {
-  //  robot->addAction(standDown());
-   //   printf("Recv Down!\n");
+    //  robot->addAction(standDown());
+    //  printf("Recv Down!\n");
     }
     else if (buf.flags & B06) {
     //  printf("Recv clear!\n");
@@ -70,14 +70,13 @@ void    client_read(int cs)
       robot->events.clear();
     //  printf("Recv clear!\n");
     }
-    
     if (robot->turn != buf.turn)  {
       robot->turn = buf.turn;
-    //  printf("Recv Turn:%d\n", buf.turn);
+      printf("Recv Turn:%d\n", buf.turn);
     }
     if (robot->height != buf.height)  {
       robot->height = buf.height;
-//      robot->addAction(updateHeight());
+    //  robot->addAction(updateHeight());
     //  printf("Recv Height:%d\n", buf.height);
     }
     if (buf.y != robot->y)  {
@@ -111,11 +110,13 @@ void serial_write(int fd) {
   }
 
   int i = write(fd, wbuf+len, 1);
-  //if (wbuf[len] == '\x0d')
-  //  printf("\\x0d\n");
-  //else
-  //  printf("%c", wbuf[len]);
+  #ifdef DEBUG
+  if (wbuf[len] == '\x0d')
+    printf("\\x0d\n");
+  else
+    printf("%c", wbuf[len]);
   len++;
+  #endif
   
   if (i < 0) {
     fprintf (stderr, "Serial: Read error: %s\n", strerror (errno));

@@ -98,7 +98,7 @@ int Body::commit() {
       }
     }
   }
-  maxTime = 100;
+  maxTime = 150;
   a << " T" << maxTime << "\x0d";
 
   char *s = strdup(viewer.str().c_str());
@@ -107,11 +107,11 @@ int Body::commit() {
   s = strdup(a.str().c_str());
   fds[fdserial].buf_write.push_back(s);
   printf("{{%s}}\n", s);
-  return (maxTime);
+  return (maxTime * 1000);
 }
 
 /*
-** Event Manager
+** Main method: Event Manager
 */
 
 void Body::start() {
@@ -129,6 +129,8 @@ void Body::start() {
   gettimeofday(&tv_cur, 0);
 
   for (;run;) { 
+    // While it is no time to execute the next action
+    // keep reading the socket/serial
     while (timercmp(&tv_cur, &tv_nxt, <)) {
       init_fd();
       r = select(lastfd + 1, &fd_read, &fd_write, NULL, &tv);
@@ -136,6 +138,9 @@ void Body::start() {
       gettimeofday(&tv_cur, 0);
     }
 
+    #ifdef AUTO_WALK // Allow the robot to walk without joystick
+      robot->x = 10;
+    #endif
     if (!events.empty()) {
       Event *e = (Event*)events.pop();
       puts(typeid(*e).name());
@@ -144,7 +149,8 @@ void Body::start() {
     }
     else
       tv_act.tv_usec = walk();
-    tv_act.tv_usec = 150000;  //remove when ready
+
+    // Calculate the time until the current event is finished
     gettimeofday(&tv_cur, 0);
     timeradd(&tv_cur, &tv_act, &tv_nxt);
     i++;
