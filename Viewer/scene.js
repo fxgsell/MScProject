@@ -21,7 +21,7 @@ function moveLeg(position, motor, angle) {
 			((spider.children[position]).children[0]).children[0].rotation.z = angle * Math.PI / 180;
 			break;
 		case 2:
-			((((spider.children[position]).children[0]).children[0]).children[0]).children[0].rotation.z = (angle - 90) * Math.PI / 180;
+			((((spider.children[position]).children[0]).children[0]).children[0]).children[0].rotation.z = (-angle - 90) * Math.PI / 180;
 			break;
 	}
 }
