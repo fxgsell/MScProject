@@ -106,8 +106,10 @@ int Body::commit() {
 
   s = strdup(a.str().c_str());
   fds[fdserial].buf_write.push_back(s);
+  #ifdef DEBUG
   printf("{{%s}}\n", s);
-  return (maxTime * 1000);
+  #endif // DEBUG
+  return (maxTime);
 }
 
 /*
@@ -130,7 +132,7 @@ void Body::start() {
   for (;run;) { 
     #ifdef AUTO_WALK // Allow the robot to walk without joystick
     robot->x = 10;
-    #endif
+    #endif // AUTO_WALK
 
     // Calculate the time until the current event is finished
     gettimeofday(&tv_cur, 0);
@@ -154,13 +156,14 @@ void Body::start() {
       Event *e = (Event*)events.pop();
       #ifdef DEBUG
       puts(typeid(*e).name());
-      #endif
+      #endif // DEBUG
       tv_act.tv_usec = e->execute();
       delete e;
     }
     else 
       tv_act.tv_usec = walk();
 
+    tv_act.tv_usec *= 1000; //Convert miliseconds to microseconds
     i++;
   }
 }

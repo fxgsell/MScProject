@@ -19,8 +19,6 @@ class list {
     bool clear();
 
     list_elem *start;
-
-  private:
     list_elem *end;
 };
 

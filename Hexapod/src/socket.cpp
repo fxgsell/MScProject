@@ -178,7 +178,9 @@ void viewer_write(int fd) {
     return;
 
   int i = write(fd, wbuf, strlen(wbuf));
+  #ifdef DEBUG
   printf("Sending: %s\n", wbuf);
+  #endif // DEBUG
   delete wbuf;
   
   if (i < 0) {

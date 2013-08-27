@@ -12,7 +12,7 @@ int	ELegSetCoord::execute() {
       robot.legs[i]->setCoord(x, y, z);
   }
   robot.commit();
-  return (0);
+  return (150);
 }
 
 /*
@@ -24,7 +24,7 @@ int	ELegSetAngles::execute() {
       robot.legs[i]->setAngles(s, e, w);
   }
   robot.commit();
-  return (0);
+  return (150);
 }
 
 /*
@@ -36,7 +36,7 @@ int	ELegSet::execute() {
       robot.legs[i]->setPosition(s, e, w);
   }
   robot.commit();
-  return (0);
+  return (150);
 }
 
 /*
@@ -48,7 +48,7 @@ int	ELegBackward::execute() {
       robot.legs[i]->backward(range);
   }
   robot.commit();
-  return (0);
+  return (150);
 }
 
 /*
@@ -60,7 +60,7 @@ int	ELegForward::execute() {
       robot.legs[i]->forward(range);
   }
   robot.commit();
-  return (0);
+  return (150);
 }
 
 /*
@@ -72,7 +72,7 @@ int	ELegSave::execute() {
       robot.legs[i]->save();
   }
   robot.commit();
-  return (0);
+  return (150);
 }
 
 int	ELegRestore::execute() {
@@ -81,7 +81,7 @@ int	ELegRestore::execute() {
       robot.legs[i]->restore();
   }
   robot.commit();
-  return (0);
+  return (150);
 }
 
 /*
@@ -89,6 +89,6 @@ int	ELegRestore::execute() {
 */
 int	ESleep::execute() {
   usleep(time);
-  return (0);
+  return (150);
 }
 
