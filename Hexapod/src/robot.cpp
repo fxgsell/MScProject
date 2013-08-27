@@ -126,33 +126,41 @@ void Body::start() {
   bzero(&tv, sizeof(struct timeval));
   bzero(&tv_act, sizeof(struct timeval));
   bzero(&tv_nxt, sizeof(struct timeval));
-  gettimeofday(&tv_cur, 0);
 
   for (;run;) { 
-    // While it is no time to execute the next action
-    // keep reading the socket/serial
-    while (timercmp(&tv_cur, &tv_nxt, <)) {
-      init_fd();
-      r = select(lastfd + 1, &fd_read, &fd_write, NULL, &tv);
-      check_fd(r);
-      gettimeofday(&tv_cur, 0);
-    }
-
     #ifdef AUTO_WALK // Allow the robot to walk without joystick
-      robot->x = 10;
+    robot->x = 10;
     #endif
-    if (!events.empty()) {
-      Event *e = (Event*)events.pop();
-      puts(typeid(*e).name());
-      tv_act.tv_usec = e->execute();
-      delete e;
-    }
-    else
-      tv_act.tv_usec = walk();
 
     // Calculate the time until the current event is finished
     gettimeofday(&tv_cur, 0);
     timeradd(&tv_cur, &tv_act, &tv_nxt);
+
+    // While it is not time to execute the next action
+    // keep reading the socket/serial
+    while (timercmp(&tv_cur, &tv_nxt, <) || (!x && !y && !turn && events.empty())) {
+      init_fd();
+      if (!x && !y && !turn && events.empty())
+        r = select(lastfd + 1, &fd_read, &fd_write, NULL, 0);
+      else {
+        tv.tv_usec = 1000;
+        r = select(lastfd + 1, &fd_read, &fd_write, NULL, &tv);
+      }
+      check_fd(r);
+      gettimeofday(&tv_cur, 0);
+    }
+
+    if (!events.empty()) {
+      Event *e = (Event*)events.pop();
+      #ifdef DEBUG
+      puts(typeid(*e).name());
+      #endif
+      tv_act.tv_usec = e->execute();
+      delete e;
+    }
+    else 
+      tv_act.tv_usec = walk();
+
     i++;
   }
 }
